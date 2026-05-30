@@ -71,3 +71,8 @@ $router->get('/admin/taches', 'Admin/TasksController@index');
 $router->post('/admin/taches', 'Admin/TasksController@store');
 $router->put('/admin/taches/{id}', 'Admin/TasksController@update');
 $router->delete('/admin/taches/{id}', 'Admin/TasksController@destroy');
+
+// Hostinger monitoring
+$router->get('/admin/hostinger', 'Admin/HostingerController@index');
+$router->post('/admin/hostinger/save', 'Admin/HostingerController@save');
+$router->post('/admin/hostinger/test', 'Admin/HostingerController@test');
