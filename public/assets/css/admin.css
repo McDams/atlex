@@ -1,0 +1,26 @@
+/* =====================================================================
+   ATLÉX-SPORT — Styles spécifiques à l'espace d'administration
+   ===================================================================== */
+
+:root {
+  --atlex-red: #E53935;
+  --atlex-dark: #001a3d;
+  --atlex-bg: #0a0e1a;
+}
+
+/* Scrollbar discrète pour les tables admin */
+.admin-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.admin-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+/* Lignes de tableau au survol */
+table tbody tr { transition: background-color 0.15s; }
+
+/* Cartes Kanban */
+.kanban-card { transition: transform 0.15s, box-shadow 0.15s; }
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}

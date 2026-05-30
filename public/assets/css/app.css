@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --atlex-red: #E53935;
+  --atlex-blue: #003366;
+  --atlex-dark: #001a3d;
+  --atlex-bg: #0a0e1a;
+  --atlex-beige: #D7B899;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-bebas { font-family: 'Bebas Neue', sans-serif; }
+.font-montserrat { font-family: 'Montserrat', sans-serif; }
+.font-poppins { font-family: 'Poppins', sans-serif; }
+
+/* Parallelogram button */
+.btn-atlex {
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  background-color: var(--atlex-red);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.75rem 2rem;
+  display: inline-block;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border: none;
+}
+.btn-atlex:hover { opacity: 0.85; }
+
+.btn-atlex-outline {
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.7rem 2rem;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.btn-atlex-outline:hover {
+  background: white;
+  color: var(--atlex-bg);
+}
+
+/* Form controls */
+.form-input {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--atlex-red);
+}
+.form-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+.form-input option { background-color: var(--atlex-dark); }
+
+.form-label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.35rem;
+}
+
+/* Ticker animation */
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-inner {
+  animation: tickerScroll 30s linear infinite;
+}
+.ticker-inner:hover { animation-play-state: paused; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Active nav link */
+.nav-link.active { color: var(--atlex-red); }
+.admin-nav-link.active {
+  background-color: rgba(229, 57, 53, 0.15);
+  color: white;
+}
+
+/* Line clamp utility (fallback for older Tailwind) */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Kanban drag feedback */
+.kanban-card.dragging { opacity: 0.5; }
+.kanban-col.drag-over { background-color: rgba(229, 57, 53, 0.08); }
