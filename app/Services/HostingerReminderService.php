@@ -45,7 +45,7 @@ final class HostingerReminderService
         $this->adminEmail = $setting->get('admin_email')
             ?? $_ENV['ADMIN_EMAIL']
             ?? getenv('ADMIN_EMAIL')
-            ?: 'admin@atlex-sport.bj';
+            ?: 'admin@atlexsport.com';
     }
 
     // -------------------------------------------------------------------------

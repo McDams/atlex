@@ -7,7 +7,7 @@ SET NAMES utf8mb4;
 
 -- Utilisateur admin
 INSERT INTO users (name, email, password, role) VALUES
-('Ulrich — Secrétaire Général', 'admin@atlex-sport.bj',
+('Ulrich — Secrétaire Général', 'admin@atlexsport.com',
  '$2b$10$ndMnXb7.SGmsyk8FmfMzr.QjZc1Qy2uPcjACmiPWuwcv/Yk1h9pCW', 'admin');
 
 -- Sponsors

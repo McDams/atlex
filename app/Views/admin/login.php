@@ -14,7 +14,7 @@
             <?= csrf_field() ?>
             <div>
                 <label class="block text-sm text-white/60 mb-1 font-montserrat">Email</label>
-                <input type="email" name="email" required autofocus class="form-input w-full" placeholder="admin@atlex-sport.bj">
+                <input type="email" name="email" required autofocus class="form-input w-full" placeholder="admin@atlexsport.com">
             </div>
             <div>
                 <label class="block text-sm text-white/60 mb-1 font-montserrat">Mot de passe</label>

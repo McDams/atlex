@@ -79,7 +79,7 @@ Le site est alors accessible sur **http://localhost:8000**.
 | Champ        | Valeur                  |
 | ------------ | ----------------------- |
 | URL          | `/admin/login`          |
-| Email        | `admin@atlex-sport.bj`  |
+| Email        | `admin@atlexsport.com`  |
 | Mot de passe | `Atlex2024!`            |
 
 > ⚠️ Pensez à modifier ces identifiants en production.

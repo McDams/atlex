@@ -131,6 +131,6 @@ final class ContactController extends Controller
         }
         $body .= '</ul>';
 
-        (new Mailer())->send('contact@atlex-sport.bj', $subject, $body);
+        (new Mailer())->send('contact@atlexsport.com', $subject, $body);
     }
 }

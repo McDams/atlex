@@ -43,7 +43,7 @@
             <h3 class="font-bebas text-lg tracking-wider text-white mb-4">Contact</h3>
             <ul class="space-y-2 text-sm text-white/60">
                 <li>Cotonou, Bénin</li>
-                <li><a href="mailto:contact@atlex-sport.bj" class="hover:text-atlex-red">contact@atlex-sport.bj</a></li>
+                <li><a href="mailto:contact@atlexsport.com" class="hover:text-atlex-red">contact@atlexsport.com</a></li>
                 <li>+229 21 30 36 00</li>
                 <li>+229 21 30 36 14</li>
             </ul>

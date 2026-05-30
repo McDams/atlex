@@ -11,7 +11,7 @@ $disciplines = ['football' => 'Football', 'basketball' => 'Basketball', 'handbal
             <h2 class="font-bebas text-2xl tracking-wider mb-4">Nos coordonnées</h2>
             <ul class="space-y-3 text-sm text-white/70">
                 <li><span class="text-atlex-red font-semibold">Adresse</span><br>Cotonou, Bénin</li>
-                <li><span class="text-atlex-red font-semibold">Email</span><br>contact@atlex-sport.bj</li>
+                <li><span class="text-atlex-red font-semibold">Email</span><br>contact@atlexsport.com</li>
                 <li><span class="text-atlex-red font-semibold">Téléphone</span><br>+229 21 30 36 00<br>+229 21 30 36 14</li>
             </ul>
         </aside>
