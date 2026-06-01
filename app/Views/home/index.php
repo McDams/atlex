@@ -23,7 +23,7 @@ $clubs = [
     <div class="relative z-10 text-center px-4 max-w-3xl">
         <p class="font-montserrat uppercase tracking-[0.3em] text-atlex-beige mb-4 text-sm">Cotonou · Bénin</p>
         <h1 class="font-bebas text-6xl sm:text-8xl leading-none tracking-wider">
-            ATL<span class="text-atlex-beige">É</span>X<span class="text-atlex-red">·</span>SPORT
+            ATL<span class="text-atlex-beige">E</span>X<span class="text-atlex-red">·</span>SPORT
         </h1>
         <p class="mt-4 font-montserrat text-lg sm:text-xl text-white/90 italic">Là où l'énergie devient passion.</p>
         <div class="mt-8 flex flex-wrap gap-4 justify-center">

@@ -9,7 +9,7 @@
                     <path d="M20 14 L28 30 H12 Z" fill="#001a3d"/>
                 </svg>
                 <span class="font-bebas text-xl tracking-wider">
-                    <span class="text-white">ATL</span><span class="text-atlex-beige">É</span><span class="text-white">X·SPORT</span>
+                    <span class="text-white">ATL</span><span class="text-atlex-beige">E</span><span class="text-white">X - Sport</span>
                 </span>
             </div>
             <p class="text-atlex-beige font-montserrat italic text-sm mb-2">Là où l'énergie devient passion.</p>

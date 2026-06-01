@@ -1,5 +1,5 @@
 <?php
-/** @var array<int,array<string,mixed>> $tickerNews */
+/** @var array<int,array{title:string,url:string,external:bool}> $tickerNews */
 $items = $tickerNews ?? [];
 ?>
 <?php if (!empty($items)): ?>
@@ -7,7 +7,8 @@ $items = $tickerNews ?? [];
     <div class="ticker-inner whitespace-nowrap flex items-center">
         <?php for ($i = 0; $i < 2; $i++): ?>
             <?php foreach ($items as $item): ?>
-                <a href="<?= url('/actualites/' . $item['slug']) ?>"
+                <a href="<?= e($item['url']) ?>"
+                   <?= !empty($item['external']) ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
                    class="inline-flex items-center font-montserrat text-sm font-semibold uppercase tracking-wide text-white mx-6">
                     <span class="w-1.5 h-1.5 rounded-full bg-white mr-3"></span>
                     <?= e($item['title']) ?>
