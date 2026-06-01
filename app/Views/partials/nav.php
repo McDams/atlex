@@ -20,7 +20,7 @@ $links = [
                 <path d="M20 14 L28 30 H12 Z" fill="#0a0e1a"/>
             </svg>
             <span class="font-bebas text-2xl tracking-wider leading-none">
-                <span class="text-white">ATL</span><span class="text-atlex-beige">É</span><span class="text-white">X·SPORT</span>
+                <span class="text-white">ATL</span><span class="text-atlex-beige">E</span><span class="text-white">X - Sport</span>
             </span>
         </a>
 
