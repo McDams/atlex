@@ -132,10 +132,20 @@ if (!function_exists('slugify')) {
      */
     function slugify(string $text): string
     {
-        $text = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $text)
-            ?: strtolower($text);
+        // Translittération des accents : intl si dispo, sinon iconv, sinon brut.
+        if (function_exists('transliterator_transliterate')) {
+            $text = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $text) ?: $text;
+        } elseif (function_exists('iconv')) {
+            $converted = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
+            if ($converted !== false) {
+                $text = $converted;
+            }
+        }
+
+        $text = strtolower($text);
         $text = preg_replace('/[^a-z0-9]+/', '-', $text) ?? '';
         $text = trim($text, '-');
+
         return $text !== '' ? $text : 'item-' . substr(md5((string) microtime(true)), 0, 8);
     }
 }

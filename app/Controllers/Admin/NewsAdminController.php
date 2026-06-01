@@ -90,6 +90,11 @@ final class NewsAdminController extends Controller
             $data['cover_image'] = $uploaded;
         }
 
+        // Publication sans date choisie et sans date existante : on prend maintenant.
+        if (empty($data['published_at']) && $data['is_published'] && empty($existing['published_at'])) {
+            $data['published_at'] = date('Y-m-d H:i:s');
+        }
+
         $this->model->update((int) $id, $data);
         flash('success', 'Article mis à jour.');
         $this->redirect('admin/actualites');
@@ -110,7 +115,7 @@ final class NewsAdminController extends Controller
     {
         $title = (string) $this->input('title');
 
-        return [
+        $data = [
             'title'        => $title,
             'slug'         => slugify($title),
             'excerpt'      => $this->input('excerpt') ?: null,
@@ -118,6 +123,17 @@ final class NewsAdminController extends Controller
             'category'     => $this->input('category') ?: 'general',
             'is_published' => $this->input('is_published') ? 1 : 0,
         ];
+
+        // Date de publication choisie par l'admin (normalisée en datetime).
+        $date = trim((string) $this->input('published_at'));
+        if ($date !== '') {
+            $ts = strtotime($date);
+            if ($ts !== false) {
+                $data['published_at'] = date('Y-m-d H:i:s', $ts);
+            }
+        }
+
+        return $data;
     }
 
     private function handleUpload(): ?string

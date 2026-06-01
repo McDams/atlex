@@ -76,6 +76,7 @@ $rest = array_slice($articles, 1);
                         <span class="text-xs font-montserrat uppercase tracking-wide text-atlex-red"><?= e($article['category']) ?></span>
                         <h3 class="font-montserrat font-bold mt-1 mb-2 leading-snug"><?= e($article['title']) ?></h3>
                         <p class="text-white/60 text-sm line-clamp-2"><?= e($article['excerpt']) ?></p>
+                        <p class="text-white/40 text-xs mt-3"><?= e(format_date_fr($article['published_at'] ?? $article['created_at'])) ?></p>
                     </div>
                 </a>
             </article>
