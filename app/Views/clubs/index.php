@@ -2,7 +2,7 @@
 /** @var array<string,array<string,mixed>> $disciplines */
 ?>
 <section class="relative h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden">
-    <img src="<?= asset('images/team-photo.png') ?>" alt="" class="absolute inset-0 w-full h-full object-cover">
+    <?= responsive_image('images/team-photo.png', '', 'absolute inset-0 w-full h-full object-cover', ['eager' => true]) ?>
     <div class="absolute inset-0 bg-gradient-to-b from-atlex-bg/75 to-atlex-bg"></div>
     <div class="relative z-10 text-center px-4">
         <h1 class="font-bebas text-5xl sm:text-7xl tracking-wider">Nos clubs</h1>
@@ -15,7 +15,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <?php foreach ($disciplines as $d): ?>
             <div class="group relative rounded-xl overflow-hidden h-80 reveal">
-                <img src="<?= asset($d['image']) ?>" alt="<?= e($d['name']) ?>" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <?= responsive_image($d['image'], $d['name'], 'absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500') ?>
                 <div class="absolute inset-0 bg-gradient-to-t from-atlex-bg via-atlex-bg/40 to-transparent"></div>
                 <div class="absolute bottom-0 p-6 w-full">
                     <h3 class="font-bebas text-4xl tracking-wider"><?= e($d['name']) ?></h3>

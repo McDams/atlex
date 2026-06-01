@@ -1,12 +1,24 @@
 <?php
 use App\Core\Auth;
+use App\Models\ContactSubmission;
 
 $isLoginPage = !Auth::isLoggedIn();
 $adminUser = Auth::user();
 
+// Nombre de demandes d'inscription en attente (pour le badge de menu).
+$pendingInscriptions = 0;
+if (!$isLoginPage) {
+    try {
+        $pendingInscriptions = (new ContactSubmission())->countPendingInscriptions();
+    } catch (\Throwable) {
+        $pendingInscriptions = 0;
+    }
+}
+
 $navItems = [
     '/admin'            => ['Tableau de bord', 'M3 13h8V3H3zM13 21h8V3h-8zM3 21h8v-6H3z'],
     '/admin/membres'    => ['Membres', 'M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m6-1.13a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'],
+    '/admin/inscriptions' => ['Inscriptions', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'],
     '/admin/evenements' => ['Événements', 'M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z'],
     '/admin/actualites' => ['Actualités', 'M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9l5 5v9a2 2 0 0 1-2 2z'],
     '/admin/documents'  => ['Documents', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'],
@@ -22,16 +34,7 @@ $navItems = [
     <title><?= e($title ?? 'Administration') ?> — ATLEX - Sport</title>
     <link rel="icon" type="image/svg+xml" href="<?= asset('images/favicon.svg') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: { extend: {
-                colors: { 'atlex-red':'#E53935','atlex-blue':'#003366','atlex-dark':'#001a3d','atlex-bg':'#0a0e1a','atlex-beige':'#D7B899' },
-                fontFamily: { bebas:['"Bebas Neue"','sans-serif'], montserrat:['Montserrat','sans-serif'], poppins:['Poppins','sans-serif'] },
-            }},
-        };
-    </script>
-    <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/app.min.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
 </head>
 <body class="bg-atlex-bg text-white font-poppins min-h-screen">
@@ -57,7 +60,10 @@ $navItems = [
                        class="admin-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-montserrat text-white/70 hover:bg-white/5 hover:text-white transition-colors"
                        data-path="<?= e($href) ?>">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="<?= $icon ?>"/></svg>
-                        <?= e($label) ?>
+                        <span class="flex-1"><?= e($label) ?></span>
+                        <?php if ($href === '/admin/inscriptions' && $pendingInscriptions > 0): ?>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-atlex-red text-white font-semibold"><?= e($pendingInscriptions) ?></span>
+                        <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
             </nav>

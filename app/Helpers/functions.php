@@ -95,6 +95,37 @@ if (!function_exists('clear_old')) {
     }
 }
 
+if (!function_exists('set_errors')) {
+    /**
+     * Mémorise les erreurs de validation par champ pour le prochain rendu.
+     *
+     * @param array<string,array<int,string>> $errors
+     */
+    function set_errors(array $errors): void
+    {
+        $_SESSION['_errors'] = $errors;
+    }
+}
+
+if (!function_exists('errors_all')) {
+    /**
+     * Récupère toutes les erreurs de validation mémorisées.
+     *
+     * @return array<string,array<int,string>>
+     */
+    function errors_all(): array
+    {
+        return $_SESSION['_errors'] ?? [];
+    }
+}
+
+if (!function_exists('clear_errors')) {
+    function clear_errors(): void
+    {
+        unset($_SESSION['_errors']);
+    }
+}
+
 if (!function_exists('slugify')) {
     /**
      * Transforme un titre en slug URL-safe.
@@ -174,5 +205,66 @@ if (!function_exists('method_field')) {
     function method_field(string $method): string
     {
         return '<input type="hidden" name="_method" value="' . e(strtoupper($method)) . '">';
+    }
+}
+
+if (!function_exists('responsive_image')) {
+    /**
+     * Génère une balise <picture> servant le WebP s'il existe (avec repli sur
+     * l'image d'origine), et applique le lazy-loading par défaut.
+     *
+     * @param string               $path  chemin relatif sous assets/ (ex: 'images/hero-bg.png')
+     * @param array<string,mixed>  $opts  eager (bool), width (int), height (int)
+     */
+    function responsive_image(string $path, string $alt, string $class = '', array $opts = []): string
+    {
+        $eager = !empty($opts['eager']);
+
+        $attrs  = ' class="' . e($class) . '" alt="' . e($alt) . '"';
+        $attrs .= $eager ? ' fetchpriority="high" decoding="async"' : ' loading="lazy" decoding="async"';
+        if (!empty($opts['width'])) {
+            $attrs .= ' width="' . (int) $opts['width'] . '"';
+        }
+        if (!empty($opts['height'])) {
+            $attrs .= ' height="' . (int) $opts['height'] . '"';
+        }
+
+        $img = '<img src="' . asset($path) . '"' . $attrs . '>';
+
+        $webpRel = preg_replace('/\.(png|jpe?g)$/i', '.webp', $path) ?? $path;
+        $webpFs  = ROOT . '/public/assets/' . ltrim($webpRel, '/');
+
+        if ($webpRel !== $path && is_file($webpFs)) {
+            return '<picture><source srcset="' . asset($webpRel) . '" type="image/webp">' . $img . '</picture>';
+        }
+
+        return $img;
+    }
+}
+
+if (!function_exists('email_template')) {
+    /**
+     * Enveloppe un contenu HTML dans un gabarit d'email brandé ATLEX - Sport.
+     * Le titre est échappé ; le corps est du HTML de confiance (construit par
+     * l'application, avec e() appliqué sur les valeurs utilisateur).
+     */
+    function email_template(string $title, string $bodyHtml): string
+    {
+        $year = date('Y');
+
+        return '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+            . '<meta name="viewport" content="width=device-width,initial-scale=1"></head>'
+            . '<body style="margin:0;padding:24px 0;background:#0a0e1a;font-family:Arial,Helvetica,sans-serif">'
+            . '<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden">'
+            . '<div style="background:#E53935;padding:24px;text-align:center">'
+            . '<span style="font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:2px">ATLEX - Sport</span>'
+            . '</div>'
+            . '<div style="padding:28px;font-size:15px;line-height:1.6;color:#222222">'
+            . '<h1 style="font-size:20px;color:#E53935;margin:0 0 16px">' . e($title) . '</h1>'
+            . $bodyHtml
+            . '</div>'
+            . '<div style="background:#0a0e1a;padding:16px;text-align:center;font-size:12px;color:#8a8a8a">'
+            . '© ' . $year . ' ATLEX - Sport — Cotonou, Bénin. Là où l\'énergie devient passion.'
+            . '</div></div></body></html>';
     }
 }

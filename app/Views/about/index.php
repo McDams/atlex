@@ -5,7 +5,7 @@
  */
 ?>
 <section class="relative h-[45vh] min-h-[320px] flex items-center justify-center overflow-hidden">
-    <img src="<?= asset('images/about-team.png') ?>" alt="" class="absolute inset-0 w-full h-full object-cover">
+    <?= responsive_image('images/about-team.png', '', 'absolute inset-0 w-full h-full object-cover', ['eager' => true]) ?>
     <div class="absolute inset-0 bg-gradient-to-b from-atlex-bg/75 to-atlex-bg"></div>
     <div class="relative z-10 text-center px-4">
         <h1 class="font-bebas text-5xl sm:text-7xl tracking-wider">À propos</h1>
@@ -58,7 +58,7 @@
 <!-- Équipe -->
 <section class="bg-atlex-dark py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <img src="<?= asset('images/team-photo.png') ?>" alt="L'équipe ATLEX - Sport" class="rounded-xl w-full object-cover">
+        <?= responsive_image('images/team-photo.png', "L'équipe ATLEX - Sport", 'rounded-xl w-full object-cover') ?>
         <div>
             <h2 class="font-bebas text-4xl tracking-wider mb-4">Notre équipe</h2>
             <p class="text-white/70 leading-relaxed mb-4">

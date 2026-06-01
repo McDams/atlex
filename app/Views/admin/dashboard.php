@@ -3,14 +3,15 @@
  * @var int $memberCount
  * @var int $eventCount
  * @var int $unreadCount
+ * @var int $pendingInscriptions
  * @var int $taskCount
  * @var array<int,array<string,mixed>> $recentTasks
  * @var array<int,array<string,mixed>> $recentContact
  */
 $kpis = [
     ['label' => 'Membres actifs', 'value' => $memberCount, 'href' => '/admin/membres'],
+    ['label' => 'Inscriptions en attente', 'value' => $pendingInscriptions, 'href' => '/admin/inscriptions'],
     ['label' => 'Événements à venir', 'value' => $eventCount, 'href' => '/admin/evenements'],
-    ['label' => 'Nouvelles soumissions', 'value' => $unreadCount, 'href' => '/admin/documents'],
     ['label' => 'Tâches en cours', 'value' => $taskCount, 'href' => '/admin/taches'],
 ];
 $statusLabels = ['a_faire' => 'À faire', 'en_cours' => 'En cours', 'termine' => 'Terminé'];
