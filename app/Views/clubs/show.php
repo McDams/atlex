@@ -2,7 +2,7 @@
 /** @var array<string,mixed> $discipline */
 ?>
 <section class="relative h-[55vh] min-h-[360px] flex items-end overflow-hidden">
-    <img src="<?= asset($discipline['image']) ?>" alt="<?= e($discipline['name']) ?>" class="absolute inset-0 w-full h-full object-cover">
+    <?= responsive_image($discipline['image'], $discipline['name'], 'absolute inset-0 w-full h-full object-cover', ['eager' => true]) ?>
     <div class="absolute inset-0 bg-gradient-to-t from-atlex-bg via-atlex-bg/40 to-transparent"></div>
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-12 w-full">
         <a href="<?= url('/clubs') ?>" class="text-white/70 hover:text-white text-sm font-montserrat">← Toutes les disciplines</a>

@@ -37,7 +37,7 @@ $rest = array_slice($articles, 1);
                 <a href="<?= url('/actualites/' . $featured['slug']) ?>">
                     <div class="h-72 bg-atlex-blue/40 overflow-hidden">
                         <?php if (!empty($featured['cover_image'])): ?>
-                            <img src="<?= asset($featured['cover_image']) ?>" alt="<?= e($featured['title']) ?>" class="w-full h-full object-cover">
+                            <img src="<?= asset($featured['cover_image']) ?>" alt="<?= e($featured['title']) ?>" loading="lazy" decoding="async" class="w-full h-full object-cover">
                         <?php endif; ?>
                     </div>
                     <div class="p-6">
@@ -69,7 +69,7 @@ $rest = array_slice($articles, 1);
                 <a href="<?= url('/actualites/' . $article['slug']) ?>">
                     <div class="h-44 bg-atlex-blue/40 overflow-hidden">
                         <?php if (!empty($article['cover_image'])): ?>
-                            <img src="<?= asset($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" class="w-full h-full object-cover">
+                            <img src="<?= asset($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" loading="lazy" decoding="async" class="w-full h-full object-cover">
                         <?php endif; ?>
                     </div>
                     <div class="p-5">

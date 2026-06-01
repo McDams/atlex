@@ -29,6 +29,9 @@ $router->get('/contact', 'ContactController@index');
 $router->post('/contact', 'ContactController@send');
 $router->post('/inscription', 'ContactController@register');
 
+$router->get('/confidentialite', 'PrivacyController@index');
+$router->get('/sitemap.xml', 'SitemapController@index');
+
 // ---------------------------------------------------------------------------
 // Routes admin (préfixe /admin, protégées par le routeur)
 // ---------------------------------------------------------------------------
@@ -60,6 +63,11 @@ $router->get('/admin/actualites/nouveau', 'Admin/NewsAdminController@create');
 $router->post('/admin/actualites', 'Admin/NewsAdminController@store');
 $router->put('/admin/actualites/{id}', 'Admin/NewsAdminController@update');
 $router->delete('/admin/actualites/{id}', 'Admin/NewsAdminController@destroy');
+
+// Demandes d'inscription
+$router->get('/admin/inscriptions', 'Admin/InscriptionsController@index');
+$router->post('/admin/inscriptions/{id}/valider', 'Admin/InscriptionsController@approve');
+$router->post('/admin/inscriptions/{id}/refuser', 'Admin/InscriptionsController@reject');
 
 // Documents
 $router->get('/admin/documents', 'Admin/DocumentsController@index');

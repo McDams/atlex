@@ -20,14 +20,17 @@ final class DashboardController extends Controller
     {
         Auth::requireAuth();
 
+        $submissions = new ContactSubmission();
+
         $this->render('admin/dashboard', [
-            'title'         => 'Tableau de bord — Espace SG',
-            'memberCount'   => (new Member())->countActive(),
-            'eventCount'    => (new Event())->countUpcoming(),
-            'unreadCount'   => (new ContactSubmission())->countUnread(),
-            'taskCount'     => (new Task())->countInProgress(),
-            'recentTasks'   => (new Task())->recent(5),
-            'recentContact' => (new ContactSubmission())->recent(5),
+            'title'              => 'Tableau de bord — Espace SG',
+            'memberCount'        => (new Member())->countActive(),
+            'eventCount'         => (new Event())->countUpcoming(),
+            'unreadCount'        => $submissions->countUnread(),
+            'pendingInscriptions' => $submissions->countPendingInscriptions(),
+            'taskCount'          => (new Task())->countInProgress(),
+            'recentTasks'        => (new Task())->recent(5),
+            'recentContact'      => $submissions->recent(5),
         ], 'layouts/admin');
     }
 }

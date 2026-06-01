@@ -130,6 +130,8 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   gender ENUM('M','F','Autre'),
   discipline VARCHAR(50),
   message TEXT,
+  status ENUM('nouveau','valide','refuse') NOT NULL DEFAULT 'nouveau',
+  processed_at TIMESTAMP NULL DEFAULT NULL,
   is_read BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

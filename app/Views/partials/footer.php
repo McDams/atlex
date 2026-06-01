@@ -34,6 +34,7 @@
                 <li><a href="<?= url('/a-propos') ?>" class="hover:text-atlex-red">À propos</a></li>
                 <li><a href="<?= url('/sponsors') ?>" class="hover:text-atlex-red">Sponsors &amp; Partenaires</a></li>
                 <li><a href="<?= url('/contact') ?>" class="hover:text-atlex-red">Nous contacter</a></li>
+                <li><a href="<?= url('/confidentialite') ?>" class="hover:text-atlex-red">Confidentialité</a></li>
                 <li><a href="<?= url('/admin/login') ?>" class="hover:text-atlex-red">Espace SG</a></li>
             </ul>
         </div>

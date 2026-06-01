@@ -18,7 +18,7 @@ $clubs = [
 
 <!-- HERO -->
 <section class="relative min-h-[88vh] flex items-center justify-center overflow-hidden">
-    <img src="<?= asset('images/hero-bg.png') ?>" alt="ATLEX - Sport" class="absolute inset-0 w-full h-full object-cover">
+    <?= responsive_image('images/hero-bg.png', 'ATLEX - Sport', 'absolute inset-0 w-full h-full object-cover', ['eager' => true]) ?>
     <div class="absolute inset-0 bg-gradient-to-b from-atlex-bg/80 via-atlex-bg/55 to-atlex-bg"></div>
     <div class="relative z-10 text-center px-4 max-w-3xl">
         <p class="font-montserrat uppercase tracking-[0.3em] text-atlex-beige mb-4 text-sm">Cotonou · Bénin</p>
@@ -67,7 +67,7 @@ $clubs = [
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <?php foreach ($clubs as $club): ?>
             <a href="<?= url('/clubs/' . $club['slug']) ?>" class="group relative h-72 rounded-xl overflow-hidden reveal">
-                <img src="<?= asset($club['img']) ?>" alt="<?= e($club['name']) ?>" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <?= responsive_image($club['img'], $club['name'], 'absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500') ?>
                 <div class="absolute inset-0 bg-gradient-to-t from-atlex-bg via-atlex-bg/30 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-5">
                     <h3 class="font-bebas text-3xl tracking-wider"><?= e($club['name']) ?></h3>
@@ -92,7 +92,7 @@ $clubs = [
                     <a href="<?= url('/actualites/' . $article['slug']) ?>">
                         <div class="h-48 bg-atlex-blue/40 overflow-hidden">
                             <?php if (!empty($article['cover_image'])): ?>
-                                <img src="<?= asset($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" class="w-full h-full object-cover">
+                                <img src="<?= asset($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" loading="lazy" decoding="async" class="w-full h-full object-cover">
                             <?php endif; ?>
                         </div>
                         <div class="p-5">
@@ -149,6 +149,7 @@ $clubs = [
                 <div class="aspect-square rounded-lg overflow-hidden reveal">
                     <img src="<?= asset(str_starts_with((string) $photo['filename'], 'uploads/') || str_starts_with((string) $photo['filename'], 'images/') ? $photo['filename'] : 'images/' . $photo['filename']) ?>"
                          alt="<?= e($photo['alt_text'] ?? $photo['title']) ?>"
+                         loading="lazy" decoding="async"
                          class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
                 </div>
             <?php endforeach; ?>

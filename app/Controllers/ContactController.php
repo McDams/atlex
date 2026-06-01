@@ -28,12 +28,18 @@ final class ContactController extends Controller
     {
         $this->verifyCsrf();
 
+        if ($this->isSpam()) {
+            flash('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
+            $this->redirect('contact#contact');
+        }
+
         $data = [
             'first_name' => $this->input('first_name'),
             'last_name'  => $this->input('last_name'),
             'email'      => $this->input('email'),
             'phone'      => $this->input('phone'),
             'message'    => $this->input('message'),
+            'consent'    => $this->input('consent'),
         ];
 
         $validator = new Validator($data);
@@ -42,11 +48,15 @@ final class ContactController extends Controller
             'last_name'  => 'required|max:80',
             'email'      => 'required|email|max:150',
             'message'    => 'required|min:10|max:2000',
+            'consent'    => 'required',
+        ], [
+            'consent.required' => 'Vous devez accepter la politique de confidentialité.',
         ]);
 
         if ($validator->fails()) {
             set_old($data);
-            flash('error', implode(' ', $validator->flatErrors()));
+            set_errors($validator->errors());
+            flash('error', 'Veuillez corriger les erreurs du formulaire.');
             $this->redirect('contact#contact');
         }
 
@@ -63,6 +73,7 @@ final class ContactController extends Controller
         $this->notify('Nouveau message de contact', $data);
 
         clear_old();
+        clear_errors();
         flash('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
         $this->redirect('contact#contact');
     }
@@ -74,6 +85,11 @@ final class ContactController extends Controller
     {
         $this->verifyCsrf();
 
+        if ($this->isSpam()) {
+            flash('success', 'Votre demande d\'inscription a été enregistrée. Bienvenue dans la famille ATLEX !');
+            $this->redirect('contact#inscription');
+        }
+
         $data = [
             'first_name' => $this->input('first_name'),
             'last_name'  => $this->input('last_name'),
@@ -83,6 +99,7 @@ final class ContactController extends Controller
             'gender'     => $this->input('gender'),
             'discipline' => $this->input('discipline'),
             'message'    => $this->input('message'),
+            'consent'    => $this->input('consent'),
         ];
 
         $validator = new Validator($data);
@@ -92,11 +109,15 @@ final class ContactController extends Controller
             'email'      => 'required|email|max:150',
             'phone'      => 'required|max:30',
             'discipline' => 'required|in:football,basketball,handball,arts_martiaux',
+            'consent'    => 'required',
+        ], [
+            'consent.required' => 'Vous devez accepter la politique de confidentialité.',
         ]);
 
         if ($validator->fails()) {
             set_old($data);
-            flash('error', implode(' ', $validator->flatErrors()));
+            set_errors($validator->errors());
+            flash('error', 'Veuillez corriger les erreurs du formulaire.');
             $this->redirect('contact#inscription');
         }
 
@@ -110,14 +131,52 @@ final class ContactController extends Controller
             'gender'     => in_array($data['gender'], ['M', 'F', 'Autre'], true) ? $data['gender'] : null,
             'discipline' => $data['discipline'],
             'message'    => $data['message'],
+            'status'     => 'nouveau',
             'is_read'    => 0,
         ]);
 
         $this->notify('Nouvelle demande d\'inscription', $data);
+        $this->acknowledgeRegistration($data);
 
         clear_old();
-        flash('success', 'Votre demande d\'inscription a été enregistrée. Bienvenue dans la famille ATLEX !');
+        clear_errors();
+        flash('success', 'Votre demande d\'inscription a été enregistrée. Vous recevrez un email de confirmation après validation.');
         $this->redirect('contact#inscription');
+    }
+
+    /**
+     * Détecte un envoi automatisé via le champ-piège (honeypot).
+     * Un humain ne remplit jamais ce champ caché ; un bot, souvent.
+     */
+    private function isSpam(): bool
+    {
+        return (string) $this->input('website', '') !== '';
+    }
+
+    /**
+     * Envoie un accusé de réception au candidat (demande en cours d'étude).
+     *
+     * @param array<string,mixed> $data
+     */
+    private function acknowledgeRegistration(array $data): void
+    {
+        $email = (string) ($data['email'] ?? '');
+        if ($email === '') {
+            return;
+        }
+
+        $name = trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? ''));
+        $body = email_template(
+            'Demande d\'inscription bien reçue',
+            '<p>Bonjour <strong>' . e($name) . '</strong>,</p>'
+            . '<p>Nous avons bien reçu votre demande d\'inscription en <strong>'
+            . e(discipline_label($data['discipline'] ?? null)) . '</strong>.</p>'
+            . '<p>Notre équipe va l\'étudier et reviendra vers vous très prochainement '
+            . 'avec un email de confirmation.</p>'
+            . '<p>Sportivement,<br>Le Secrétariat Général — ATLEX - Sport</p>'
+        );
+
+        (new Mailer())->send($email, 'Demande d\'inscription reçue — ATLEX - Sport', $body, $name);
     }
 
     /**
