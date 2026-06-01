@@ -27,7 +27,7 @@ final class ClubsController extends Controller
                 'tagline'   => 'Le cœur battant de l\'association',
                 'description' => 'Notre section football rassemble joueurs et passionnés autour du sport roi. Entraînements techniques, matchs et tournois rythment la saison.',
                 'schedule'  => ['Lundi 17h-19h', 'Mercredi 17h-19h', 'Samedi 9h-12h'],
-                'coach'     => 'Coach principal : ATLÉX Staff',
+                'coach'     => 'Coach principal : ATLEX Staff',
             ],
             'basketball' => [
                 'slug'      => 'basketball',
@@ -36,16 +36,16 @@ final class ClubsController extends Controller
                 'tagline'   => 'Vitesse, adresse et collectif',
                 'description' => 'La section basketball développe l\'esprit d\'équipe et le dépassement de soi. Du mini-basket aux compétitions seniors.',
                 'schedule'  => ['Mardi 18h-20h', 'Jeudi 18h-20h', 'Samedi 14h-16h'],
-                'coach'     => 'Coach principal : ATLÉX Staff',
+                'coach'     => 'Coach principal : ATLEX Staff',
             ],
             'handball' => [
                 'slug'      => 'handball',
                 'name'      => 'Handball',
                 'image'     => 'images/handball-hero.png',
                 'tagline'   => 'Intensité et stratégie',
-                'description' => 'Le handball ATLÉX privilégie l\'engagement physique et la cohésion. Une discipline complète pour tous les âges.',
+                'description' => 'Le handball ATLEX privilégie l\'engagement physique et la cohésion. Une discipline complète pour tous les âges.',
                 'schedule'  => ['Lundi 18h-20h', 'Vendredi 18h-20h'],
-                'coach'     => 'Coach principal : ATLÉX Staff',
+                'coach'     => 'Coach principal : ATLEX Staff',
             ],
             'arts_martiaux' => [
                 'slug'      => 'arts-martiaux',
@@ -55,7 +55,7 @@ final class ClubsController extends Controller
                 'tagline'   => 'Discipline, respect, maîtrise',
                 'description' => 'Notre section arts martiaux enseigne la maîtrise de soi, la concentration et le respect. Self-défense et compétition.',
                 'schedule'  => ['Mercredi 18h-20h', 'Samedi 10h-12h'],
-                'coach'     => 'Coach principal : ATLÉX Staff',
+                'coach'     => 'Coach principal : ATLEX Staff',
             ],
         ];
     }

@@ -1,4 +1,4 @@
-# 📧 Guide Configuration Emails Professionnels — ATLÉX-SPORT
+# 📧 Guide Configuration Emails Professionnels — ATLEX - Sport
 **Domaine :** atlexsport.com  
 **Hébergeur :** Hostinger
 
@@ -22,17 +22,17 @@
 3. Créer dans l'ordre :
 
 ### contact@atlexsport.com
-- Nom d'affichage : `ATLÉX-SPORT`
+- Nom d'affichage : `ATLEX - Sport`
 - Mot de passe : (fort, à noter)
 - Quota : 1 Go minimum
 
 ### ulrich@atlexsport.com
-- Nom d'affichage : `Ulrich — ATLÉX-SPORT`
+- Nom d'affichage : `Ulrich — ATLEX - Sport`
 - Mot de passe : (fort, à noter)
 - Quota : 1 Go minimum
 
 ### noreply@atlexsport.com
-- Nom d'affichage : `ATLÉX-SPORT (Ne pas répondre)`
+- Nom d'affichage : `ATLEX - Sport (Ne pas répondre)`
 - Peut être un alias pointant vers `contact@atlexsport.com`
 
 ---
@@ -81,7 +81,7 @@ MAIL_PORT=465
 MAIL_USER=contact@atlexsport.com
 MAIL_PASS=MOT_DE_PASSE_DE_LA_BOITE_CONTACT
 MAIL_ENCRYPTION=ssl
-MAIL_FROM_NAME="ATLÉX-SPORT"
+MAIL_FROM_NAME="ATLEX - Sport"
 
 ADMIN_EMAIL=ulrich@atlexsport.com
 ```

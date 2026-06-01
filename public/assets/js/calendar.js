@@ -1,5 +1,5 @@
 /**
- * ATLÉX-SPORT — Calendrier interactif.
+ * ATLEX - Sport — Calendrier interactif.
  * Récupère les événements via /api/events/{year}/{month} et affiche
  * une grille mensuelle avec pastilles + détails de la date sélectionnée.
  */

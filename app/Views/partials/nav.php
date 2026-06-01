@@ -14,7 +14,7 @@ $links = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
 
         <!-- Logo SVG inline -->
-        <a href="<?= url('/') ?>" class="flex items-center gap-2" aria-label="ATLÉX-SPORT accueil">
+        <a href="<?= url('/') ?>" class="flex items-center gap-2" aria-label="ATLEX - Sport accueil">
             <svg width="38" height="38" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M20 3 L37 34 H3 Z" fill="#E53935"/>
                 <path d="M20 14 L28 30 H12 Z" fill="#0a0e1a"/>

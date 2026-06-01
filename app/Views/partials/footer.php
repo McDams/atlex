@@ -60,7 +60,7 @@
 
     <div class="border-t border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 text-center text-xs text-white/40">
-            © <?= date('Y') ?> ATLANTIS EXPERTISE SPORT (ATLÉX-SPORT). Tous droits réservés.
+            © <?= date('Y') ?> ATLANTIS EXPERTISE SPORT (ATLEX - Sport). Tous droits réservés.
         </div>
     </div>
 </footer>

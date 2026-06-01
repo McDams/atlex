@@ -14,7 +14,7 @@ $rest = array_slice($articles, 1);
 ?>
 <section class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
     <h1 class="font-bebas text-5xl sm:text-6xl tracking-wider mb-2">Actualités</h1>
-    <p class="text-white/60 font-montserrat mb-10">Toute la vie du club ATLÉX-SPORT</p>
+    <p class="text-white/60 font-montserrat mb-10">Toute la vie du club ATLEX - Sport</p>
 
     <!-- Filtres catégorie -->
     <div class="flex flex-wrap gap-2 mb-10">

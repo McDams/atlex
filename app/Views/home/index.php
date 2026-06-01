@@ -18,7 +18,7 @@ $clubs = [
 
 <!-- HERO -->
 <section class="relative min-h-[88vh] flex items-center justify-center overflow-hidden">
-    <img src="<?= asset('images/hero-bg.png') ?>" alt="ATLÉX-SPORT" class="absolute inset-0 w-full h-full object-cover">
+    <img src="<?= asset('images/hero-bg.png') ?>" alt="ATLEX - Sport" class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-gradient-to-b from-atlex-bg/80 via-atlex-bg/55 to-atlex-bg"></div>
     <div class="relative z-10 text-center px-4 max-w-3xl">
         <p class="font-montserrat uppercase tracking-[0.3em] text-atlex-beige mb-4 text-sm">Cotonou · Bénin</p>
@@ -173,7 +173,7 @@ $clubs = [
 <section class="bg-atlex-red">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
         <h2 class="font-bebas text-4xl sm:text-6xl tracking-wider text-white">Prêt à rejoindre l'aventure ?</h2>
-        <p class="text-white/90 font-montserrat mt-3">Intègre la famille ATLÉX-SPORT dès aujourd'hui.</p>
+        <p class="text-white/90 font-montserrat mt-3">Intègre la famille ATLEX - Sport dès aujourd'hui.</p>
         <a href="<?= url('/contact#inscription') ?>" class="inline-block mt-8 bg-white text-atlex-red font-montserrat font-bold uppercase tracking-wide px-8 py-3 rounded hover:bg-atlex-beige transition-colors">S'inscrire maintenant</a>
     </div>
 </section>

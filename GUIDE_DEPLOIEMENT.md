@@ -1,4 +1,4 @@
-# 🚀 Guide de Déploiement — ATLÉX-SPORT
+# 🚀 Guide de Déploiement — ATLEX - Sport
 **Domaine cible :** atlexsport.com  
 **Hébergeur :** Hostinger  
 **Stack :** PHP 8.2 · MySQL 8.0 · Tailwind CSS v3

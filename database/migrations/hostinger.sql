@@ -1,6 +1,6 @@
 -- =============================================================================
 -- Migration : Monitoring Hostinger — Table settings
--- Projet     : ATLÉX-SPORT
+-- Projet     : ATLEX - Sport
 -- Date       : 2025
 -- Description: Crée la table `settings` (clé/valeur) pour stocker les
 --              configurations persistentes (token API Hostinger, email admin, etc.)

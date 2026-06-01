@@ -116,7 +116,7 @@ final class ContactController extends Controller
         $this->notify('Nouvelle demande d\'inscription', $data);
 
         clear_old();
-        flash('success', 'Votre demande d\'inscription a été enregistrée. Bienvenue dans la famille ATLÉX !');
+        flash('success', 'Votre demande d\'inscription a été enregistrée. Bienvenue dans la famille ATLEX !');
         $this->redirect('contact#inscription');
     }
 

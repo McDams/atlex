@@ -99,7 +99,7 @@ final class HostingerReminderService
                     }
 
                     // Envoyer l'email
-                    $subject = "⚠️ ATLÉX-SPORT — Abonnement expirant dans {$daysLeft} jour(s) : {$name}";
+                    $subject = "⚠️ ATLEX - Sport — Abonnement expirant dans {$daysLeft} jour(s) : {$name}";
                     $body    = $this->buildSubscriptionEmailBody($sub, $daysLeft, $threshold);
 
                     if ($this->mailer->send($this->adminEmail, $subject, $body)) {
@@ -132,7 +132,7 @@ final class HostingerReminderService
                         continue;
                     }
 
-                    $subject = "⚠️ ATLÉX-SPORT — Domaine expirant dans {$daysLeft} jour(s) : {$name}";
+                    $subject = "⚠️ ATLEX - Sport — Domaine expirant dans {$daysLeft} jour(s) : {$name}";
                     $body    = $this->buildDomainEmailBody($domain, $daysLeft, $threshold);
 
                     if ($this->mailer->send($this->adminEmail, $subject, $body)) {
@@ -281,7 +281,7 @@ final class HostingerReminderService
     }
 
     /**
-     * Enveloppe le contenu email dans un template HTML responsive aux couleurs ATLÉX-SPORT.
+     * Enveloppe le contenu email dans un template HTML responsive aux couleurs ATLEX - Sport.
      */
     private function wrapEmailTemplate(string $title, string $accentColor, string $body): string
     {
@@ -329,8 +329,8 @@ final class HostingerReminderService
                             <tr>
                                 <td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.08);background-color:#000d1f;">
                                     <p style="margin:0;color:#4b5563;font-size:12px;text-align:center;">
-                                        ATLÉX-SPORT — Administration &bull; Cet email a été envoyé automatiquement.<br>
-                                        &copy; {$year} ATLÉX-SPORT. Tous droits réservés.
+                                        ATLEX - Sport — Administration &bull; Cet email a été envoyé automatiquement.<br>
+                                        &copy; {$year} ATLEX - Sport. Tous droits réservés.
                                     </p>
                                 </td>
                             </tr>

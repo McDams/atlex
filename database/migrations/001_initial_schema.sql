@@ -1,5 +1,5 @@
 -- =====================================================================
--- ATLÉX-SPORT — Schéma de base de données complet
+-- ATLEX - Sport — Schéma de base de données complet
 -- MySQL 8.0 / utf8mb4
 -- =====================================================================
 

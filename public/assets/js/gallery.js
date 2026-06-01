@@ -1,5 +1,5 @@
 /**
- * ATLÉX-SPORT — Galerie : filtre par catégorie + lightbox.
+ * ATLEX - Sport — Galerie : filtre par catégorie + lightbox.
  */
 function filterGallery(cat, btn) {
     document.querySelectorAll('.g-cell').forEach(function (item) {

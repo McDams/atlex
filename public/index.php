@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Front controller unique de l'application ATLÉX-SPORT.
+ * Front controller unique de l'application ATLEX - Sport.
  */
 
 define('ROOT', dirname(__DIR__));

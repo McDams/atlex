@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 — Erreur serveur | ATLÉX-SPORT</title>
+    <title>500 — Erreur serveur | ATLEX - Sport</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <style>
         body { margin:0; min-height:100vh; display:grid; place-items:center; background:#0a0e1a; color:#fff; font-family:'Montserrat',sans-serif; text-align:center; }
