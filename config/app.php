@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Configuration générale de l'application ATLÉX-SPORT.
+ * Configuration générale de l'application ATLEX - Sport.
  *
  * Charge les variables d'environnement et définit les constantes globales.
  */
@@ -19,7 +19,7 @@ $env = static function (string $key, mixed $default = null): mixed {
     };
 };
 
-define('APP_NAME', $env('APP_NAME', 'ATLÉX-SPORT'));
+define('APP_NAME', $env('APP_NAME', 'ATLEX - Sport'));
 define('APP_URL', rtrim((string) $env('APP_URL', 'http://localhost:8000'), '/'));
 define('APP_ENV', $env('APP_ENV', 'production'));
 define('APP_DEBUG', (bool) $env('APP_DEBUG', false));

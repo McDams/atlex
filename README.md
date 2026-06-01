@@ -1,6 +1,6 @@
-# 🏆 ATLÉX-SPORT
+# 🏆 ATLEX - Sport
 
-> Plateforme web officielle de l'association sportive **ATLÉX-SPORT** — Cotonou, Bénin.
+> Plateforme web officielle de l'association sportive **ATLEX - Sport** — Cotonou, Bénin.
 > *Là où l'énergie devient passion.*
 
 ![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
@@ -12,7 +12,7 @@
 
 ## 📋 Présentation
 
-ATLÉX-SPORT est une association sportive béninoise active dans **quatre disciplines** :
+ATLEX - Sport est une association sportive béninoise active dans **quatre disciplines** :
 football, basketball, handball et arts martiaux.
 
 Cette plateforme propose :
@@ -177,5 +177,5 @@ Distribué sous licence **MIT**. Voir le fichier `LICENSE` pour plus d'informati
 ---
 
 <p align="center">
-  <strong>ATLÉX-SPORT</strong> — Là où l'énergie devient passion. 🇧🇯
+  <strong>ATLEX - Sport</strong> — Là où l'énergie devient passion. 🇧🇯
 </p>

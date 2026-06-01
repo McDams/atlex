@@ -1,5 +1,5 @@
 /**
- * ATLÉX-SPORT — JavaScript global
+ * ATLEX - Sport — JavaScript global
  * Navigation mobile, scroll reveal, lien actif, flash auto-dismiss.
  */
 (function () {

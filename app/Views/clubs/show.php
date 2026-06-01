@@ -22,7 +22,7 @@
             <div class="font-montserrat uppercase text-xs tracking-widest text-white/60 mt-1">Créneaux / semaine</div>
         </div>
         <div class="bg-atlex-dark rounded-xl p-6 text-center border border-white/5">
-            <div class="font-bebas text-2xl text-atlex-red mt-3">ATLÉX</div>
+            <div class="font-bebas text-2xl text-atlex-red mt-3">ATLEX</div>
             <div class="font-montserrat uppercase text-xs tracking-widest text-white/60 mt-1">Encadrement</div>
         </div>
     </div>

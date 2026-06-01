@@ -1,5 +1,5 @@
 /**
- * ATLÉX-SPORT — Espace d'administration.
+ * ATLEX - Sport — Espace d'administration.
  * Confirmation de suppression, Kanban drag-and-drop, bascule publication AJAX.
  */
 (function () {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($title ?? APP_NAME) ?></title>
-    <meta name="description" content="ATLÉX-SPORT — Association sportive béninoise. Football, Basketball, Handball, Arts Martiaux. Là où l'énergie devient passion.">
+    <meta name="description" content="ATLEX - Sport — Association sportive béninoise. Football, Basketball, Handball, Arts Martiaux. Là où l'énergie devient passion.">
 
     <link rel="icon" type="image/svg+xml" href="<?= asset('images/favicon.svg') ?>">
 

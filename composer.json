@@ -1,6 +1,6 @@
 {
     "name": "atlex-sport/platform",
-    "description": "Plateforme numérique ATLÉX-SPORT",
+    "description": "Plateforme numérique ATLEX - Sport",
     "type": "project",
     "license": "MIT",
     "require": {

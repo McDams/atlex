@@ -16,7 +16,7 @@ final class Mailer
 
     public function __construct()
     {
-        $this->fromName  = $_ENV['MAIL_FROM_NAME'] ?? getenv('MAIL_FROM_NAME') ?: 'ATLÉX-SPORT';
+        $this->fromName  = $_ENV['MAIL_FROM_NAME'] ?? getenv('MAIL_FROM_NAME') ?: 'ATLEX - Sport';
         $this->fromEmail = $_ENV['MAIL_USER'] ?? getenv('MAIL_USER') ?: 'contact@atlexsport.com';
     }
 

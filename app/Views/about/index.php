@@ -17,12 +17,12 @@
 <section class="max-w-3xl mx-auto px-4 sm:px-6 py-16">
     <h2 class="font-bebas text-4xl tracking-wider mb-6">Notre histoire</h2>
     <p class="text-white/70 leading-relaxed mb-4">
-        Fondée le 26 août 2023 à Cotonou, l'association ATLANTIS EXPERTISE SPORT (ATLÉX-SPORT)
+        Fondée le 26 août 2023 à Cotonou, l'association ATLANTIS EXPERTISE SPORT (ATLEX - Sport)
         rassemble des passionnés autour de quatre disciplines : le football, le basketball,
         le handball et les arts martiaux.
     </p>
     <p class="text-white/70 leading-relaxed">
-        Portée par sa devise « Là où l'énergie devient passion », ATLÉX-SPORT œuvre pour
+        Portée par sa devise « Là où l'énergie devient passion », ATLEX - Sport œuvre pour
         la formation sportive, la cohésion sociale et l'épanouissement de la jeunesse béninoise.
     </p>
 </section>
@@ -58,7 +58,7 @@
 <!-- Équipe -->
 <section class="bg-atlex-dark py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <img src="<?= asset('images/team-photo.png') ?>" alt="L'équipe ATLÉX-SPORT" class="rounded-xl w-full object-cover">
+        <img src="<?= asset('images/team-photo.png') ?>" alt="L'équipe ATLEX - Sport" class="rounded-xl w-full object-cover">
         <div>
             <h2 class="font-bebas text-4xl tracking-wider mb-4">Notre équipe</h2>
             <p class="text-white/70 leading-relaxed mb-4">

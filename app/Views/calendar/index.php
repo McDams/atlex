@@ -7,7 +7,7 @@
 ?>
 <section class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
     <h1 class="font-bebas text-5xl sm:text-6xl tracking-wider mb-2">Calendrier</h1>
-    <p class="text-white/60 font-montserrat mb-10">Tous les rendez-vous d'ATLÉX-SPORT</p>
+    <p class="text-white/60 font-montserrat mb-10">Tous les rendez-vous d'ATLEX - Sport</p>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Calendrier -->

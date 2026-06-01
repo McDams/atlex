@@ -19,7 +19,7 @@ $active = $category ?? 'all';
 ?>
 <section class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
     <h1 class="font-bebas text-5xl sm:text-6xl tracking-wider mb-2">Galerie</h1>
-    <p class="text-white/60 font-montserrat mb-10">Les moments forts d'ATLÉX-SPORT en images</p>
+    <p class="text-white/60 font-montserrat mb-10">Les moments forts d'ATLEX - Sport en images</p>
 
     <!-- Filtres -->
     <div class="flex flex-wrap gap-2 mb-10">
