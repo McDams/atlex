@@ -4,7 +4,6 @@
 /storage/logs/*
 /storage/cache/*
 /public/uploads/*
-/public/assets/css/app.min.css
 .DS_Store
 *.log
 Thumbs.db
@@ -12,3 +11,4 @@ Thumbs.db
 !/storage/logs/.gitkeep
 !/storage/cache/.gitkeep
 !/public/uploads/.gitkeep
+!/public/uploads/.htaccess

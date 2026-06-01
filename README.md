@@ -66,7 +66,10 @@ cp .env.example .env
 mysql -u root -p atlex_sport < database/schema.sql
 mysql -u root -p atlex_sport < database/seeds.sql
 
-# 6. Lancer le serveur de développement
+# 6. Créer le compte administrateur (mot de passe fort de votre choix)
+php bin/create-admin.php
+
+# 7. Lancer le serveur de développement
 php -S localhost:8000 -t public
 ```
 
@@ -79,10 +82,13 @@ Le site est alors accessible sur **http://localhost:8000**.
 | Champ        | Valeur                  |
 | ------------ | ----------------------- |
 | URL          | `/admin/login`          |
-| Email        | `admin@atlexsport.com`  |
-| Mot de passe | `Atlex2024!`            |
+| Email        | celui défini via `bin/create-admin.php` |
+| Mot de passe | celui défini via `bin/create-admin.php` |
 
-> ⚠️ Pensez à modifier ces identifiants en production.
+> 🔒 **Aucun identifiant par défaut n'est livré avec le code.** Le compte admin
+> se crée uniquement via `php bin/create-admin.php`, qui exige un mot de passe
+> d'au moins 12 caractères. Après 5 tentatives de connexion échouées depuis une
+> même IP, l'accès est temporairement bloqué (15 min).
 
 ---
 

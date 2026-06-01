@@ -1,14 +1,13 @@
 -- =====================================================================
 -- ATLEX - Sport — Données initiales (seeds)
--- Mot de passe admin : Atlex2024!  (bcrypt)
+--
+-- Le compte administrateur N'EST PAS créé ici : aucun mot de passe par
+-- défaut n'est livré avec le code. Créez-le avec un mot de passe fort via :
+--     php bin/create-admin.php
+-- (voir GUIDE_DEPLOIEMENT.md, ÉTAPE 7).
 -- =====================================================================
 
 SET NAMES utf8mb4;
-
--- Utilisateur admin
-INSERT INTO users (name, email, password, role) VALUES
-('Ulrich — Secrétaire Général', 'admin@atlexsport.com',
- '$2b$10$ndMnXb7.SGmsyk8FmfMzr.QjZc1Qy2uPcjACmiPWuwcv/Yk1h9pCW', 'admin');
 
 -- Sponsors
 INSERT INTO sponsors (name, tier, website_url, description, is_active, sort_order) VALUES
@@ -35,15 +34,15 @@ INSERT INTO news_articles (title, slug, excerpt, content, category, is_published
 ('ATLEX - Sport lance sa nouvelle saison 2026', 'atlex-sport-lance-saison-2026',
  'La saison sportive 2026 démarre avec de nombreuses nouveautés pour nos quatre disciplines.',
  'La saison 2026 s''annonce exceptionnelle pour ATLEX - Sport.\n\nNos quatre disciplines — football, basketball, handball et arts martiaux — reprennent du service avec des entraînements renforcés et un calendrier riche en compétitions.\n\nRejoignez-nous pour vivre cette aventure sportive intense, là où l''énergie devient passion.',
- 'general', 1, '2026-05-10 10:00:00', 1),
+ 'general', 1, '2026-05-10 10:00:00', NULL),
 ('Nos basketteurs remportent le tournoi régional', 'basketteurs-remportent-tournoi-regional',
  'L''équipe senior de basketball s''impose en finale du tournoi régional de Cotonou.',
  'Quelle performance !\n\nNos basketteurs ont brillé lors du tournoi régional, décrochant une victoire éclatante en finale.\n\nUn grand bravo à toute l''équipe et au staff technique pour ce résultat qui récompense des mois de travail acharné.',
- 'resultat', 1, '2026-05-18 14:30:00', 1),
+ 'resultat', 1, '2026-05-18 14:30:00', NULL),
 ('Campagne de recrutement : rejoignez la famille ATLEX', 'campagne-recrutement-rejoignez-atlex',
  'ATLEX - Sport ouvre ses inscriptions pour la saison 2026. Toutes les disciplines recrutent !',
  'Vous rêvez de pratiquer un sport dans une ambiance conviviale et exigeante ?\n\nATLEX - Sport recrute dans ses quatre disciplines. Que vous soyez débutant ou confirmé, une place vous attend.\n\nRendez-vous sur notre page contact pour vous inscrire dès aujourd''hui.',
- 'recrutement', 1, '2026-05-25 09:00:00', 1);
+ 'recrutement', 1, '2026-05-25 09:00:00', NULL);
 
 -- Membres d'exemple
 INSERT INTO members (first_name, last_name, email, phone, age, gender, discipline, status, joined_at) VALUES
@@ -63,6 +62,6 @@ INSERT INTO gallery_photos (title, filename, category, alt_text, is_published, s
 
 -- Tâches d'exemple (espace SG)
 INSERT INTO tasks (title, description, status, priority, due_date, created_by) VALUES
-('Préparer le tournoi de juin', 'Logistique, terrains, arbitres', 'en_cours', 'haute', '2026-06-01', 1),
-('Mettre à jour la liste des membres', 'Vérifier les cotisations', 'a_faire', 'normale', '2026-06-10', 1),
-('Publier le bilan de la saison', 'Rédiger et publier l''article bilan', 'a_faire', 'basse', NULL, 1);
+('Préparer le tournoi de juin', 'Logistique, terrains, arbitres', 'en_cours', 'haute', '2026-06-01', NULL),
+('Mettre à jour la liste des membres', 'Vérifier les cotisations', 'a_faire', 'normale', '2026-06-10', NULL),
+('Publier le bilan de la saison', 'Rédiger et publier l''article bilan', 'a_faire', 'basse', NULL, NULL);

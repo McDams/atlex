@@ -1,0 +1,22 @@
+# Dossier des téléversements : aucune exécution de script, aucun contenu actif.
+# Défense en profondeur — complète la validation MIME côté PHP (FileUpload).
+
+# Interdire l'accès aux fichiers exécutables ou porteurs de contenu actif
+# (scripts serveur + formats susceptibles d'embarquer du JavaScript : SVG, HTML).
+<FilesMatch "(?i)\.(php|php[0-9]*|phtml|phar|pl|py|cgi|sh|asp|aspx|jsp|svg|svgz|xhtml|html?|js)$">
+    Require all denied
+</FilesMatch>
+
+# Ne jamais exécuter de CGI ni lister le contenu du dossier.
+Options -ExecCGI -Indexes
+
+# Forcer la désactivation du moteur PHP s'il tourne en module Apache.
+<IfModule mod_php.c>
+    php_admin_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_admin_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_admin_flag engine off
+</IfModule>

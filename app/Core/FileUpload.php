@@ -11,14 +11,19 @@ use RuntimeException;
  */
 final class FileUpload
 {
-    /** @var array<string,string> Extensions images autorisées => type MIME. */
+    /**
+     * @var array<string,string> Extensions images autorisées => type MIME.
+     *
+     * NB : le SVG est volontairement exclu — un fichier SVG peut embarquer du
+     * JavaScript et constitue un vecteur de XSS stocké lorsqu'il est servi en
+     * ligne. Utiliser un format rasterisé (PNG/WebP) pour les logos vectoriels.
+     */
     public const IMAGE_TYPES = [
         'jpg'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'png'  => 'image/png',
         'webp' => 'image/webp',
         'gif'  => 'image/gif',
-        'svg'  => 'image/svg+xml',
     ];
 
     /** @var array<string,string> Extensions documents autorisées => type MIME. */
@@ -124,12 +129,6 @@ final class FileUpload
         $mime = $finfo ? (string) finfo_file($finfo, $tmpPath) : '';
         if ($finfo) {
             finfo_close($finfo);
-        }
-
-        // Les SVG sont parfois détectés comme text/plain ou text/xml.
-        if (in_array($mime, ['text/plain', 'text/xml', 'application/xml'], true)
-            && str_contains((string) file_get_contents($tmpPath, false, null, 0, 256), '<svg')) {
-            return 'image/svg+xml';
         }
 
         return $mime;

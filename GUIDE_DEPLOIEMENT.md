@@ -113,13 +113,27 @@ HOSTINGER_API_TOKEN=TON_TOKEN_API_HOSTINGER
 
 ---
 
-## ÉTAPE 7 — Changer le mot de passe admin
+## ÉTAPE 7 — Créer le compte administrateur
 
-Se connecter sur `https://atlexsport.com/admin` avec :
-- Email : `admin@atlexsport.com`
-- Mot de passe : `Atlex2024!`
+Aucun identifiant par défaut n'est livré avec le code. Créez le compte admin
+avec un mot de passe fort (≥ 12 caractères) en exécutant, depuis la racine du projet :
 
-**⚠️ Changer immédiatement le mot de passe depuis le panneau admin !**
+```bash
+php bin/create-admin.php
+```
+
+Le script demande le nom, l'email de connexion et le mot de passe. En
+non-interactif (déploiement automatisé) :
+
+```bash
+ADMIN_NAME="Ulrich — SG" ADMIN_LOGIN_EMAIL="admin@atlexsport.com" \
+ADMIN_PASSWORD="<mot_de_passe_fort>" php bin/create-admin.php
+```
+
+Connectez-vous ensuite sur `https://atlexsport.com/admin` avec ces identifiants.
+
+> 🔒 Après 5 tentatives échouées depuis une même IP, la connexion est bloquée
+> 15 minutes (protection anti-bruteforce).
 
 ---
 
