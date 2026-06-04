@@ -72,8 +72,8 @@ $statusFilters = ['identifie', 'en_preparation', 'depose', 'obtenu', 'refuse'];
                     ?>
                     <tr class="border-b border-white/5 hover:bg-white/5">
                         <td class="px-5 py-3 font-montserrat font-semibold">
-                            <?php if (!empty($f['application_url'])): ?>
-                                <a href="<?= e($f['application_url']) ?>" target="_blank" rel="noopener noreferrer" class="hover:text-atlex-beige"><?= e($f['name']) ?> ↗</a>
+                            <?php if ($link = safe_url($f['application_url'])): ?>
+                                <a href="<?= e($link) ?>" target="_blank" rel="noopener noreferrer" class="hover:text-atlex-beige"><?= e($f['name']) ?> ↗</a>
                             <?php else: ?>
                                 <?= e($f['name']) ?>
                             <?php endif; ?>

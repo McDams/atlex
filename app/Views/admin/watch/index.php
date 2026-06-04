@@ -55,9 +55,13 @@ $activeSources = array_filter($sources, static fn ($s) => (int) $s['is_active'] 
             <div class="bg-atlex-dark rounded-xl border border-white/5 p-5">
                 <div class="flex flex-wrap items-start justify-between gap-3">
                     <div class="min-w-0 flex-1">
-                        <a href="<?= e($lead['url']) ?>" target="_blank" rel="noopener noreferrer" class="font-montserrat font-semibold hover:text-atlex-beige">
-                            <?= e($lead['title']) ?> ↗
-                        </a>
+                        <?php if ($link = safe_url($lead['url'])): ?>
+                            <a href="<?= e($link) ?>" target="_blank" rel="noopener noreferrer" class="font-montserrat font-semibold hover:text-atlex-beige">
+                                <?= e($lead['title']) ?> ↗
+                            </a>
+                        <?php else: ?>
+                            <span class="font-montserrat font-semibold"><?= e($lead['title']) ?></span>
+                        <?php endif; ?>
                         <div class="text-white/40 text-xs mt-1">
                             <?= e($lead['source_label'] ?? $lead['source_name'] ?? 'Source') ?>
                             <?php if (!empty($lead['published_at'])): ?> · <?= e(format_date_fr($lead['published_at'])) ?><?php endif; ?>

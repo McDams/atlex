@@ -32,8 +32,8 @@ $offers = [
                             <?php endif; ?>
                         </div>
                         <?php $card = (string) ob_get_clean(); ?>
-                        <?php if (!empty($sponsor['website_url'])): ?>
-                            <a href="<?= e($sponsor['website_url']) ?>" target="_blank" rel="noopener"><?= $card ?></a>
+                        <?php if ($link = safe_url($sponsor['website_url'])): ?>
+                            <a href="<?= e($link) ?>" target="_blank" rel="noopener"><?= $card ?></a>
                         <?php else: ?>
                             <?= $card ?>
                         <?php endif; ?>

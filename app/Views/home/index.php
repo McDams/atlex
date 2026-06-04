@@ -92,7 +92,7 @@ $clubs = [
                     <a href="<?= url('/actualites/' . $article['slug']) ?>">
                         <div class="h-48 bg-atlex-blue/40 overflow-hidden">
                             <?php if (!empty($article['cover_image'])): ?>
-                                <img src="<?= asset($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                                <img src="<?= url($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" loading="lazy" decoding="async" class="w-full h-full object-cover">
                             <?php endif; ?>
                         </div>
                         <div class="p-5">

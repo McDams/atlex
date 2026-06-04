@@ -99,8 +99,8 @@ $videos       = $athlete['videos'] ?? [];
                                 <iframe src="<?= e($embed) ?>" title="<?= e($v['title'] ?: 'Vidéo') ?>" class="w-full h-full"
                                         loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             </div>
-                        <?php else: ?>
-                            <a href="<?= e($v['url']) ?>" target="_blank" rel="noopener noreferrer"
+                        <?php elseif ($link = safe_url($v['url'])): ?>
+                            <a href="<?= e($link) ?>" target="_blank" rel="noopener noreferrer"
                                class="flex items-center gap-3 bg-atlex-dark border border-white/5 rounded-xl px-5 py-4 hover:border-atlex-red/40 transition-colors">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-atlex-red"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                                 <span class="font-montserrat text-sm"><?= e($v['title'] ?: 'Voir la vidéo') ?></span>

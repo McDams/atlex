@@ -391,6 +391,22 @@ if (!function_exists('responsive_image')) {
     }
 }
 
+if (!function_exists('safe_url')) {
+    /**
+     * Valide qu'une URL externe utilise le schéma http(s).
+     * Retourne l'URL si elle est sûre, sinon null (neutralise javascript:, data:, etc.).
+     */
+    function safe_url(?string $url): ?string
+    {
+        $url = trim((string) ($url ?? ''));
+        if ($url === '') {
+            return null;
+        }
+
+        return preg_match('#^https?://#i', $url) === 1 ? $url : null;
+    }
+}
+
 if (!function_exists('youtube_embed_url')) {
     /**
      * Transforme un lien YouTube (watch, youtu.be, shorts) en URL d'intégration

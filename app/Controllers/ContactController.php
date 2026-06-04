@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Mailer;
+use App\Core\RateLimiter;
 use App\Core\Validator;
 use App\Models\ContactSubmission;
 
@@ -14,6 +15,11 @@ use App\Models\ContactSubmission;
  */
 final class ContactController extends Controller
 {
+    /** Nombre maximal de soumissions par IP sur la fenêtre. */
+    private const MAX_SUBMISSIONS = 8;
+
+    /** Fenêtre de limitation (secondes) — 15 minutes. */
+    private const SUBMISSION_WINDOW = 900;
     public function index(): void
     {
         $this->render('contact/index', [
@@ -27,6 +33,7 @@ final class ContactController extends Controller
     public function send(): void
     {
         $this->verifyCsrf();
+        $this->guardSubmissionRate('contact');
 
         if ($this->isSpam()) {
             flash('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
@@ -84,6 +91,7 @@ final class ContactController extends Controller
     public function register(): void
     {
         $this->verifyCsrf();
+        $this->guardSubmissionRate('inscription');
 
         if ($this->isSpam()) {
             flash('success', 'Votre demande d\'inscription a été enregistrée. Bienvenue dans la famille ATLEX !');
@@ -142,6 +150,24 @@ final class ContactController extends Controller
         clear_errors();
         flash('success', 'Votre demande d\'inscription a été enregistrée. Vous recevrez un email de confirmation après validation.');
         $this->redirect('contact#inscription');
+    }
+
+    /**
+     * Limite le nombre de soumissions par IP (anti-spam / anti-flood),
+     * en complément du honeypot. Redirige avec un message si le seuil est atteint.
+     */
+    private function guardSubmissionRate(string $anchor): void
+    {
+        $limiter = new RateLimiter();
+        $key = 'form:' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+
+        if ($limiter->tooManyAttempts($key, self::MAX_SUBMISSIONS)) {
+            $minutes = (int) ceil($limiter->availableIn($key) / 60);
+            flash('error', "Trop d'envois en peu de temps. Réessayez dans {$minutes} minute(s).");
+            $this->redirect('contact#' . $anchor);
+        }
+
+        $limiter->hit($key, self::SUBMISSION_WINDOW);
     }
 
     /**

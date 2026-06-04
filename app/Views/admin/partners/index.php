@@ -39,8 +39,8 @@
                         </td>
                         <td class="px-5 py-3 text-white/60"><?= e(sponsor_tier_label($p['tier'])) ?></td>
                         <td class="px-5 py-3 text-white/60">
-                            <?php if (!empty($p['website_url'])): ?>
-                                <a href="<?= e($p['website_url']) ?>" target="_blank" rel="noopener noreferrer" class="text-atlex-beige hover:underline">Lien ↗</a>
+                            <?php if ($link = safe_url($p['website_url'])): ?>
+                                <a href="<?= e($link) ?>" target="_blank" rel="noopener noreferrer" class="text-atlex-beige hover:underline">Lien ↗</a>
                             <?php else: ?>—<?php endif; ?>
                         </td>
                         <td class="px-5 py-3">

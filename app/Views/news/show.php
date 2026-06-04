@@ -16,7 +16,7 @@
 
     <?php if (!empty($article['cover_image'])): ?>
         <div class="rounded-xl overflow-hidden mb-8">
-            <img src="<?= asset($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" class="w-full object-cover">
+            <img src="<?= url($article['cover_image']) ?>" alt="<?= e($article['title']) ?>" class="w-full object-cover">
         </div>
     <?php endif; ?>
 
