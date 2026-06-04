@@ -96,7 +96,7 @@ $clubs = [
                             <?php endif; ?>
                         </div>
                         <div class="p-5">
-                            <span class="inline-block text-xs font-montserrat uppercase tracking-wide text-atlex-red mb-2"><?= e(ucfirst((string) $article['category'])) ?></span>
+                            <span class="inline-block text-xs font-montserrat uppercase tracking-wide text-atlex-red mb-2"><?= e(news_category_label($article['category'])) ?></span>
                             <h3 class="font-montserrat font-bold text-lg leading-snug mb-2"><?= e($article['title']) ?></h3>
                             <p class="text-white/60 text-sm line-clamp-3"><?= e($article['excerpt']) ?></p>
                             <p class="text-white/40 text-xs mt-3"><?= e(format_date_fr($article['published_at'] ?? $article['created_at'])) ?></p>

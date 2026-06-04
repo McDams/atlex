@@ -8,7 +8,7 @@
     <a href="<?= url('/actualites') ?>" class="text-white/60 hover:text-white text-sm font-montserrat">← Retour aux actualités</a>
 
     <div class="flex items-center gap-3 mt-6 mb-4">
-        <span class="text-xs font-montserrat uppercase tracking-wide px-3 py-1 rounded bg-atlex-red text-white"><?= e($article['category']) ?></span>
+        <span class="text-xs font-montserrat uppercase tracking-wide px-3 py-1 rounded bg-atlex-red text-white"><?= e(news_category_label($article['category'])) ?></span>
         <span class="text-white/40 text-sm"><?= e(format_date_fr($article['published_at'] ?? $article['created_at'])) ?></span>
     </div>
 
@@ -41,7 +41,7 @@
             <?php foreach ($related as $r): ?>
                 <?php if ($r['id'] === $article['id']) { continue; } ?>
                 <a href="<?= url('/actualites/' . $r['slug']) ?>" class="block bg-atlex-bg rounded-xl p-5 border border-white/5 hover:border-atlex-red/40 transition-colors">
-                    <span class="text-xs text-atlex-red font-montserrat uppercase"><?= e($r['category']) ?></span>
+                    <span class="text-xs text-atlex-red font-montserrat uppercase"><?= e(news_category_label($r['category'])) ?></span>
                     <h3 class="font-montserrat font-bold mt-1"><?= e($r['title']) ?></h3>
                 </a>
             <?php endforeach; ?>

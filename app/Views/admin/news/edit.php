@@ -1,6 +1,6 @@
 <?php
 /** @var array<string,mixed> $article */
-$categories = ['general' => 'Général', 'resultat' => 'Résultat', 'recrutement' => 'Recrutement', 'evenement' => 'Événement', 'partenariat' => 'Partenariat'];
+$categories = ['general' => 'Général', 'resultat' => 'Résultat', 'recrutement' => 'Recrutement', 'evenement' => 'Événement', 'partenariat' => 'Partenariat', 'rapport' => "Rapports d'activité"];
 $pubDate = !empty($article['published_at']) ? date('Y-m-d', strtotime((string) $article['published_at'])) : '';
 ?>
 <div class="max-w-3xl">

@@ -8,7 +8,8 @@
  */
 $categories = [
     '' => 'Toutes', 'resultat' => 'Résultats', 'recrutement' => 'Recrutement',
-    'evenement' => 'Événements', 'partenariat' => 'Partenariats', 'general' => 'Général',
+    'evenement' => 'Événements', 'partenariat' => 'Partenariats',
+    'rapport' => "Rapports d'activité", 'general' => 'Général',
 ];
 $rest = array_slice($articles, 1);
 ?>
@@ -41,7 +42,7 @@ $rest = array_slice($articles, 1);
                         <?php endif; ?>
                     </div>
                     <div class="p-6">
-                        <span class="text-xs font-montserrat uppercase tracking-wide text-atlex-red"><?= e(ucfirst((string) $featured['category'])) ?></span>
+                        <span class="text-xs font-montserrat uppercase tracking-wide text-atlex-red"><?= e(news_category_label($featured['category'])) ?></span>
                         <h2 class="font-bebas text-3xl tracking-wide mt-2 mb-3"><?= e($featured['title']) ?></h2>
                         <p class="text-white/60"><?= e($featured['excerpt']) ?></p>
                         <p class="text-white/40 text-xs mt-4"><?= e(format_date_fr($featured['published_at'] ?? $featured['created_at'])) ?></p>
@@ -55,7 +56,7 @@ $rest = array_slice($articles, 1);
             <h3 class="font-bebas text-2xl tracking-wider">À lire aussi</h3>
             <?php foreach (array_slice($rest, 0, 4) as $a): ?>
                 <a href="<?= url('/actualites/' . $a['slug']) ?>" class="block bg-atlex-dark rounded-lg p-4 border border-white/5 hover:border-atlex-red/40 transition-colors">
-                    <span class="text-xs text-atlex-red font-montserrat uppercase"><?= e($a['category']) ?></span>
+                    <span class="text-xs text-atlex-red font-montserrat uppercase"><?= e(news_category_label($a['category'])) ?></span>
                     <h4 class="font-montserrat font-semibold text-sm mt-1"><?= e($a['title']) ?></h4>
                 </a>
             <?php endforeach; ?>
@@ -73,7 +74,7 @@ $rest = array_slice($articles, 1);
                         <?php endif; ?>
                     </div>
                     <div class="p-5">
-                        <span class="text-xs font-montserrat uppercase tracking-wide text-atlex-red"><?= e($article['category']) ?></span>
+                        <span class="text-xs font-montserrat uppercase tracking-wide text-atlex-red"><?= e(news_category_label($article['category'])) ?></span>
                         <h3 class="font-montserrat font-bold mt-1 mb-2 leading-snug"><?= e($article['title']) ?></h3>
                         <p class="text-white/60 text-sm line-clamp-2"><?= e($article['excerpt']) ?></p>
                         <p class="text-white/40 text-xs mt-3"><?= e(format_date_fr($article['published_at'] ?? $article['created_at'])) ?></p>

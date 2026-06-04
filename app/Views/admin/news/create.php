@@ -1,5 +1,5 @@
 <?php
-$categories = ['general' => 'Général', 'resultat' => 'Résultat', 'recrutement' => 'Recrutement', 'evenement' => 'Événement', 'partenariat' => 'Partenariat'];
+$categories = ['general' => 'Général', 'resultat' => 'Résultat', 'recrutement' => 'Recrutement', 'evenement' => 'Événement', 'partenariat' => 'Partenariat', 'rapport' => "Rapports d'activité"];
 ?>
 <div class="max-w-3xl">
     <a href="<?= url('/admin/actualites') ?>" class="text-white/50 text-sm hover:text-white">← Retour</a>

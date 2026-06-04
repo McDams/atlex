@@ -165,7 +165,7 @@ final class NewsAdminController extends Controller
         $validator = new Validator($data);
         $validator->validate([
             'title'    => 'required|max:250',
-            'category' => 'in:resultat,recrutement,evenement,partenariat,general',
+            'category' => 'in:resultat,recrutement,evenement,partenariat,general,rapport',
         ]);
 
         if ($validator->fails()) {

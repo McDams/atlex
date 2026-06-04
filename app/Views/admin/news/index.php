@@ -24,7 +24,7 @@
                 <?php foreach ($articles as $a): ?>
                     <tr class="border-b border-white/5 hover:bg-white/5">
                         <td class="px-5 py-3 font-montserrat font-semibold"><?= e($a['title']) ?></td>
-                        <td class="px-5 py-3 text-white/60"><?= e($a['category']) ?></td>
+                        <td class="px-5 py-3 text-white/60"><?= e(news_category_label($a['category'])) ?></td>
                         <td class="px-5 py-3 text-white/60"><?= e(format_date_fr($a['published_at'] ?? $a['created_at'])) ?></td>
                         <td class="px-5 py-3">
                             <form method="POST" action="<?= url('/admin/actualites/' . $a['id']) ?>" class="inline js-toggle-publish" data-id="<?= (int) $a['id'] ?>">

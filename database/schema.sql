@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS news_articles (
   slug VARCHAR(270) UNIQUE NOT NULL,
   excerpt TEXT,
   content LONGTEXT,
-  category ENUM('resultat','recrutement','evenement','partenariat','general') DEFAULT 'general',
+  category ENUM('resultat','recrutement','evenement','partenariat','general','rapport') DEFAULT 'general',
   cover_image VARCHAR(300),
   is_published BOOLEAN DEFAULT FALSE,
   published_at DATETIME,

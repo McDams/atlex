@@ -197,6 +197,25 @@ if (!function_exists('discipline_label')) {
     }
 }
 
+if (!function_exists('news_category_label')) {
+    /**
+     * Retourne le libellé lisible d'une catégorie d'actualité.
+     */
+    function news_category_label(?string $key): string
+    {
+        $labels = [
+            'general'     => 'Général',
+            'resultat'    => 'Résultat',
+            'recrutement' => 'Recrutement',
+            'evenement'   => 'Événement',
+            'partenariat' => 'Partenariat',
+            'rapport'     => "Rapports d'activité",
+        ];
+
+        return $labels[$key] ?? ucfirst((string) $key);
+    }
+}
+
 if (!function_exists('csrf_field')) {
     /**
      * Génère le champ caché CSRF pour les formulaires.
