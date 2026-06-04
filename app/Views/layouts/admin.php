@@ -17,6 +17,7 @@ if (!$isLoginPage) {
 
 $navItems = [
     '/admin'            => ['Tableau de bord', 'M3 13h8V3H3zM13 21h8V3h-8zM3 21h8v-6H3z'],
+    '/admin/impact'     => ['Impact', 'M3 3v18h18M7 14l4-4 3 3 5-6'],
     '/admin/membres'    => ['Membres', 'M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m6-1.13a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'],
     '/admin/athletes'   => ['Athlètes', 'M13 2 L3 14h7l-1 8 10-12h-7z'],
     '/admin/inscriptions' => ['Inscriptions', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'],

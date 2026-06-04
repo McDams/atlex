@@ -149,6 +149,7 @@ atlex-sport/
 | GET / POST | `/admin/login`         | Connexion                    |
 | POST    | `/admin/logout`           | Déconnexion                  |
 | GET     | `/admin`                  | Tableau de bord              |
+| GET     | `/admin/impact`           | Tableau de bord d'impact     |
 | GET     | `/admin/membres`          | Gestion des membres          |
 | GET     | `/admin/athletes`         | Gestion des profils athlètes |
 | GET     | `/admin/projets`          | Gestion des projets          |

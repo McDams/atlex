@@ -44,6 +44,11 @@ $router->post('/admin/logout', 'Admin/AuthController@logout');
 
 $router->get('/admin', 'Admin/DashboardController@index');
 
+// Tableau de bord d'impact
+$router->get('/admin/impact', 'Admin/ImpactController@index');
+$router->post('/admin/impact/indicateurs', 'Admin/ImpactController@store');
+$router->delete('/admin/impact/indicateurs/{id}', 'Admin/ImpactController@destroy');
+
 // Membres
 $router->get('/admin/membres', 'Admin/MembersController@index');
 $router->get('/admin/membres/nouveau', 'Admin/MembersController@create');

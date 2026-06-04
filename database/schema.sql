@@ -276,4 +276,14 @@ CREATE TABLE IF NOT EXISTS project_partners (
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Indicateurs d'impact manuels (cf. migration 008)
+CREATE TABLE IF NOT EXISTS impact_indicators (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  label VARCHAR(150) NOT NULL,
+  value VARCHAR(60) NOT NULL,
+  unit VARCHAR(40),
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

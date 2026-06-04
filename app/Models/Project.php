@@ -101,6 +101,16 @@ final class Project extends BaseModel
     }
 
     /**
+     * Nombre total de bénéficiaires déclarés sur l'ensemble des projets.
+     */
+    public function sumBeneficiaries(): int
+    {
+        return (int) $this->db->query(
+            "SELECT COALESCE(SUM(beneficiary_count), 0) FROM {$this->table}"
+        )->fetchColumn();
+    }
+
+    /**
      * Répartition du nombre de projets par statut.
      *
      * @return array<string,int>
