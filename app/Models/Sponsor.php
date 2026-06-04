@@ -16,6 +16,30 @@ final class Sponsor extends BaseModel
     ];
 
     /**
+     * Tous les partenaires ordonnés (espace SG — actifs et masqués).
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    public function allOrdered(): array
+    {
+        return $this->db->query(
+            "SELECT * FROM {$this->table}
+             ORDER BY FIELD(tier,'officiel','associe','media'), sort_order ASC, name ASC"
+        )->fetchAll();
+    }
+
+    /**
+     * Bascule l'état actif/masqué.
+     */
+    public function toggleActive(int $id): void
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE {$this->table} SET is_active = NOT is_active WHERE id = :id"
+        );
+        $stmt->execute(['id' => $id]);
+    }
+
+    /**
      * Sponsors actifs ordonnés.
      *
      * @return array<int,array<string,mixed>>

@@ -96,6 +96,14 @@ $router->get('/admin/financements/{id}/edit', 'Admin/FundingController@edit');
 $router->put('/admin/financements/{id}', 'Admin/FundingController@update');
 $router->delete('/admin/financements/{id}', 'Admin/FundingController@destroy');
 
+// Partenaires
+$router->get('/admin/partenaires', 'Admin/PartnersController@index');
+$router->get('/admin/partenaires/nouveau', 'Admin/PartnersController@create');
+$router->post('/admin/partenaires', 'Admin/PartnersController@store');
+$router->get('/admin/partenaires/{id}/edit', 'Admin/PartnersController@edit');
+$router->put('/admin/partenaires/{id}', 'Admin/PartnersController@update');
+$router->delete('/admin/partenaires/{id}', 'Admin/PartnersController@destroy');
+
 // Documents
 $router->get('/admin/documents', 'Admin/DocumentsController@index');
 $router->post('/admin/documents', 'Admin/DocumentsController@upload');

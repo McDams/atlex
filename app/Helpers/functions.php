@@ -268,6 +268,22 @@ if (!function_exists('funding_type_label')) {
     }
 }
 
+if (!function_exists('sponsor_tier_label')) {
+    /**
+     * Libellé lisible d'un niveau de partenaire.
+     */
+    function sponsor_tier_label(?string $key): string
+    {
+        $labels = [
+            'officiel' => 'Partenaire officiel',
+            'associe'  => 'Partenaire associé',
+            'media'    => 'Partenaire média',
+        ];
+
+        return $labels[$key] ?? ucfirst((string) $key);
+    }
+}
+
 if (!function_exists('news_category_label')) {
     /**
      * Retourne le libellé lisible d'une catégorie d'actualité.

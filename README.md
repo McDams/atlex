@@ -155,6 +155,7 @@ atlex-sport/
 | GET     | `/admin/financements`     | Recherche de financements    |
 | GET     | `/admin/evenements`       | Gestion des événements       |
 | GET     | `/admin/actualites`       | Gestion des actualités       |
+| GET     | `/admin/partenaires`      | Gestion des partenaires      |
 | GET     | `/admin/documents`        | Documents internes           |
 | GET     | `/admin/taches`           | Tableau Kanban des tâches    |
 

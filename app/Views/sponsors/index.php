@@ -18,10 +18,20 @@ $offers = [
                 <h2 class="font-bebas text-3xl tracking-wider mb-6"><?= e($label) ?></h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <?php foreach ($sponsors[$tier] as $sponsor): ?>
-                        <?php $card = '<div class="bg-atlex-dark rounded-xl p-6 border border-white/5 flex flex-col items-center justify-center h-36 text-center hover:border-atlex-red/40 transition-colors">'
-                            . '<span class="font-bebas text-2xl tracking-wide">' . e($sponsor['name']) . '</span>'
-                            . (!empty($sponsor['description']) ? '<span class="text-white/40 text-xs mt-2">' . e($sponsor['description']) . '</span>' : '')
-                            . '</div>'; ?>
+                        <?php
+                        ob_start(); ?>
+                        <div class="bg-atlex-dark rounded-xl p-6 border border-white/5 flex flex-col items-center justify-center h-36 text-center hover:border-atlex-red/40 transition-colors">
+                            <?php if (!empty($sponsor['logo'])): ?>
+                                <img src="<?= url($sponsor['logo']) ?>" alt="<?= e($sponsor['name']) ?>" loading="lazy" decoding="async" class="max-h-16 max-w-full object-contain">
+                                <span class="sr-only"><?= e($sponsor['name']) ?></span>
+                            <?php else: ?>
+                                <span class="font-bebas text-2xl tracking-wide"><?= e($sponsor['name']) ?></span>
+                            <?php endif; ?>
+                            <?php if (!empty($sponsor['description'])): ?>
+                                <span class="text-white/40 text-xs mt-2"><?= e($sponsor['description']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <?php $card = (string) ob_get_clean(); ?>
                         <?php if (!empty($sponsor['website_url'])): ?>
                             <a href="<?= e($sponsor['website_url']) ?>" target="_blank" rel="noopener"><?= $card ?></a>
                         <?php else: ?>
