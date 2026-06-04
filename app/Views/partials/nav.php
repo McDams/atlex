@@ -2,6 +2,7 @@
 $links = [
     '/'           => 'Accueil',
     '/clubs'      => 'Clubs',
+    '/athletes'   => 'Athlètes',
     '/actualites' => 'Actualités',
     '/galerie'    => 'Galerie',
     '/calendrier' => 'Calendrier',

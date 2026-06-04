@@ -252,6 +252,31 @@ if (!function_exists('responsive_image')) {
     }
 }
 
+if (!function_exists('youtube_embed_url')) {
+    /**
+     * Transforme un lien YouTube (watch, youtu.be, shorts) en URL d'intégration
+     * « privacy-enhanced » (youtube-nocookie). Retourne null si l'URL n'est pas
+     * reconnue comme une vidéo YouTube intégrable.
+     */
+    function youtube_embed_url(string $url): ?string
+    {
+        $patterns = [
+            '#youtu\.be/([A-Za-z0-9_-]{11})#',
+            '#youtube\.com/watch\?(?:.*&)?v=([A-Za-z0-9_-]{11})#',
+            '#youtube\.com/embed/([A-Za-z0-9_-]{11})#',
+            '#youtube\.com/shorts/([A-Za-z0-9_-]{11})#',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url, $m)) {
+                return 'https://www.youtube-nocookie.com/embed/' . $m[1];
+            }
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('email_template')) {
     /**
      * Enveloppe un contenu HTML dans un gabarit d'email brandé ATLEX - Sport.

@@ -137,4 +137,52 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Athlètes (profils numériques publics — cf. migration 003)
+CREATE TABLE IF NOT EXISTS athletes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  slug VARCHAR(180) UNIQUE NOT NULL,
+  first_name VARCHAR(80) NOT NULL,
+  last_name VARCHAR(80) NOT NULL,
+  discipline ENUM('football','basketball','handball','arts_martiaux') NOT NULL,
+  category VARCHAR(80),
+  ranking VARCHAR(150),
+  photo VARCHAR(300),
+  bio TEXT,
+  is_published BOOLEAN DEFAULT TRUE,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_athletes_discipline (discipline),
+  INDEX idx_athletes_published (is_published)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS athlete_achievements (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  athlete_id INT NOT NULL,
+  year VARCHAR(9),
+  title VARCHAR(250) NOT NULL,
+  position VARCHAR(100),
+  sort_order INT DEFAULT 0,
+  FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS athlete_results (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  athlete_id INT NOT NULL,
+  result_date DATE,
+  competition VARCHAR(250) NOT NULL,
+  result VARCHAR(150),
+  sort_order INT DEFAULT 0,
+  FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS athlete_videos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  athlete_id INT NOT NULL,
+  title VARCHAR(200),
+  url VARCHAR(500) NOT NULL,
+  sort_order INT DEFAULT 0,
+  FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

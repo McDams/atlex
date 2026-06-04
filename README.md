@@ -130,6 +130,8 @@ atlex-sport/
 | GET     | `/`                       | Accueil                      |
 | GET     | `/clubs`                  | Liste des disciplines        |
 | GET     | `/clubs/{slug}`           | Détail d'une discipline      |
+| GET     | `/athletes`               | Liste des athlètes (profils) |
+| GET     | `/athletes/{slug}`        | Profil détaillé d'un athlète |
 | GET     | `/actualites`             | Liste des actualités         |
 | GET     | `/actualites/{slug}`      | Détail d'un article          |
 | GET     | `/galerie`                | Galerie photo                |
@@ -148,6 +150,7 @@ atlex-sport/
 | POST    | `/admin/logout`           | Déconnexion                  |
 | GET     | `/admin`                  | Tableau de bord              |
 | GET     | `/admin/membres`          | Gestion des membres          |
+| GET     | `/admin/athletes`         | Gestion des profils athlètes |
 | GET     | `/admin/evenements`       | Gestion des événements       |
 | GET     | `/admin/actualites`       | Gestion des actualités       |
 | GET     | `/admin/documents`        | Documents internes           |

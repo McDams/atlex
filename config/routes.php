@@ -14,6 +14,9 @@ $router->get('/', 'HomeController@index');
 $router->get('/clubs', 'ClubsController@index');
 $router->get('/clubs/{slug}', 'ClubsController@show');
 
+$router->get('/athletes', 'AthletesController@index');
+$router->get('/athletes/{slug}', 'AthletesController@show');
+
 $router->get('/actualites', 'NewsController@index');
 $router->get('/actualites/{slug}', 'NewsController@show');
 
@@ -48,6 +51,14 @@ $router->post('/admin/membres', 'Admin/MembersController@store');
 $router->get('/admin/membres/{id}/edit', 'Admin/MembersController@edit');
 $router->put('/admin/membres/{id}', 'Admin/MembersController@update');
 $router->delete('/admin/membres/{id}', 'Admin/MembersController@destroy');
+
+// Athlètes
+$router->get('/admin/athletes', 'Admin/AthletesController@index');
+$router->get('/admin/athletes/nouveau', 'Admin/AthletesController@create');
+$router->post('/admin/athletes', 'Admin/AthletesController@store');
+$router->get('/admin/athletes/{id}/edit', 'Admin/AthletesController@edit');
+$router->put('/admin/athletes/{id}', 'Admin/AthletesController@update');
+$router->delete('/admin/athletes/{id}', 'Admin/AthletesController@destroy');
 
 // Événements
 $router->get('/admin/evenements', 'Admin/EventsController@index');
