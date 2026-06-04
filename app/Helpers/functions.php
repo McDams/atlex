@@ -197,6 +197,77 @@ if (!function_exists('discipline_label')) {
     }
 }
 
+if (!function_exists('format_fcfa')) {
+    /**
+     * Formate un montant en francs CFA (séparateur de milliers par espace).
+     */
+    function format_fcfa(mixed $amount): string
+    {
+        if ($amount === null || $amount === '') {
+            return '—';
+        }
+
+        return number_format((float) $amount, 0, ',', ' ') . ' FCFA';
+    }
+}
+
+if (!function_exists('project_status_label')) {
+    /**
+     * Libellé lisible d'un statut de projet.
+     */
+    function project_status_label(?string $key): string
+    {
+        $labels = [
+            'planifie' => 'Planifié',
+            'en_cours' => 'En cours',
+            'en_pause' => 'En pause',
+            'termine'  => 'Terminé',
+            'annule'   => 'Annulé',
+        ];
+
+        return $labels[$key] ?? ucfirst((string) $key);
+    }
+}
+
+if (!function_exists('funding_status_label')) {
+    /**
+     * Libellé lisible d'un statut de candidature de financement.
+     */
+    function funding_status_label(?string $key): string
+    {
+        $labels = [
+            'identifie'      => 'Identifié',
+            'en_preparation' => 'En préparation',
+            'depose'         => 'Déposé',
+            'obtenu'         => 'Obtenu',
+            'refuse'         => 'Refusé',
+        ];
+
+        return $labels[$key] ?? ucfirst((string) $key);
+    }
+}
+
+if (!function_exists('funding_type_label')) {
+    /**
+     * Libellé lisible d'un type de financement.
+     */
+    function funding_type_label(?string $key): string
+    {
+        $labels = [
+            'subvention'   => 'Subvention',
+            'appel_projet' => 'Appel à projets',
+            'sponsoring'   => 'Sponsoring',
+            'crowdfunding' => 'Crowdfunding / dons communautaires',
+            'don'          => 'Don',
+            'bourse'       => 'Bourse',
+            'prix'         => 'Prix',
+            'autre'        => 'Autre',
+        ];
+
+        return $labels[$key] ?? ucfirst((string) $key);
+    }
+}
+
 if (!function_exists('news_category_label')) {
     /**
      * Retourne le libellé lisible d'une catégorie d'actualité.

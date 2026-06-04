@@ -80,6 +80,22 @@ $router->get('/admin/inscriptions', 'Admin/InscriptionsController@index');
 $router->post('/admin/inscriptions/{id}/valider', 'Admin/InscriptionsController@approve');
 $router->post('/admin/inscriptions/{id}/refuser', 'Admin/InscriptionsController@reject');
 
+// Projets
+$router->get('/admin/projets', 'Admin/ProjectsController@index');
+$router->get('/admin/projets/nouveau', 'Admin/ProjectsController@create');
+$router->post('/admin/projets', 'Admin/ProjectsController@store');
+$router->get('/admin/projets/{id}/edit', 'Admin/ProjectsController@edit');
+$router->put('/admin/projets/{id}', 'Admin/ProjectsController@update');
+$router->delete('/admin/projets/{id}', 'Admin/ProjectsController@destroy');
+
+// Recherche de financements
+$router->get('/admin/financements', 'Admin/FundingController@index');
+$router->get('/admin/financements/nouveau', 'Admin/FundingController@create');
+$router->post('/admin/financements', 'Admin/FundingController@store');
+$router->get('/admin/financements/{id}/edit', 'Admin/FundingController@edit');
+$router->put('/admin/financements/{id}', 'Admin/FundingController@update');
+$router->delete('/admin/financements/{id}', 'Admin/FundingController@destroy');
+
 // Documents
 $router->get('/admin/documents', 'Admin/DocumentsController@index');
 $router->post('/admin/documents', 'Admin/DocumentsController@upload');

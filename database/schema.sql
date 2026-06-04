@@ -185,4 +185,57 @@ CREATE TABLE IF NOT EXISTS athlete_videos (
   FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Projets de l'association (gestion interne SG — cf. migration 005)
+CREATE TABLE IF NOT EXISTS projects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  description TEXT,
+  discipline ENUM('football','basketball','handball','arts_martiaux','tous') DEFAULT 'tous',
+  theme VARCHAR(120),
+  status ENUM('planifie','en_cours','en_pause','termine','annule') DEFAULT 'planifie',
+  lead VARCHAR(150),
+  beneficiaries TEXT,
+  beneficiary_count INT,
+  expected_impact TEXT,
+  budget_target DECIMAL(12,2),
+  start_date DATE,
+  end_date DATE,
+  created_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_projects_status (status),
+  FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Opportunités de financement (tracker interne SG — cf. migration 005)
+CREATE TABLE IF NOT EXISTS funding_opportunities (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  project_id INT,
+  name VARCHAR(200) NOT NULL,
+  funder VARCHAR(200),
+  type ENUM('subvention','appel_projet','sponsoring','crowdfunding','don','bourse','prix','autre') DEFAULT 'subvention',
+  amount DECIMAL(12,2),
+  deadline DATE,
+  status ENUM('identifie','en_preparation','depose','obtenu','refuse') DEFAULT 'identifie',
+  application_url VARCHAR(500),
+  notes TEXT,
+  created_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_funding_status (status),
+  INDEX idx_funding_project (project_id),
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
+  FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Partenaires d'un projet (cf. migration 006)
+CREATE TABLE IF NOT EXISTS project_partners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  project_id INT NOT NULL,
+  name VARCHAR(180) NOT NULL,
+  role VARCHAR(120),
+  sort_order INT DEFAULT 0,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;
