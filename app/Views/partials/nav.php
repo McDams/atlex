@@ -8,6 +8,7 @@ $links = [
     '/calendrier' => 'Calendrier',
     '/a-propos'   => 'À propos',
     '/sponsors'   => 'Sponsors',
+    '/centre-media' => 'Presse',
     '/contact'    => 'Contact',
 ];
 ?>

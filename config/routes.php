@@ -28,6 +28,9 @@ $router->get('/api/events/{year}/{month}', 'CalendarController@apiEvents');
 $router->get('/a-propos', 'AboutController@index');
 $router->get('/sponsors', 'SponsorsController@index');
 
+$router->get('/centre-media', 'MediaController@index');
+$router->get('/centre-media/communiques/{slug}', 'MediaController@show');
+
 $router->get('/contact', 'ContactController@index');
 $router->post('/contact', 'ContactController@send');
 $router->post('/inscription', 'ContactController@register');
@@ -125,6 +128,19 @@ $router->post('/admin/partenaires', 'Admin/PartnersController@store');
 $router->get('/admin/partenaires/{id}/edit', 'Admin/PartnersController@edit');
 $router->put('/admin/partenaires/{id}', 'Admin/PartnersController@update');
 $router->delete('/admin/partenaires/{id}', 'Admin/PartnersController@destroy');
+
+// Centre média
+$router->get('/admin/media', 'Admin/MediaController@index');
+$router->get('/admin/media/communiques/nouveau', 'Admin/MediaController@createRelease');
+$router->post('/admin/media/communiques', 'Admin/MediaController@storeRelease');
+$router->get('/admin/media/communiques/{id}/edit', 'Admin/MediaController@editRelease');
+$router->put('/admin/media/communiques/{id}', 'Admin/MediaController@updateRelease');
+$router->delete('/admin/media/communiques/{id}', 'Admin/MediaController@destroyRelease');
+$router->post('/admin/media/kit', 'Admin/MediaController@storeKit');
+$router->delete('/admin/media/kit/{id}', 'Admin/MediaController@destroyKit');
+$router->post('/admin/media/revue', 'Admin/MediaController@storeCoverage');
+$router->delete('/admin/media/revue/{id}', 'Admin/MediaController@destroyCoverage');
+$router->post('/admin/media/contact', 'Admin/MediaController@saveContact');
 
 // Documents
 $router->get('/admin/documents', 'Admin/DocumentsController@index');

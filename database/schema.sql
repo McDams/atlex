@@ -276,6 +276,42 @@ CREATE TABLE IF NOT EXISTS project_partners (
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Centre média (cf. migration 009)
+CREATE TABLE IF NOT EXISTS press_releases (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(250) NOT NULL,
+  slug VARCHAR(270) UNIQUE NOT NULL,
+  reference VARCHAR(60),
+  excerpt TEXT,
+  content LONGTEXT,
+  file VARCHAR(300),
+  is_published BOOLEAN DEFAULT FALSE,
+  published_at DATETIME,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_press_published (is_published)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS press_kit_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  description VARCHAR(300),
+  category ENUM('logo','charte','photo','dossier','autre') DEFAULT 'autre',
+  file VARCHAR(300) NOT NULL,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS press_coverage (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(250) NOT NULL,
+  media_name VARCHAR(150),
+  url VARCHAR(500) NOT NULL,
+  published_date DATE,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Indicateurs d'impact manuels (cf. migration 008)
 CREATE TABLE IF NOT EXISTS impact_indicators (
   id INT AUTO_INCREMENT PRIMARY KEY,

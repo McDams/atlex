@@ -139,6 +139,8 @@ atlex-sport/
 | GET     | `/api/events/{year}/{month}` | Événements du mois (JSON) |
 | GET     | `/a-propos`               | À propos                     |
 | GET     | `/partenaires`            | Sponsors & partenaires       |
+| GET     | `/centre-media`           | Centre média (presse)        |
+| GET     | `/centre-media/communiques/{slug}` | Détail d'un communiqué |
 | GET / POST | `/contact`             | Formulaire de contact        |
 | POST    | `/inscription`            | Formulaire d'inscription     |
 
@@ -158,6 +160,7 @@ atlex-sport/
 | GET     | `/admin/evenements`       | Gestion des événements       |
 | GET     | `/admin/actualites`       | Gestion des actualités       |
 | GET     | `/admin/partenaires`      | Gestion des partenaires      |
+| GET     | `/admin/media`            | Centre média (presse)        |
 | GET     | `/admin/documents`        | Documents internes           |
 | GET     | `/admin/taches`           | Tableau Kanban des tâches    |
 

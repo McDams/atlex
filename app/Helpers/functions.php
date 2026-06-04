@@ -301,6 +301,24 @@ if (!function_exists('funding_checklist_steps')) {
     }
 }
 
+if (!function_exists('press_kit_category_label')) {
+    /**
+     * Libellé lisible d'une catégorie de ressource du kit presse.
+     */
+    function press_kit_category_label(?string $key): string
+    {
+        $labels = [
+            'logo'    => 'Logos',
+            'charte'  => 'Charte graphique',
+            'photo'   => 'Photos officielles',
+            'dossier' => 'Dossiers',
+            'autre'   => 'Autres ressources',
+        ];
+
+        return $labels[$key] ?? ucfirst((string) $key);
+    }
+}
+
 if (!function_exists('sponsor_tier_label')) {
     /**
      * Libellé lisible d'un niveau de partenaire.
