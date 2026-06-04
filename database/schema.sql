@@ -228,6 +228,44 @@ CREATE TABLE IF NOT EXISTS funding_opportunities (
   FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Veille de financements : sources curées (cf. migration 007)
+CREATE TABLE IF NOT EXISTS funding_sources (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  type ENUM('rss','google_news') NOT NULL DEFAULT 'google_news',
+  url VARCHAR(500),
+  query VARCHAR(300),
+  is_active TINYINT(1) DEFAULT 1,
+  last_fetch_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Opportunités détectées automatiquement (cf. migration 007)
+CREATE TABLE IF NOT EXISTS funding_leads (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  source_id INT,
+  title VARCHAR(400) NOT NULL,
+  url VARCHAR(700) NOT NULL,
+  url_hash CHAR(40) NOT NULL UNIQUE,
+  summary TEXT,
+  source_name VARCHAR(200),
+  published_at DATETIME NULL,
+  status ENUM('nouveau','promu','ignore') NOT NULL DEFAULT 'nouveau',
+  fetched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_leads_status (status),
+  FOREIGN KEY (source_id) REFERENCES funding_sources(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Démarches à suivre par opportunité (cf. migration 007)
+CREATE TABLE IF NOT EXISTS funding_checklist (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  opportunity_id INT NOT NULL,
+  label VARCHAR(300) NOT NULL,
+  is_done TINYINT(1) DEFAULT 0,
+  sort_order INT DEFAULT 0,
+  FOREIGN KEY (opportunity_id) REFERENCES funding_opportunities(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Partenaires d'un projet (cf. migration 006)
 CREATE TABLE IF NOT EXISTS project_partners (
   id INT AUTO_INCREMENT PRIMARY KEY,

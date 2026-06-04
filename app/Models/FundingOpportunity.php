@@ -101,4 +101,91 @@ final class FundingOpportunity extends BaseModel
             'by_status' => $byStatus,
         ];
     }
+
+    // -------------------------------------------------------------------------
+    // Démarches à suivre (checklist)
+    // -------------------------------------------------------------------------
+
+    /**
+     * @return array<int,array<string,mixed>>
+     */
+    public function checklist(int $opportunityId): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM funding_checklist WHERE opportunity_id = :id ORDER BY sort_order ASC, id ASC'
+        );
+        $stmt->execute(['id' => $opportunityId]);
+
+        return $stmt->fetchAll();
+    }
+
+    public function addChecklistItem(int $opportunityId, string $label): void
+    {
+        if (trim($label) === '') {
+            return;
+        }
+
+        $stmt = $this->db->prepare(
+            'SELECT COALESCE(MAX(sort_order), -1) + 1 FROM funding_checklist WHERE opportunity_id = :id'
+        );
+        $stmt->execute(['id' => $opportunityId]);
+        $next = (int) $stmt->fetchColumn();
+
+        $ins = $this->db->prepare(
+            'INSERT INTO funding_checklist (opportunity_id, label, sort_order)
+             VALUES (:id, :label, :sort)'
+        );
+        $ins->execute(['id' => $opportunityId, 'label' => mb_substr($label, 0, 300), 'sort' => $next]);
+    }
+
+    /**
+     * Crée la checklist à partir d'une liste d'étapes (ignore si déjà présente).
+     *
+     * @param array<int,string> $labels
+     */
+    public function seedChecklist(int $opportunityId, array $labels): void
+    {
+        $stmt = $this->db->prepare('SELECT COUNT(*) FROM funding_checklist WHERE opportunity_id = :id');
+        $stmt->execute(['id' => $opportunityId]);
+        if ((int) $stmt->fetchColumn() > 0) {
+            return;
+        }
+
+        $ins = $this->db->prepare(
+            'INSERT INTO funding_checklist (opportunity_id, label, sort_order)
+             VALUES (:id, :label, :sort)'
+        );
+        $sort = 0;
+        foreach ($labels as $label) {
+            $label = trim($label);
+            if ($label === '') {
+                continue;
+            }
+            $ins->execute(['id' => $opportunityId, 'label' => mb_substr($label, 0, 300), 'sort' => $sort++]);
+        }
+    }
+
+    public function toggleChecklistItem(int $itemId): void
+    {
+        $stmt = $this->db->prepare('UPDATE funding_checklist SET is_done = NOT is_done WHERE id = :id');
+        $stmt->execute(['id' => $itemId]);
+    }
+
+    public function deleteChecklistItem(int $itemId): void
+    {
+        $stmt = $this->db->prepare('DELETE FROM funding_checklist WHERE id = :id');
+        $stmt->execute(['id' => $itemId]);
+    }
+
+    /**
+     * Identifiant d'opportunité d'un item (pour la redirection après action).
+     */
+    public function checklistItemOpportunity(int $itemId): ?int
+    {
+        $stmt = $this->db->prepare('SELECT opportunity_id FROM funding_checklist WHERE id = :id');
+        $stmt->execute(['id' => $itemId]);
+        $val = $stmt->fetchColumn();
+
+        return $val === false ? null : (int) $val;
+    }
 }

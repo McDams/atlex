@@ -268,6 +268,39 @@ if (!function_exists('funding_type_label')) {
     }
 }
 
+if (!function_exists('funding_checklist_steps')) {
+    /**
+     * Étapes de démarches par défaut pour candidater à un financement.
+     * Surchargeable via le paramètre `funding_checklist_template` (une étape par ligne).
+     *
+     * @return array<int,string>
+     */
+    function funding_checklist_steps(): array
+    {
+        $default = [
+            "Lire l'appel et vérifier l'éligibilité de l'association",
+            'Constituer le dossier administratif (statuts, RIB, rapport d\'activité)',
+            "Rédiger la note d'intention / lettre de motivation",
+            'Établir le budget prévisionnel du projet',
+            'Faire valider le dossier par le bureau',
+            'Déposer le dossier avant la date limite',
+            'Assurer le suivi et relancer le bailleur',
+        ];
+
+        $tpl = (new \App\Models\Setting())->get('funding_checklist_template');
+        if ($tpl === null || trim($tpl) === '') {
+            return $default;
+        }
+
+        $lines = array_values(array_filter(array_map(
+            static fn (string $l): string => trim($l),
+            preg_split('/\r\n|\r|\n/', $tpl) ?: []
+        ), static fn (string $l): bool => $l !== ''));
+
+        return $lines !== [] ? $lines : $default;
+    }
+}
+
 if (!function_exists('sponsor_tier_label')) {
     /**
      * Libellé lisible d'un niveau de partenaire.

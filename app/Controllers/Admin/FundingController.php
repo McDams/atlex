@@ -76,6 +76,7 @@ final class FundingController extends Controller
             'title'       => 'Modifier une opportunité — Espace SG',
             'opportunity' => $opportunity,
             'projects'    => (new Project())->options(),
+            'checklist'   => $this->model->checklist((int) $id),
         ], 'layouts/admin');
     }
 
@@ -104,6 +105,41 @@ final class FundingController extends Controller
         $this->model->delete((int) $id);
         flash('success', 'Opportunité supprimée.');
         $this->redirect('admin/financements');
+    }
+
+    // -------------------------------------------------------------------------
+    // Démarches à suivre (checklist)
+    // -------------------------------------------------------------------------
+
+    public function addChecklist(string $id): void
+    {
+        $this->verifyCsrf();
+        $this->model->addChecklistItem((int) $id, (string) $this->input('label'));
+        $this->redirect('admin/financements/' . $id . '/edit');
+    }
+
+    public function seedChecklist(string $id): void
+    {
+        $this->verifyCsrf();
+        $this->model->seedChecklist((int) $id, funding_checklist_steps());
+        flash('success', 'Démarches types ajoutées.');
+        $this->redirect('admin/financements/' . $id . '/edit');
+    }
+
+    public function toggleChecklist(string $itemId): void
+    {
+        $this->verifyCsrf();
+        $oppId = $this->model->checklistItemOpportunity((int) $itemId);
+        $this->model->toggleChecklistItem((int) $itemId);
+        $this->redirect($oppId !== null ? 'admin/financements/' . $oppId . '/edit' : 'admin/financements');
+    }
+
+    public function deleteChecklist(string $itemId): void
+    {
+        $this->verifyCsrf();
+        $oppId = $this->model->checklistItemOpportunity((int) $itemId);
+        $this->model->deleteChecklistItem((int) $itemId);
+        $this->redirect($oppId !== null ? 'admin/financements/' . $oppId . '/edit' : 'admin/financements');
     }
 
     /**

@@ -153,6 +153,7 @@ atlex-sport/
 | GET     | `/admin/athletes`         | Gestion des profils athlètes |
 | GET     | `/admin/projets`          | Gestion des projets          |
 | GET     | `/admin/financements`     | Recherche de financements    |
+| GET     | `/admin/veille`           | Veille de financements (auto)|
 | GET     | `/admin/evenements`       | Gestion des événements       |
 | GET     | `/admin/actualites`       | Gestion des actualités       |
 | GET     | `/admin/partenaires`      | Gestion des partenaires      |

@@ -96,6 +96,23 @@ $router->get('/admin/financements/{id}/edit', 'Admin/FundingController@edit');
 $router->put('/admin/financements/{id}', 'Admin/FundingController@update');
 $router->delete('/admin/financements/{id}', 'Admin/FundingController@destroy');
 
+// Démarches à suivre (checklist d'une opportunité)
+$router->post('/admin/financements/{id}/checklist', 'Admin/FundingController@addChecklist');
+$router->post('/admin/financements/{id}/checklist/seed', 'Admin/FundingController@seedChecklist');
+$router->put('/admin/financements/checklist/{item}', 'Admin/FundingController@toggleChecklist');
+$router->delete('/admin/financements/checklist/{item}', 'Admin/FundingController@deleteChecklist');
+
+// Veille de financements (opportunités détectées automatiquement)
+$router->get('/admin/veille', 'Admin/FundingWatchController@index');
+$router->post('/admin/veille/refresh', 'Admin/FundingWatchController@refresh');
+$router->get('/admin/veille/sources', 'Admin/FundingWatchController@sources');
+$router->post('/admin/veille/sources', 'Admin/FundingWatchController@storeSource');
+$router->put('/admin/veille/sources/{id}', 'Admin/FundingWatchController@updateSource');
+$router->delete('/admin/veille/sources/{id}', 'Admin/FundingWatchController@destroySource');
+$router->post('/admin/veille/template', 'Admin/FundingWatchController@saveTemplate');
+$router->post('/admin/veille/{id}/promouvoir', 'Admin/FundingWatchController@promote');
+$router->post('/admin/veille/{id}/ignorer', 'Admin/FundingWatchController@ignore');
+
 // Partenaires
 $router->get('/admin/partenaires', 'Admin/PartnersController@index');
 $router->get('/admin/partenaires/nouveau', 'Admin/PartnersController@create');
