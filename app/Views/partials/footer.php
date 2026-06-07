@@ -4,7 +4,7 @@
         <!-- Colonne 1 : logo + slogan -->
         <div>
             <div class="mb-4">
-                <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" class="h-14 w-auto object-contain bg-white rounded p-1">
+                <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" style="height:80px; width:auto; object-fit:contain; background:white; border-radius:8px; padding:6px; margin-bottom:12px;">
             </div>
             <p class="text-atlex-beige font-montserrat italic text-sm mb-2">Là où l'énergie devient passion.</p>
             <p class="text-white/50 text-sm">Association sportive ATLANTIS EXPERTISE SPORT — Cotonou, Bénin. Fondée le 26 août 2023.</p>
@@ -38,7 +38,7 @@
             <h3 class="font-bebas text-lg tracking-wider text-white mb-4">Contact</h3>
             <ul class="space-y-2 text-sm text-white/60">
                 <li>Cotonou, Bénin</li>
-                <li><a href="mailto:contact@atlexsport.com" class="hover:text-atlex-red">contact@atlexsport.com</a></li>
+                <li><a href="mailto:contact@atlex-sport.com" class="hover:text-atlex-red">contact@atlex-sport.com</a></li>
                 <li>+229 21 30 36 00</li>
                 <li>+229 21 30 36 14</li>
             </ul>

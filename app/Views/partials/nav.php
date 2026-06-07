@@ -21,7 +21,7 @@ $links = [
 
         <!-- Logo -->
         <a href="<?= url('/') ?>" class="flex items-center" aria-label="ATLEX - Sport accueil">
-            <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" class="h-12 w-auto object-contain bg-white rounded p-1">
+            <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" style="height:48px; width:auto; object-fit:contain; background:white; border-radius:6px; padding:4px;">
         </a>
 
         <!-- Icônes desktop (libellé affiché au survol) -->
