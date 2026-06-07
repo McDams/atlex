@@ -56,11 +56,8 @@ $navItems = [
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <aside class="w-64 bg-atlex-dark border-r border-white/5 flex-shrink-0 flex flex-col">
-            <div class="h-20 flex items-center gap-2 px-6 border-b border-white/5">
-                <svg width="30" height="30" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                    <path d="M20 3 L37 34 H3 Z" fill="#E53935"/><path d="M20 14 L28 30 H12 Z" fill="#001a3d"/>
-                </svg>
-                <span class="font-bebas text-lg tracking-wider">ATL<span class="text-atlex-beige">É</span>X·SG</span>
+            <div class="h-20 flex items-center px-6 border-b border-white/5">
+                <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" class="h-10 w-auto object-contain bg-white rounded p-1">
             </div>
             <nav class="flex-1 px-3 py-5 space-y-1">
                 <?php foreach ($navItems as $href => [$label, $icon]): ?>

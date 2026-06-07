@@ -19,15 +19,9 @@ $links = [
 <nav class="fixed top-0 inset-x-0 z-40 bg-atlex-dark/95 backdrop-blur border-b border-white/5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
 
-        <!-- Logo SVG inline -->
-        <a href="<?= url('/') ?>" class="flex items-center gap-2" aria-label="ATLEX - Sport accueil">
-            <svg width="38" height="38" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M20 3 L37 34 H3 Z" fill="#E53935"/>
-                <path d="M20 14 L28 30 H12 Z" fill="#0a0e1a"/>
-            </svg>
-            <span class="font-bebas text-2xl tracking-wider leading-none">
-                <span class="text-white">ATL</span><span class="text-atlex-beige">E</span><span class="text-white">X - Sport</span>
-            </span>
+        <!-- Logo -->
+        <a href="<?= url('/') ?>" class="flex items-center" aria-label="ATLEX - Sport accueil">
+            <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" class="h-12 w-auto object-contain bg-white rounded p-1">
         </a>
 
         <!-- Icônes desktop (libellé affiché au survol) -->

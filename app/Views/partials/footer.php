@@ -3,14 +3,8 @@
 
         <!-- Colonne 1 : logo + slogan -->
         <div>
-            <div class="flex items-center gap-2 mb-4">
-                <svg width="34" height="34" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                    <path d="M20 3 L37 34 H3 Z" fill="#E53935"/>
-                    <path d="M20 14 L28 30 H12 Z" fill="#001a3d"/>
-                </svg>
-                <span class="font-bebas text-xl tracking-wider">
-                    <span class="text-white">ATL</span><span class="text-atlex-beige">E</span><span class="text-white">X - Sport</span>
-                </span>
+            <div class="mb-4">
+                <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" class="h-14 w-auto object-contain bg-white rounded p-1">
             </div>
             <p class="text-atlex-beige font-montserrat italic text-sm mb-2">Là où l'énergie devient passion.</p>
             <p class="text-white/50 text-sm">Association sportive ATLANTIS EXPERTISE SPORT — Cotonou, Bénin. Fondée le 26 août 2023.</p>
