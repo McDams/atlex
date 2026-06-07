@@ -105,6 +105,7 @@ final class MembersController extends Controller
             'phone'      => $this->input('phone') ?: null,
             'age'        => $this->input('age') !== '' ? (int) $this->input('age') : null,
             'gender'     => $this->input('gender') ?: null,
+            'role'       => $this->input('role') ?: null,
             'discipline' => $this->input('discipline') ?: null,
             'status'     => $this->input('status') ?: 'actif',
             'joined_at'  => $this->input('joined_at') ?: null,
@@ -122,7 +123,8 @@ final class MembersController extends Controller
             'first_name' => 'required|max:80',
             'last_name'  => 'required|max:80',
             'email'      => 'email|max:150',
-            'discipline' => 'required|in:football,basketball,handball,arts_martiaux',
+            'role'       => 'required|in:benevole,bureau,president,secretaire_general,tresorier,responsable_technique,autre',
+            'discipline' => 'in:football,basketball,handball,arts_martiaux',
             'status'     => 'in:actif,inactif,suspendu',
         ]);
 

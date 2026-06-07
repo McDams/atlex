@@ -1,5 +1,13 @@
 <?php
-$disciplines = ['football' => 'Football', 'basketball' => 'Basketball', 'handball' => 'Handball', 'arts_martiaux' => 'Arts Martiaux'];
+$roles = [
+    'benevole'              => 'Bénévole',
+    'bureau'                => 'Membre du Bureau',
+    'president'             => 'Président (PDG)',
+    'secretaire_general'    => 'Secrétaire Général',
+    'tresorier'             => 'Trésorier',
+    'responsable_technique' => 'Responsable Technique',
+    'autre'                 => 'Autre',
+];
 ?>
 <div class="max-w-2xl">
     <a href="<?= url('/admin/membres') ?>" class="text-white/50 text-sm hover:text-white">← Retour à la liste</a>
@@ -16,10 +24,10 @@ $disciplines = ['football' => 'Football', 'basketball' => 'Basketball', 'handbal
                     <option value="">—</option><option value="M">Masculin</option><option value="F">Féminin</option><option value="Autre">Autre</option>
                 </select>
             </div>
-            <div><label class="form-label">Discipline *</label>
-                <select name="discipline" required class="form-input w-full">
+            <div><label class="form-label">Rôle *</label>
+                <select name="role" required class="form-input w-full">
                     <option value="">—</option>
-                    <?php foreach ($disciplines as $k => $v): ?><option value="<?= e($k) ?>"><?= e($v) ?></option><?php endforeach; ?>
+                    <?php foreach ($roles as $k => $v): ?><option value="<?= e($k) ?>" <?= old('role') === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?>
                 </select>
             </div>
             <div><label class="form-label">Statut</label>

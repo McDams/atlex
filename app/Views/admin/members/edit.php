@@ -1,6 +1,14 @@
 <?php
 /** @var array<string,mixed> $member */
-$disciplines = ['football' => 'Football', 'basketball' => 'Basketball', 'handball' => 'Handball', 'arts_martiaux' => 'Arts Martiaux'];
+$roles = [
+    'benevole'              => 'Bénévole',
+    'bureau'                => 'Membre du Bureau',
+    'president'             => 'Président (PDG)',
+    'secretaire_general'    => 'Secrétaire Général',
+    'tresorier'             => 'Trésorier',
+    'responsable_technique' => 'Responsable Technique',
+    'autre'                 => 'Autre',
+];
 $genders = ['M' => 'Masculin', 'F' => 'Féminin', 'Autre' => 'Autre'];
 $statuses = ['actif' => 'Actif', 'inactif' => 'Inactif', 'suspendu' => 'Suspendu'];
 ?>
@@ -20,9 +28,10 @@ $statuses = ['actif' => 'Actif', 'inactif' => 'Inactif', 'suspendu' => 'Suspendu
                     <?php foreach ($genders as $k => $v): ?><option value="<?= e($k) ?>" <?= $member['gender'] === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?>
                 </select>
             </div>
-            <div><label class="form-label">Discipline *</label>
-                <select name="discipline" required class="form-input w-full">
-                    <?php foreach ($disciplines as $k => $v): ?><option value="<?= e($k) ?>" <?= $member['discipline'] === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?>
+            <div><label class="form-label">Rôle *</label>
+                <select name="role" required class="form-input w-full">
+                    <option value="">—</option>
+                    <?php foreach ($roles as $k => $v): ?><option value="<?= e($k) ?>" <?= ($member['role'] ?? '') === $k ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?>
                 </select>
             </div>
             <div><label class="form-label">Statut</label>

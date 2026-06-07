@@ -4,6 +4,15 @@
  * @var string|null $search
  */
 $statusColors = ['actif' => 'bg-green-600/20 text-green-300', 'inactif' => 'bg-white/10 text-white/60', 'suspendu' => 'bg-atlex-red/20 text-red-300'];
+$roleLabels = [
+    'benevole'              => 'Bénévole',
+    'bureau'                => 'Membre du Bureau',
+    'president'             => 'Président',
+    'secretaire_general'    => 'Secrétaire Général',
+    'tresorier'             => 'Trésorier',
+    'responsable_technique' => 'Responsable Technique',
+    'autre'                 => 'Autre',
+];
 ?>
 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
     <form method="GET" action="<?= url('/admin/membres') ?>" class="flex gap-2">
@@ -18,7 +27,7 @@ $statusColors = ['actif' => 'bg-green-600/20 text-green-300', 'inactif' => 'bg-w
         <thead class="text-left text-white/50 font-montserrat uppercase text-xs border-b border-white/5">
             <tr>
                 <th class="px-5 py-3">Nom</th>
-                <th class="px-5 py-3">Discipline</th>
+                <th class="px-5 py-3">Rôle</th>
                 <th class="px-5 py-3">Contact</th>
                 <th class="px-5 py-3">Statut</th>
                 <th class="px-5 py-3 text-right">Actions</th>
@@ -31,7 +40,7 @@ $statusColors = ['actif' => 'bg-green-600/20 text-green-300', 'inactif' => 'bg-w
                 <?php foreach ($members as $m): ?>
                     <tr class="border-b border-white/5 hover:bg-white/5">
                         <td class="px-5 py-3 font-montserrat font-semibold"><?= e($m['last_name']) ?> <?= e($m['first_name']) ?></td>
-                        <td class="px-5 py-3"><?= e(discipline_label($m['discipline'])) ?></td>
+                        <td class="px-5 py-3"><?= e($roleLabels[$m['role']] ?? '—') ?></td>
                         <td class="px-5 py-3 text-white/60"><?= e($m['email'] ?: $m['phone'] ?: '—') ?></td>
                         <td class="px-5 py-3"><span class="text-xs px-2 py-1 rounded <?= $statusColors[$m['status']] ?? 'bg-white/10' ?>"><?= e($m['status']) ?></span></td>
                         <td class="px-5 py-3 text-right whitespace-nowrap">

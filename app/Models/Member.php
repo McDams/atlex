@@ -13,7 +13,7 @@ final class Member extends BaseModel
 
     protected array $fillable = [
         'first_name', 'last_name', 'email', 'phone', 'age',
-        'gender', 'discipline', 'status', 'joined_at', 'notes',
+        'gender', 'role', 'discipline', 'status', 'joined_at', 'notes',
     ];
 
     /**
