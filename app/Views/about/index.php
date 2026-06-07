@@ -13,15 +13,17 @@
     </div>
 </section>
 
-<!-- Histoire -->
+<!-- Histoire --> <!-- Justifier le texte et limiter la largeur pour une meilleure lisibilité -->
 <section class="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-    <h2 class="font-bebas text-4xl tracking-wider mb-6">Notre histoire</h2>
-    <p class="text-white/70 leading-relaxed mb-4">
-        Fondée le 26 août 2023 à Cotonou, l'association ATLANTIS EXPERTISE SPORT (ATLEX - Sport)
-        rassemble des passionnés autour de quatre disciplines : le football, le basketball,
-        le handball et les arts martiaux.
+    <!-- Centrer le titre et justifier le texte pour une meilleure lisibilité -->
+    <h2 class="font-bebas text-4xl tracking-wider mb-6 text-center">Notre histoire</h2>
+    <p class="text-white/70 leading-relaxed mb-4 text-center">
+        Fondée le 26 août 2023 à Cotonou, ATLANTIS EXPERTISE SPORT (ATLEX-Sport) est une organisation sportive et sociale engagée dans le développement de la jeunesse par le sport, l'éducation et l'engagement citoyen.
+        Née de la volonté de créer un cadre d'épanouissement accessible à tous, l'association rassemble athlètes, éducateurs, bénévoles et partenaires autour d'une vision commune : faire du sport un véritable levier de transformation sociale.
+        À travers ses différentes disciplines sportives, ses actions communautaires et ses projets éducatifs, ATLEX-Sport œuvre pour l'inclusion, le développement du leadership, la promotion de la santé et le renforcement de la cohésion sociale au sein des communautés béninoises.
+        Guidée par sa devise « Là où l'énergie devient passion », l'association accompagne les jeunes dans leur parcours sportif et personnel afin de révéler leur potentiel et contribuer à bâtir une génération responsable, ambitieuse et engagée.
     </p>
-    <p class="text-white/70 leading-relaxed">
+    <p class="text-white/70 leading-relaxed text-center">
         Portée par sa devise « Là où l'énergie devient passion », ATLEX - Sport œuvre pour
         la formation sportive, la cohésion sociale et l'épanouissement de la jeunesse béninoise.
     </p>
@@ -31,6 +33,12 @@
 <section class="bg-atlex-dark py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
         <h2 class="font-bebas text-4xl tracking-wider mb-10 text-center">Notre parcours</h2>
+            <p class="text-white/60 text-sm font-montserrat mt-2 text-center col-span-full">
+                Depuis sa création, ATLEX-Sport s'est progressivement imposée comme un acteur dynamique du développement sportif et social au Bénin.
+                À travers l'organisation de compétitions, d'actions de sensibilisation, de formations, de projets communautaires et de programmes d'accompagnement des jeunes, l'association poursuit son ambition de rendre le sport accessible au plus grand nombre.
+                Chaque initiative menée renforce notre conviction que le sport constitue un outil puissant d'éducation, d'inclusion et de développement durable. Grâce à l'engagement de nos membres, bénévoles et partenaires, nous continuons à élargir notre impact au service de la jeunesse béninoise et africaine.
+            </p>
+        <!--
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-6">
             <?php foreach ($timeline as $item): ?>
                 <div class="text-center reveal">
@@ -39,6 +47,7 @@
                 </div>
             <?php endforeach; ?>
         </div>
+        -->
     </div>
 </section>
 
