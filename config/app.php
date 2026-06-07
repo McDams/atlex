@@ -20,7 +20,25 @@ $env = static function (string $key, mixed $default = null): mixed {
 };
 
 define('APP_NAME', $env('APP_NAME', 'ATLEX - Sport'));
-define('APP_URL', rtrim((string) $env('APP_URL', 'http://localhost:8000'), '/'));
+
+// URL de base utilisée par le helper url(). En mode tunnel/proxy
+// (APP_URL_DYNAMIC=true, ex. démo via ngrok), elle est dérivée de la requête
+// entrante (en-têtes X-Forwarded-* du proxy) afin que liens et assets pointent
+// vers le domaine public. Désactivé par défaut → production inchangée.
+$appUrl = rtrim((string) $env('APP_URL', 'http://localhost:8000'), '/');
+
+if ($env('APP_URL_DYNAMIC', false) === true && !empty($_SERVER['HTTP_HOST'])) {
+    $fwdProto = (string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '');
+    $scheme   = $fwdProto !== ''
+        ? strtok($fwdProto, ',')
+        : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
+    $host = trim((string) strtok((string) ($_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST']), ','));
+    if ($host !== '') {
+        $appUrl = $scheme . '://' . $host;
+    }
+}
+
+define('APP_URL', $appUrl);
 define('APP_ENV', $env('APP_ENV', 'production'));
 define('APP_DEBUG', (bool) $env('APP_DEBUG', false));
 

@@ -21,13 +21,12 @@ $clubs = [
     <?= responsive_image('images/hero-bg.png', 'ATLEX - Sport', 'absolute inset-0 w-full h-full object-cover', ['eager' => true]) ?>
     <div class="absolute inset-0 bg-gradient-to-b from-atlex-bg/80 via-atlex-bg/55 to-atlex-bg"></div>
     <div class="relative z-10 text-center px-4 max-w-3xl">
-        <p class="font-montserrat uppercase tracking-[0.3em] text-atlex-beige mb-4 text-sm">Cotonou · Bénin</p>
         <h1 class="font-bebas text-6xl sm:text-8xl leading-none tracking-wider">
             ATL<span class="text-atlex-beige">E</span>X<span class="text-atlex-red">·</span>SPORT
         </h1>
         <p class="mt-4 font-montserrat text-lg sm:text-xl text-white/90 italic">Là où l'énergie devient passion.</p>
         <div class="mt-8 flex flex-wrap gap-4 justify-center">
-            <a href="<?= url('/contact#inscription') ?>" class="btn-atlex">Rejoindre le club</a>
+            <a href="<?= url('/contact#inscription') ?>" class="btn-atlex">Rejoindre le Mouvement</a>
             <a href="<?= url('/clubs') ?>" class="btn-atlex-outline">Nos disciplines</a>
         </div>
     </div>

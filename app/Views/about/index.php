@@ -8,7 +8,7 @@
     <?= responsive_image('images/about-team.png', '', 'absolute inset-0 w-full h-full object-cover', ['eager' => true]) ?>
     <div class="absolute inset-0 bg-gradient-to-b from-atlex-bg/75 to-atlex-bg"></div>
     <div class="relative z-10 text-center px-4">
-        <h1 class="font-bebas text-5xl sm:text-7xl tracking-wider">À propos</h1>
+        <h1 class="font-bebas text-5xl sm:text-7xl tracking-wider">L'Association</h1>
         <p class="font-montserrat uppercase tracking-widest text-atlex-beige mt-2">ATLANTIS EXPERTISE SPORT</p>
     </div>
 </section>

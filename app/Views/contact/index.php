@@ -42,6 +42,8 @@ $invalid = static function (string $field) use ($formErrors): string {
             <div class="flex gap-2 mb-6" role="tablist" aria-label="Choisir un formulaire">
                 <button type="button" id="tabbtn-inscription" class="contact-tab btn-atlex text-sm" data-tab="inscription" role="tab" aria-selected="true" aria-controls="tab-inscription">S'inscrire</button>
                 <button type="button" id="tabbtn-contact" class="contact-tab btn-atlex-outline text-sm" data-tab="contact" role="tab" aria-selected="false" aria-controls="tab-contact">Nous contacter</button>
+                <button type="button" id="tabbtn-benevol" class="contact-tab btn-atlex-outline text-sm" data-tab="benevol" role="tab" aria-selected="false" aria-controls="tab-benevol">Devenir bénévole</button>
+                <button type="button" id="tabbtn-don" class="contact-tab btn-atlex-outline text-sm" data-tab="don" role="tab" aria-selected="false" aria-controls="tab-don">Faire un don</button>
             </div>
 
             <!-- Inscription -->
@@ -151,6 +153,23 @@ $invalid = static function (string $field) use ($formErrors): string {
                 <?= $err('consent') ?>
                 <button type="submit" class="btn-atlex">Envoyer le message</button>
             </form>
+
+            <!-- Bénévolat -->
+            <div id="tab-benevol" role="tabpanel" aria-labelledby="tabbtn-benevol" class="contact-panel hidden bg-atlex-dark rounded-xl p-6 border border-white/5 space-y-4">
+                <h2 class="font-bebas text-2xl tracking-wider">Devenir bénévole</h2>
+                <p class="text-white/70">L'Espace Bénévolat d'Atlex-Sport permet aux associations, clubs, projets communautaires et initiatives sportives de faire connaître leurs besoins en ressources humaines, tout en offrant aux citoyens l'opportunité de s'engager selon leurs compétences, leurs centres d'intérêt et leurs disponibilités.
+                    En quelques clics, chacun peut rejoindre une mission bénévole, participer à l'organisation d'événements sportifs, soutenir des actions sociales ou contribuer à des projets en faveur de la jeunesse et du développement local.
+                    Parce que le sport est un puissant levier de transformation sociale, l'engagement bénévole permet à chaque citoyen de devenir un acteur du changement, de renforcer la cohésion communautaire et de contribuer à la construction d'un avenir plus inclusif, solidaire et dynamique pour tous.
+                </p>
+            </div>  
+            
+            <!-- Don -->
+            <div id="tab-don" role="tabpanel" aria-labelledby="tabbtn-don" class="contact-panel hidden bg-atlex-dark rounded-xl p-6 border border-white/5 space-y-4">
+                <h2 class="font-bebas text-2xl tracking-wider">Faire un don</h2>
+                <p class="text-white/70">Votre soutien financier est essentiel pour permettre à Atlex-Sport de poursuivre sa mission d'inclusion sociale par le sport. En faisant un don, vous contribuez directement à la mise en place de programmes sportifs accessibles à tous, au développement d'infrastructures adaptées et à l'organisation d'événements qui rassemblent les communautés autour des valeurs du sport.
+                    Chaque contribution, quelle que soit sa taille, fait une différence significative dans la vie des bénéficiaires de nos actions. En soutenant Atlex-Sport, vous devenez un acteur clé du changement social, en aidant à créer des opportunités pour les personnes défavorisées, en renforçant la cohésion sociale et en promouvant un avenir plus inclusif et solidaire grâce au pouvoir du sport.
+                </p>
+            </div>
         </div>
     </div>
 </section>
