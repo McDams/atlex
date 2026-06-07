@@ -8,6 +8,7 @@ use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Validator;
 use App\Models\Event;
+use App\Models\EventCategory;
 
 /**
  * CRUD des événements / calendrier.
@@ -15,11 +16,13 @@ use App\Models\Event;
 final class EventsController extends Controller
 {
     private Event $model;
+    private EventCategory $categories;
 
     public function __construct()
     {
         Auth::requireAuth();
-        $this->model = new Event();
+        $this->model      = new Event();
+        $this->categories = new EventCategory();
     }
 
     public function index(): void
@@ -33,7 +36,8 @@ final class EventsController extends Controller
     public function create(): void
     {
         $this->render('admin/events/create', [
-            'title' => 'Nouvel événement — Espace SG',
+            'title'      => 'Nouvel événement — Espace SG',
+            'categories' => $this->categories->allActive(),
         ], 'layouts/admin');
     }
 
@@ -60,8 +64,9 @@ final class EventsController extends Controller
         }
 
         $this->render('admin/events/edit', [
-            'title' => 'Modifier un événement — Espace SG',
-            'event' => $event,
+            'title'      => 'Modifier un événement — Espace SG',
+            'event'      => $event,
+            'categories' => $this->categories->allActive(),
         ], 'layouts/admin');
     }
 
@@ -92,13 +97,15 @@ final class EventsController extends Controller
      */
     private function payload(): array
     {
-        $title = (string) $this->input('title');
+        $title      = (string) $this->input('title');
+        $categoryId = $this->input('category_id');
 
         return [
             'title'          => $title,
             'slug'           => slugify($title),
             'type'           => $this->input('type') ?: 'autre',
             'discipline'     => $this->input('discipline') ?: 'tous',
+            'category_id'    => $categoryId !== '' && $categoryId !== null ? (int) $categoryId : null,
             'description'    => $this->input('description') ?: null,
             'start_datetime' => $this->normalizeDateTime($this->input('start_datetime')),
             'end_datetime'   => $this->normalizeDateTime($this->input('end_datetime')) ?: null,
@@ -126,7 +133,7 @@ final class EventsController extends Controller
             'title'          => 'required|max:200',
             'start_datetime' => 'required',
             'type'           => 'in:match,tournoi,stage,entrainement,remise,autre',
-            'discipline'     => 'in:football,basketball,handball,arts_martiaux,tous',
+            'discipline'     => 'in:basketball,handball,arts_martiaux,tous',
         ]);
 
         if ($validator->fails()) {

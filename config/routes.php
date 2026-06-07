@@ -75,6 +75,12 @@ $router->post('/admin/evenements', 'Admin/EventsController@store');
 $router->get('/admin/evenements/{id}/edit', 'Admin/EventsController@edit');
 $router->put('/admin/evenements/{id}', 'Admin/EventsController@update');
 $router->delete('/admin/evenements/{id}', 'Admin/EventsController@destroy');
+// Catégories d'événements
+$router->get('/admin/evenements/categories', 'Admin/EventCategoriesController@index');
+$router->post('/admin/evenements/categories', 'Admin/EventCategoriesController@store');
+$router->get('/admin/evenements/categories/{id}/edit', 'Admin/EventCategoriesController@edit');
+$router->put('/admin/evenements/categories/{id}', 'Admin/EventCategoriesController@update');
+$router->delete('/admin/evenements/categories/{id}', 'Admin/EventCategoriesController@destroy');
 
 // Actualités
 $router->get('/admin/actualites', 'Admin/NewsAdminController@index');
