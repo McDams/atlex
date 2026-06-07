@@ -20,8 +20,9 @@ $links = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
 
         <!-- Logo -->
-        <a href="<?= url('/') ?>" class="flex items-center" aria-label="ATLEX - Sport accueil">
+        <a href="<?= url('/') ?>" style="display:flex; align-items:center; gap:10px; text-decoration:none;" aria-label="ATLEX - Sport accueil">
             <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" style="height:48px; width:auto; object-fit:contain; background:white; border-radius:6px; padding:4px;">
+            <span style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.05em; color:white; line-height:1;">ATLEX<br><span style="font-size:0.9rem; color:#E53935;">Sport</span></span>
         </a>
 
         <!-- Icônes desktop (libellé affiché au survol) -->
