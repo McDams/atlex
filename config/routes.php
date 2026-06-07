@@ -23,6 +23,7 @@ $router->get('/actualites/{slug}', 'NewsController@show');
 $router->get('/galerie', 'GalleryController@index');
 
 $router->get('/calendrier', 'CalendarController@index');
+$router->get('/evenements', 'CalendarController@index'); // alias public pour les catégories
 $router->get('/api/events/{year}/{month}', 'CalendarController@apiEvents');
 
 $router->get('/a-propos', 'AboutController@index');
