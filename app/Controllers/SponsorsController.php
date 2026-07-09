@@ -15,7 +15,12 @@ final class SponsorsController extends Controller
     public function index(): void
     {
         $this->render('sponsors/index', [
-            'title'    => 'Sponsors & Partenaires — ' . APP_NAME,
+            'title' => 'Sponsors et partenaires | ' . APP_NAME,
+            'description' => 'Découvrez les sponsors et partenaires de ATLEX - Sport et les opportunités de sponsoring pour soutenir le sport et la jeunesse à Cotonou.',
+            'canonical' => url('/sponsors'),
+            'ogImage' => 'images/hero-bg.png',
+            'ogType' => 'website',
+            'metaRobots' => 'index, follow',
             'sponsors' => (new Sponsor())->groupedByTier(),
         ]);
     }

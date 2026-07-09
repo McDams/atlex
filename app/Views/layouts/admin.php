@@ -1,37 +1,46 @@
 <?php
 use App\Core\Auth;
 use App\Models\ContactSubmission;
+use App\Models\VolunteerRequest;
 
 $isLoginPage = !Auth::isLoggedIn();
 $adminUser = Auth::user();
 
-// Nombre de demandes d'inscription en attente (pour le badge de menu).
 $pendingInscriptions = 0;
+$newVolunteers = 0;
 if (!$isLoginPage) {
     try {
         $pendingInscriptions = (new ContactSubmission())->countPendingInscriptions();
     } catch (\Throwable) {
         $pendingInscriptions = 0;
     }
+    try {
+        $newVolunteers = (new VolunteerRequest())->countByStatus()['nouveau'] ?? 0;
+    } catch (\Throwable) {
+        $newVolunteers = 0;
+    }
 }
 
 $navItems = [
-    '/admin'            => ['Tableau de bord', 'M3 13h8V3H3zM13 21h8V3h-8zM3 21h8v-6H3z'],
-    '/admin/impact'     => ['Impact', 'M3 3v18h18M7 14l4-4 3 3 5-6'],
-    '/admin/membres'    => ['Membres', 'M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m6-1.13a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'],
-    '/admin/athletes'   => ['Athlètes', 'M13 2 L3 14h7l-1 8 10-12h-7z'],
-    '/admin/inscriptions' => ['Inscriptions', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'],
-    '/admin/evenements' => ['Événements', 'M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z'],
+    '/admin'             => ['Tableau de bord',      'M3 13h8V3H3zM13 21h8V3h-8zM3 21h8v-6H3z'],
+    '/admin/analytics'   => ['Analytics',            'M3 3v18h18M7 15l3-3 2 2 5-5M16 8h5v5'],
+    '/admin/impact'      => ['Impact',               'M3 3v18h18M7 14l4-4 3 3 5-6'],
+    '/admin/membres'     => ['Membres',              'M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m6-1.13a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'],
+    '/admin/benevoles'   => ['Bénévoles',            'M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zM8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zM8 13c-2.33 0-7 1.17-7 3.5V19h7M16 13c-.29 0-.62.02-.97.05C16.16 13.84 17 14.93 17 16.5V19h7v-2.5c0-2.33-4.67-3.5-8-3.5z'],
+    '/admin/athletes'    => ['Athlètes',             'M13 2 L3 14h7l-1 8 10-12h-7z'],
+    '/admin/inscriptions'=> ['Inscriptions',         'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'],
+    '/admin/evenements'  => ['Événements',           'M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z'],
     '/admin/evenements/categories' => ['Catégories événements', 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 0 1 0 2.828l-7 7a2 2 0 0 1-2.828 0l-7-7A1.994 1.994 0 0 1 3 12V7a4 4 0 0 1 4-4z'],
-    '/admin/actualites' => ['Actualités', 'M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9l5 5v9a2 2 0 0 1-2 2z'],
-    '/admin/projets'    => ['Projets', 'M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'],
-    '/admin/financements' => ['Financements', 'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],
-    '/admin/veille'     => ['Veille financements', 'M21 21l-4.35-4.35M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'],
-    '/admin/partenaires' => ['Partenaires', 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z'],
-    '/admin/media'      => ['Centre média', 'M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z'],
-    '/admin/documents'  => ['Documents', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'],
-    '/admin/taches'     => ['Tâches', 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
-    '/admin/hostinger'  => ['Hébergement', 'M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z'],
+    '/admin/actualites'  => ['Actualités',           'M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9l5 5v9a2 2 0 0 1-2 2z'],
+    '/admin/projets'     => ['Projets',              'M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'],
+    '/admin/financements'=> ['Financements',         'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],
+    '/admin/veille'      => ['Veille financements',  'M21 21l-4.35-4.35M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'],
+    '/admin/partenaires' => ['Partenaires',          'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z'],
+    '/admin/media'       => ['Centre média',         'M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z'],
+    '/admin/documents'   => ['Documents',            'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'],
+    '/admin/taches'      => ['Tâches',               'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
+    '/admin/hostinger'   => ['Hébergement',          'M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z'],
+    '/admin/settings'    => ['Paramètres',           'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z'],
 ];
 ?>
 <!DOCTYPE html>
@@ -49,12 +58,13 @@ $navItems = [
 
 <?php if ($isLoginPage): ?>
     <?php if ($msg = flash('error')): ?>
-        <div class="fixed top-4 inset-x-0 mx-auto w-fit z-50 bg-atlex-red px-5 py-3 rounded shadow-lg" data-flash><?= e($msg) ?></div>
+        <div class="fixed top-4 inset-x-0 mx-auto w-fit z-50 bg-atlex-red px-5 py-3 rounded shadow-lg" data-flash>
+            <?= e($msg) ?>
+        </div>
     <?php endif; ?>
     <?= $content ?>
 <?php else: ?>
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside class="w-64 bg-atlex-dark border-r border-white/5 flex-shrink-0 flex flex-col">
             <div class="h-20 flex items-center px-6 border-b border-white/5">
                 <img src="<?= asset('images/LOGO.jpeg') ?>" alt="ATLEX Sport" class="h-10 w-auto object-contain bg-white rounded p-1">
@@ -64,10 +74,20 @@ $navItems = [
                     <a href="<?= url($href) ?>"
                        class="admin-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-montserrat text-white/70 hover:bg-white/5 hover:text-white transition-colors"
                        data-path="<?= e($href) ?>">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="<?= $icon ?>"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="<?= $icon ?>"/>
+                        </svg>
                         <span class="flex-1"><?= e($label) ?></span>
                         <?php if ($href === '/admin/inscriptions' && $pendingInscriptions > 0): ?>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-atlex-red text-white font-semibold"><?= e($pendingInscriptions) ?></span>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-atlex-red text-white font-semibold">
+                                <?= e($pendingInscriptions) ?>
+                            </span>
+                        <?php endif; ?>
+                        <?php if ($href === '/admin/benevoles' && $newVolunteers > 0): ?>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-atlex-red text-white font-semibold">
+                                <?= e($newVolunteers) ?>
+                            </span>
                         <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
@@ -75,15 +95,18 @@ $navItems = [
             <div class="p-3 border-t border-white/5">
                 <form method="POST" action="<?= url('/admin/logout') ?>">
                     <?= csrf_field() ?>
-                    <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-montserrat text-white/70 hover:bg-atlex-red hover:text-white transition-colors">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    <button type="submit"
+                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-montserrat text-white/70 hover:bg-atlex-red hover:text-white transition-colors">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                        </svg>
                         Déconnexion
                     </button>
                 </form>
             </div>
         </aside>
 
-        <!-- Zone principale -->
         <div class="flex-1 flex flex-col min-w-0">
             <header class="h-20 bg-atlex-dark/60 border-b border-white/5 flex items-center justify-between px-6">
                 <h1 class="font-bebas text-2xl tracking-wider text-white"><?= e($title ?? 'Administration') ?></h1>
@@ -96,10 +119,14 @@ $navItems = [
             </header>
 
             <?php if ($msg = flash('success')): ?>
-                <div class="m-6 mb-0 bg-green-600/20 border border-green-600/40 text-green-300 px-4 py-3 rounded" data-flash><?= e($msg) ?></div>
+                <div class="m-6 mb-0 bg-green-600/20 border border-green-600/40 text-green-300 px-4 py-3 rounded" data-flash>
+                    <?= e($msg) ?>
+                </div>
             <?php endif; ?>
             <?php if ($msg = flash('error')): ?>
-                <div class="m-6 mb-0 bg-atlex-red/20 border border-atlex-red/40 text-red-300 px-4 py-3 rounded" data-flash><?= e($msg) ?></div>
+                <div class="m-6 mb-0 bg-atlex-red/20 border border-atlex-red/40 text-red-300 px-4 py-3 rounded" data-flash>
+                    <?= e($msg) ?>
+                </div>
             <?php endif; ?>
 
             <main class="flex-1 p-6 overflow-x-auto">
@@ -109,6 +136,43 @@ $navItems = [
     </div>
 <?php endif; ?>
 
-    <script src="<?= asset('js/admin.js') ?>" defer></script>
+<script src="<?= asset('js/admin.js') ?>" defer></script>
+
+<?php if (!$isLoginPage): ?>
+<script src="https://cdn.tiny.cloud/1/myu0eibmmz87g5ljgwz9zbqu1lv39pd2ddszl17qm1udeqdm/tinymce/8/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const editor = document.querySelector('#article-content');
+    if (!editor || typeof tinymce === 'undefined') {
+        return;
+    }
+
+    tinymce.init({
+        selector: '#article-content',
+        height: 520,
+        menubar: false,
+        branding: false,
+        promotion: false,
+        plugins: 'lists link image table code autoresize',
+        toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link image table blockquote | removeformat code',
+        block_formats: 'Paragraphe=p; Titre 1=h1; Titre 2=h2; Titre 3=h3; Titre 4=h4',
+        convert_urls: false,
+        content_style: `
+            body {
+                font-family: Montserrat, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 1.7;
+                padding: 12px;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.3rem; }
+            p { margin: 0 0 1rem; }
+        `
+    });
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>

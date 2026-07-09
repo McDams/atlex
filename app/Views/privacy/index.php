@@ -60,7 +60,7 @@
             <p>
                 Conformément à la réglementation, vous disposez d'un droit d'accès, de rectification,
                 d'effacement et d'opposition sur vos données. Pour l'exercer, écrivez-nous à
-                <a href="mailto:contact@atlexsport.com" class="text-atlex-red hover:underline">contact@atlexsport.com</a>.
+                <a href="mailto:contact@atlex-sport.com" class="text-atlex-red hover:underline">contact@atlex-sport.com</a>.
             </p>
         </div>
 
@@ -68,7 +68,7 @@
             <h2 class="font-bebas text-2xl tracking-wider text-white mb-3">7. Contact</h2>
             <p>
                 Pour toute question relative à cette politique :
-                <a href="mailto:contact@atlexsport.com" class="text-atlex-red hover:underline">contact@atlexsport.com</a>
+                <a href="mailto:contact@atlex-sport.com" class="text-atlex-red hover:underline">contact@atlex-sport.com</a>
                 — Cotonou, Bénin.
             </p>
         </div>

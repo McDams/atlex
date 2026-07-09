@@ -24,6 +24,7 @@ $router->get('/galerie', 'GalleryController@index');
 
 $router->get('/calendrier', 'CalendarController@index');
 $router->get('/evenements', 'CalendarController@index'); // alias public pour les catégories
+$router->get('/evenements/{id}', 'CalendarController@show');
 $router->get('/api/events/{year}/{month}', 'CalendarController@apiEvents');
 
 $router->get('/a-propos', 'AboutController@index');
@@ -34,6 +35,7 @@ $router->get('/centre-media/communiques/{slug}', 'MediaController@show');
 
 $router->get('/contact', 'ContactController@index');
 $router->post('/contact', 'ContactController@send');
+$router->post('/contact/benevole', 'ContactController@submitVolunteer');
 $router->post('/inscription', 'ContactController@register');
 
 $router->get('/confidentialite', 'PrivacyController@index');
@@ -47,6 +49,7 @@ $router->post('/admin/login', 'Admin/AuthController@login');
 $router->post('/admin/logout', 'Admin/AuthController@logout');
 
 $router->get('/admin', 'Admin/DashboardController@index');
+$router->get('/admin/analytics', 'Admin/AnalyticsController@index');
 
 // Tableau de bord d'impact
 $router->get('/admin/impact', 'Admin/ImpactController@index');
@@ -79,6 +82,7 @@ $router->delete('/admin/evenements/{id}', 'Admin/EventsController@destroy');
 // Catégories d'événements
 $router->get('/admin/evenements/categories', 'Admin/EventCategoriesController@index');
 $router->post('/admin/evenements/categories', 'Admin/EventCategoriesController@store');
+$router->post('/admin/evenements/import-ics', 'Admin/EventsController@importIcs');
 $router->get('/admin/evenements/categories/{id}/edit', 'Admin/EventCategoriesController@edit');
 $router->put('/admin/evenements/categories/{id}', 'Admin/EventCategoriesController@update');
 $router->delete('/admin/evenements/categories/{id}', 'Admin/EventCategoriesController@destroy');
@@ -86,6 +90,7 @@ $router->delete('/admin/evenements/categories/{id}', 'Admin/EventCategoriesContr
 // Actualités
 $router->get('/admin/actualites', 'Admin/NewsAdminController@index');
 $router->get('/admin/actualites/nouveau', 'Admin/NewsAdminController@create');
+$router->get('/admin/actualites/{id}/edit', 'Admin/NewsAdminController@edit');
 $router->post('/admin/actualites', 'Admin/NewsAdminController@store');
 $router->put('/admin/actualites/{id}', 'Admin/NewsAdminController@update');
 $router->delete('/admin/actualites/{id}', 'Admin/NewsAdminController@destroy');
@@ -94,6 +99,12 @@ $router->delete('/admin/actualites/{id}', 'Admin/NewsAdminController@destroy');
 $router->get('/admin/inscriptions', 'Admin/InscriptionsController@index');
 $router->post('/admin/inscriptions/{id}/valider', 'Admin/InscriptionsController@approve');
 $router->post('/admin/inscriptions/{id}/refuser', 'Admin/InscriptionsController@reject');
+
+// Bénévoles
+$router->get('/admin/benevoles', 'Admin/VolunteersController@index');
+$router->get('/admin/benevoles/{id}', 'Admin/VolunteersController@show');
+$router->post('/admin/benevoles/{id}/status', 'Admin/VolunteersController@updateStatus');
+$router->post('/admin/benevoles/{id}/delete', 'Admin/VolunteersController@destroy');
 
 // Projets
 $router->get('/admin/projets', 'Admin/ProjectsController@index');
@@ -164,3 +175,9 @@ $router->delete('/admin/taches/{id}', 'Admin/TasksController@destroy');
 $router->get('/admin/hostinger', 'Admin/HostingerController@index');
 $router->post('/admin/hostinger/save', 'Admin/HostingerController@save');
 $router->post('/admin/hostinger/test', 'Admin/HostingerController@test');
+
+// Paramètres
+$router->get('/admin/settings', 'Admin/SettingsController@index');
+$router->post('/admin/settings/profile', 'Admin/SettingsController@updateProfile');
+$router->post('/admin/settings/password', 'Admin/SettingsController@updatePassword');
+$router->post('/admin/settings/site', 'Admin/SettingsController@updateSite');

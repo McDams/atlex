@@ -40,8 +40,7 @@
             <ul class="space-y-2 text-sm text-white/60">
                 <li>Cotonou, Bénin</li>
                 <li><a href="mailto:contact@atlex-sport.com" class="hover:text-atlex-red">contact@atlex-sport.com</a></li>
-                <li>+229 21 30 36 00</li>
-                <li>+229 21 30 36 14</li>
+                <li>+229 01 92 57 33 33</li>
             </ul>
             <div class="flex gap-3 mt-4">
                 <a href="#" aria-label="Facebook" class="w-9 h-9 grid place-items-center rounded-full bg-white/5 hover:bg-atlex-red transition-colors">

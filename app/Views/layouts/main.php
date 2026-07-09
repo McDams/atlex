@@ -1,32 +1,58 @@
 <?php
-// --- SEO : valeurs par page (surchargées via les données de la vue) ---
-$pageTitle       = $title ?? APP_NAME;
-$pageDescription = $description ?? 'ATLEX - Sport — Association sportive béninoise à Cotonou. Football, Basketball, Handball et Arts Martiaux. Là où l\'énergie devient passion.';
-$pageImage       = asset($ogImage ?? 'images/hero-bg.png');
-$currentPath     = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-$canonicalUrl    = $canonical ?? (rtrim(APP_URL, '/') . $currentPath);
+// --- SEO : valeurs dynamiques par page ---
+$pageTitle = $title ?? APP_NAME;
+
+$pageDescription = $description
+    ?? 'ATLEX - Sport — Association sportive béninoise à Cotonou. Football, Basketball, Handball et Arts Martiaux. Là où l\'énergie devient passion.';
+
+$currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$canonicalUrl = $canonical ?? (rtrim(APP_URL, '/') . $currentPath);
+
+$ogType = $ogType ?? 'website';
+$metaRobots = $metaRobots ?? 'index, follow';
+
+$defaultOgImage = 'images/hero-bg.png';
+$pageImage = asset($ogImage ?? $defaultOgImage);
+
+// Sécurisation légère des longueurs pour éviter des tags trop longs
+$seoTitle = trim($pageTitle);
+$seoDescription = trim($pageDescription);
+
+if (function_exists('mb_substr')) {
+    $seoTitle = mb_substr($seoTitle, 0, 65);
+    $seoDescription = mb_substr($seoDescription, 0, 160);
+} else {
+    $seoTitle = substr($seoTitle, 0, 65);
+    $seoDescription = substr($seoDescription, 0, 160);
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($pageTitle) ?></title>
-    <meta name="description" content="<?= e($pageDescription) ?>">
-    <meta name="robots" content="index, follow">
+
+    <title><?= e($seoTitle) ?></title>
+    <meta name="description" content="<?= e($seoDescription) ?>">
+    <meta name="robots" content="<?= e($metaRobots) ?>">
     <link rel="canonical" href="<?= e($canonicalUrl) ?>">
 
-    <!-- Open Graph / réseaux sociaux -->
-    <meta property="og:type" content="website">
+    <!-- Open Graph -->
+    <meta property="og:type" content="<?= e($ogType) ?>">
     <meta property="og:site_name" content="ATLEX - Sport">
-    <meta property="og:title" content="<?= e($pageTitle) ?>">
-    <meta property="og:description" content="<?= e($pageDescription) ?>">
-    <meta property="og:image" content="<?= e($pageImage) ?>">
+    <meta property="og:title" content="<?= e($seoTitle) ?>">
+    <meta property="og:description" content="<?= e($seoDescription) ?>">
     <meta property="og:url" content="<?= e($canonicalUrl) ?>">
+    <meta property="og:image" content="<?= e($pageImage) ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="<?= e($seoTitle) ?>">
     <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<?= e($pageTitle) ?>">
-    <meta name="twitter:description" content="<?= e($pageDescription) ?>">
+    <meta name="twitter:title" content="<?= e($seoTitle) ?>">
+    <meta name="twitter:description" content="<?= e($seoDescription) ?>">
     <meta name="twitter:image" content="<?= e($pageImage) ?>">
 
     <link rel="icon" type="image/svg+xml" href="<?= asset('images/favicon.svg') ?>">
@@ -47,6 +73,7 @@ $canonicalUrl    = $canonical ?? (rtrim(APP_URL, '/') . $currentPath);
             <?= e($msg) ?>
         </div>
     <?php endif; ?>
+
     <?php if ($msg = flash('error')): ?>
         <div class="fixed top-24 right-4 z-50 bg-atlex-red text-white px-5 py-3 rounded shadow-lg" data-flash>
             <?= e($msg) ?>

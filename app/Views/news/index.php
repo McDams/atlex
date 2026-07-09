@@ -9,7 +9,7 @@
 $categories = [
     '' => 'Toutes', 'resultat' => 'Résultats', 'recrutement' => 'Recrutement',
     'evenement' => 'Événements', 'partenariat' => 'Partenariats',
-    'rapport' => "Rapports d'activité", 'general' => 'Général',
+    'rapport' => "Rapports d'activité", 'general' => 'Général', 'coupe du monde' => 'Coupe du monde'
 ];
 $rest = array_slice($articles, 1);
 ?>

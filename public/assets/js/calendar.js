@@ -24,6 +24,9 @@
     var month = cfg.month;
     var current = [];
 
+    // Préfixe des pages de détail (dérivé de apiBase : <base>/api/events → <base>/evenements/).
+    var eventBase = (cfg.apiBase || '/api/events').replace(/\/api\/events\/?$/, '') + '/evenements/';
+
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
     function formatTime(dt) {
@@ -50,12 +53,12 @@
                 ? '<p class="text-white/50 text-xs mt-1">' + escapeHtml(e.location) + '</p>'
                 : '';
             return '' +
-                '<div class="bg-white/5 rounded-lg p-3 border-l-4 border-atlex-red">' +
+                '<a href="' + eventBase + encodeURIComponent(e.id) + '" class="block bg-white/5 rounded-lg p-3 border-l-4 border-atlex-red hover:bg-white/10 transition-colors no-underline">' +
                 '<p class="font-montserrat text-xs text-atlex-red uppercase tracking-wide">' +
                 (time ? time + ' · ' : '') + escapeHtml(e.type || '') + '</p>' +
                 '<p class="font-poppins font-semibold mt-0.5">' + escapeHtml(e.title) + '</p>' +
                 loc +
-                '</div>';
+                '</a>';
         }).join('');
     }
 

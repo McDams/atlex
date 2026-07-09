@@ -9,21 +9,42 @@ use App\Core\Mailer;
 use App\Core\RateLimiter;
 use App\Core\Validator;
 use App\Models\ContactSubmission;
+use App\Models\VolunteerRequest;
 
 /**
  * Formulaires de contact et d'inscription.
  */
 final class ContactController extends Controller
 {
+    /** Missions de bénévolat proposées (clé technique => libellé). */
+    public const VOLUNTEER_MISSIONS = [
+        'organisation_evenements' => 'Organisation d\'événements sportifs',
+        'entrainement_jeunes'     => 'Encadrement / Entraînement des jeunes',
+        'communication'           => 'Communication & Réseaux sociaux',
+        'logistique'              => 'Logistique & Transport',
+        'administration'          => 'Tâches administratives',
+        'arbitrage'               => 'Arbitrage & Officiel de table',
+        'accueil'                 => 'Accueil & Orientation',
+        'collecte_fonds'          => 'Collecte de fonds & Partenariats',
+        'sante'                   => 'Assistance médicale / Premiers secours',
+        'autre'                   => 'Autre mission',
+    ];
+
     /** Nombre maximal de soumissions par IP sur la fenêtre. */
     private const MAX_SUBMISSIONS = 8;
 
     /** Fenêtre de limitation (secondes) — 15 minutes. */
     private const SUBMISSION_WINDOW = 900;
+
     public function index(): void
     {
         $this->render('contact/index', [
-            'title' => 'Contact & Inscription — ' . APP_NAME,
+            'title' => 'Contact et inscription | ' . APP_NAME,
+            'description' => 'Contactez ATLEX - Sport à Cotonou pour une inscription, une demande d’information, du bénévolat ou un accompagnement sportif.',
+            'canonical' => url('/contact'),
+            'ogImage' => 'images/hero-bg.png',
+            'ogType' => 'website',
+            'metaRobots' => 'index, follow',
         ]);
     }
 
@@ -153,6 +174,78 @@ final class ContactController extends Controller
     }
 
     /**
+     * Traite une candidature bénévole.
+     */
+    public function submitVolunteer(): void
+    {
+        $this->verifyCsrf();
+        $this->guardSubmissionRate('benevol');
+
+        if ($this->isSpam()) {
+            flash('success', 'Merci ! Votre candidature a bien été reçue. Nous vous contacterons prochainement.');
+            $this->redirect('contact#benevol');
+        }
+
+        $rawMissions = $_POST['missions'] ?? [];
+        $missions = [];
+
+        if (is_array($rawMissions)) {
+            foreach ($rawMissions as $mission) {
+                if (is_string($mission) && isset(self::VOLUNTEER_MISSIONS[$mission])) {
+                    $missions[] = $mission;
+                }
+            }
+        }
+
+        $data = [
+            'first_name' => $this->input('first_name'),
+            'last_name'  => $this->input('last_name'),
+            'phone'      => $this->input('phone'),
+            'email'      => $this->input('email'),
+            'message'    => $this->input('message'),
+        ];
+
+        $validator = new Validator($data);
+        $validator->validate([
+            'first_name' => 'required|max:80',
+            'last_name'  => 'required|max:80',
+            'phone'      => 'required|max:30',
+            'email'      => 'email|max:150',
+        ]);
+
+        $errors = $validator->errors();
+
+        if ($missions === []) {
+            $errors['missions'][] = 'Veuillez sélectionner au moins une mission.';
+        }
+
+        if ($errors !== []) {
+            set_old($data + ['missions' => $missions]);
+            set_errors($errors);
+            flash('error', 'Veuillez corriger les erreurs du formulaire.');
+            $this->redirect('contact#benevol');
+        }
+
+        (new VolunteerRequest())->create([
+            'first_name' => $data['first_name'],
+            'last_name'  => $data['last_name'],
+            'phone'      => $data['phone'],
+            'email'      => $data['email'] !== '' ? $data['email'] : null,
+            'missions'   => json_encode($missions, JSON_UNESCAPED_UNICODE),
+            'message'    => $data['message'] !== '' ? $data['message'] : null,
+            'status'     => 'nouveau',
+        ]);
+
+        $labels = array_map(static fn (string $m): string => self::VOLUNTEER_MISSIONS[$m], $missions);
+        $this->notify('Nouvelle candidature bénévole', $data + ['missions' => implode(', ', $labels)]);
+
+        clear_old();
+        clear_errors();
+        flash('success', 'Merci ! Votre candidature a bien été reçue. Nous vous contacterons prochainement.');
+        $this->redirect('contact#benevol');
+    }
+
+    /**
      * Limite le nombre de soumissions par IP (anti-spam / anti-flood),
      * en complément du honeypot. Redirige avec un message si le seuil est atteint.
      */
@@ -211,11 +304,13 @@ final class ContactController extends Controller
     private function notify(string $subject, array $data): void
     {
         $body = '<h2>' . e($subject) . '</h2><ul>';
+
         foreach ($data as $key => $value) {
             $body .= '<li><strong>' . e($key) . ' :</strong> ' . e((string) $value) . '</li>';
         }
+
         $body .= '</ul>';
 
-        (new Mailer())->send('contact@atlexsport.com', $subject, $body);
+        (new Mailer())->send('contact@atlex-sport.com', $subject, $body);
     }
 }

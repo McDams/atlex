@@ -55,12 +55,75 @@ final class EventsController extends Controller
         $this->redirect('admin/evenements');
     }
 
+    public function importIcs(): void
+    {
+        $this->verifyCsrf();
+
+        if (
+            !isset($_FILES['ics_file']) ||
+            !is_array($_FILES['ics_file']) ||
+            empty($_FILES['ics_file']['tmp_name'])
+        ) {
+            flash('error', 'Aucun fichier ICS envoyé.');
+            $this->redirect('admin/evenements');
+            return;
+        }
+
+        $rows = $this->parseIcsFile((string) $_FILES['ics_file']['tmp_name']);
+
+        if ($rows === []) {
+            flash('error', 'Le fichier ICS est vide ou invalide.');
+            $this->redirect('admin/evenements');
+            return;
+        }
+
+        $imported = 0;
+        $updated = 0;
+
+        foreach ($rows as $row) {
+            if (empty($row['uid']) || empty($row['start_datetime'])) {
+                continue;
+            }
+
+            $title = !empty($row['title']) ? (string) $row['title'] : 'Événement';
+
+            $data = [
+                'title'          => $title,
+                'slug'           => slugify($title . '-' . substr((string) $row['uid'], 0, 8)),
+                'type'           => 'tournoi',
+                'discipline'     => 'tous',
+                'category_id'    => null,
+                'description'    => !empty($row['description']) ? (string) $row['description'] : null,
+                'start_datetime' => (string) $row['start_datetime'],
+                'end_datetime'   => !empty($row['end_datetime']) ? (string) $row['end_datetime'] : null,
+                'location'       => !empty($row['location']) ? (string) $row['location'] : null,
+                'is_published'   => 1,
+                'external_uid'   => (string) $row['uid'],
+                'source'         => 'ics',
+            ];
+
+            $existing = $this->model->findByExternalUid((string) $row['uid']);
+
+            if ($existing !== null) {
+                $this->model->update((int) $existing['id'], $data);
+                $updated++;
+            } else {
+                $this->model->create($data);
+                $imported++;
+            }
+        }
+
+        flash('success', $imported . ' événement(s) importé(s), ' . $updated . ' mis à jour.');
+        $this->redirect('admin/evenements');
+    }
+
     public function edit(string $id): void
     {
         $event = $this->model->find((int) $id);
         if ($event === null) {
             flash('error', 'Événement introuvable.');
             $this->redirect('admin/evenements');
+            return;
         }
 
         $this->render('admin/events/edit', [
@@ -144,5 +207,104 @@ final class EventsController extends Controller
 
         clear_old();
         return true;
+    }
+
+    /**
+     * @return array<int,array<string,mixed>>
+     */
+    private function parseIcsFile(string $filePath): array
+    {
+        $lines = @file($filePath, FILE_IGNORE_NEW_LINES);
+
+        if ($lines === false) {
+            return [];
+        }
+
+        $events = [];
+        $event = null;
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ($line === 'BEGIN:VEVENT') {
+                $event = [];
+                continue;
+            }
+
+            if ($line === 'END:VEVENT') {
+                if ($event !== null) {
+                    $events[] = $event;
+                }
+                $event = null;
+                continue;
+            }
+
+            if ($event === null || $line === '') {
+                continue;
+            }
+
+            [$keyPart, $value] = array_pad(explode(':', $line, 2), 2, null);
+
+            if ($value === null) {
+                continue;
+            }
+
+            $key = strtoupper((string) explode(';', $keyPart)[0]);
+
+            switch ($key) {
+                case 'UID':
+                    $event['uid'] = trim($value);
+                    break;
+
+                case 'SUMMARY':
+                    $event['title'] = trim($value);
+                    break;
+
+                case 'DESCRIPTION':
+                    $event['description'] = str_replace('\n', "\n", trim($value));
+                    break;
+
+                case 'LOCATION':
+                    $event['location'] = trim($value);
+                    break;
+
+                case 'DTSTART':
+                    $event['start_datetime'] = $this->icsToMysqlDatetime($value);
+                    break;
+
+                case 'DTEND':
+                    $event['end_datetime'] = $this->icsToMysqlDatetime($value);
+                    break;
+            }
+        }
+
+        return $events;
+    }
+
+    private function icsToMysqlDatetime(string $value): ?string
+    {
+        $value = trim($value);
+
+        $formats = [
+            'Ymd\THis\Z',
+            'Ymd\THis',
+            'Ymd',
+        ];
+
+        foreach ($formats as $format) {
+            $date = \DateTime::createFromFormat($format, $value, new \DateTimeZone('UTC'));
+
+            if ($date instanceof \DateTime) {
+                $date->setTimezone(new \DateTimeZone('Europe/Paris'));
+
+                if ($format === 'Ymd') {
+                    return $date->format('Y-m-d 00:00:00');
+                }
+
+                return $date->format('Y-m-d H:i:s');
+            }
+        }
+
+        return null;
     }
 }

@@ -5,22 +5,34 @@
  * @var int $unreadCount
  * @var int $pendingInscriptions
  * @var int $taskCount
+ * @var int $visitCount
  * @var array<int,array<string,mixed>> $recentTasks
  * @var array<int,array<string,mixed>> $recentContact
  */
 $kpis = [
-    ['label' => 'Membres actifs', 'value' => $memberCount, 'href' => '/admin/membres'],
+    ['label' => 'Membres actifs',          'value' => $memberCount,         'href' => '/admin/membres'],
     ['label' => 'Inscriptions en attente', 'value' => $pendingInscriptions, 'href' => '/admin/inscriptions'],
-    ['label' => 'Événements à venir', 'value' => $eventCount, 'href' => '/admin/evenements'],
-    ['label' => 'Tâches en cours', 'value' => $taskCount, 'href' => '/admin/taches'],
+    ['label' => 'Événements à venir',      'value' => $eventCount,          'href' => '/admin/evenements'],
+    ['label' => 'Tâches en cours',         'value' => $taskCount,           'href' => '/admin/taches'],
+
+    // KPI trafic → lien vers la page analytics détaillée
+    ['label' => 'Pages vues',              'value' => $visitCount,          'href' => '/admin/analytics'],
 ];
-$statusLabels = ['a_faire' => 'À faire', 'en_cours' => 'En cours', 'termine' => 'Terminé'];
+
+$statusLabels = [
+    'a_faire'  => 'À faire',
+    'en_cours' => 'En cours',
+    'termine'  => 'Terminé',
+];
 ?>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
     <?php foreach ($kpis as $kpi): ?>
-        <a href="<?= url($kpi['href']) ?>" class="bg-atlex-dark rounded-xl p-6 border border-white/5 hover:border-atlex-red/40 transition-colors">
+        <a href="<?= url($kpi['href']) ?>"
+           class="bg-atlex-dark rounded-xl p-6 border border-white/5 hover:border-atlex-red/40 transition-colors">
             <div class="font-bebas text-5xl text-atlex-red leading-none"><?= e($kpi['value']) ?></div>
-            <div class="font-montserrat uppercase text-xs tracking-widest text-white/60 mt-2"><?= e($kpi['label']) ?></div>
+            <div class="font-montserrat uppercase text-xs tracking-widest text-white/60 mt-2">
+                <?= e($kpi['label']) ?>
+            </div>
         </a>
     <?php endforeach; ?>
 </div>
@@ -35,13 +47,17 @@ $statusLabels = ['a_faire' => 'À faire', 'en_cours' => 'En cours', 'termine' =>
         <table class="w-full text-sm">
             <tbody>
                 <?php if (empty($recentTasks)): ?>
-                    <tr><td class="px-6 py-4 text-white/40">Aucune tâche.</td></tr>
+                    <tr>
+                        <td class="px-6 py-4 text-white/40">Aucune tâche.</td>
+                    </tr>
                 <?php else: ?>
                     <?php foreach ($recentTasks as $task): ?>
                         <tr class="border-b border-white/5">
                             <td class="px-6 py-3 font-montserrat"><?= e($task['title']) ?></td>
                             <td class="px-6 py-3 text-right">
-                                <span class="text-xs px-2 py-1 rounded bg-white/5 text-white/70"><?= e($statusLabels[$task['status']] ?? $task['status']) ?></span>
+                                <span class="text-xs px-2 py-1 rounded bg-white/5 text-white/70">
+                                    <?= e($statusLabels[$task['status']] ?? $task['status']) ?>
+                                </span>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -58,7 +74,9 @@ $statusLabels = ['a_faire' => 'À faire', 'en_cours' => 'En cours', 'termine' =>
         <table class="w-full text-sm">
             <tbody>
                 <?php if (empty($recentContact)): ?>
-                    <tr><td class="px-6 py-4 text-white/40">Aucune soumission.</td></tr>
+                    <tr>
+                        <td class="px-6 py-4 text-white/40">Aucune soumission.</td>
+                    </tr>
                 <?php else: ?>
                     <?php foreach ($recentContact as $sub): ?>
                         <tr class="border-b border-white/5">
@@ -67,7 +85,9 @@ $statusLabels = ['a_faire' => 'À faire', 'en_cours' => 'En cours', 'termine' =>
                                 <span class="block text-white/40 text-xs"><?= e($sub['email']) ?></span>
                             </td>
                             <td class="px-6 py-3 text-right">
-                                <span class="text-xs px-2 py-1 rounded bg-atlex-red/20 text-atlex-red"><?= e($sub['type']) ?></span>
+                                <span class="text-xs px-2 py-1 rounded bg-atlex-red/20 text-atlex-red">
+                                    <?= e($sub['type']) ?>
+                                </span>
                             </td>
                         </tr>
                     <?php endforeach; ?>

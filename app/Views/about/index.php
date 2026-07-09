@@ -71,14 +71,25 @@
         <div>
             <h2 class="font-bebas text-4xl tracking-wider mb-4">Notre équipe</h2>
             <p class="text-white/70 leading-relaxed mb-4">
-                Une équipe dirigeante engagée encadre les activités de l'association.
-                Le Secrétariat Général, conduit par Ulrich, assure la coordination
-                quotidienne des opérations.
+                ATLEX-Sport s'appuie sur une équipe de dirigeants, d'encadreurs, de bénévoles et de passionnés engagés au service du développement de la jeunesse par le sport.
+                Notre gouvernance repose sur des valeurs de responsabilité, de transparence, d'innovation et d'excellence. Chaque membre contribue, à son niveau, à la conception, à la mise en œuvre et au suivi des projets sportifs, éducatifs et sociaux portés par l'association.
+                Grâce à la complémentarité de leurs compétences, nos équipes assurent l'encadrement des athlètes, l'organisation des événements, la gestion des partenariats et le développement de programmes à fort impact communautaire.
+                Animés par une vision commune, nous travaillons chaque jour à faire du sport un outil d'éducation, d'inclusion sociale, de leadership et de développement durable pour les jeunes du Bénin et d'Afrique.
+                <!-- Retour à la ligne pour séparer les idées et améliorer la lisibilité -->
+                <br>UNE ÉQUIPE, UNE VISION: 
+                <!--
+                Faire une liste à puces pour mettre en avant les valeurs clés de l'équipe:                 
+                UNE ÉQUIPE, UNE VISION
+                    ✔️ Développer le potentiel des jeunes par le sport
+                    ✔️ Promouvoir les valeurs citoyennes et le vivre-ensemble
+                    ✔️ Renforcer l'inclusion et l'égalité
+                -->
+                <ul class="list-disc list-inside mt-4 text-white/60">
+                    <li>Développer le potentiel des jeunes par le sport</li>
+                    <li>Promouvoir les valeurs citoyennes et le vivre-ensemble</li>
+                    <li>Renforcer l'inclusion et l'égalité</li> 
+                </ul>
             </p>
-            <div class="bg-atlex-bg rounded-lg p-4 border border-white/5 inline-block">
-                <p class="font-montserrat font-bold">Ulrich</p>
-                <p class="text-atlex-beige text-sm">Secrétaire Général</p>
-            </div>
         </div>
     </div>
 </section>

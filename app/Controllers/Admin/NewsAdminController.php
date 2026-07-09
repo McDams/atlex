@@ -12,7 +12,7 @@ use App\Models\NewsArticle;
 use RuntimeException;
 
 /**
- * CRUD des articles d'actualités (avec upload d'image).
+ * CRUD des articles d'actualités (avec upload d'image et contenu HTML enrichi).
  */
 final class NewsAdminController extends Controller
 {
@@ -36,6 +36,22 @@ final class NewsAdminController extends Controller
     {
         $this->render('admin/news/create', [
             'title' => 'Nouvel article — Espace SG',
+        ], 'layouts/admin');
+    }
+
+    public function edit(string $id): void
+    {
+        $article = $this->model->find((int) $id);
+
+        if ($article === null) {
+            flash('error', 'Article introuvable.');
+            $this->redirect('admin/actualites');
+            return;
+        }
+
+        $this->render('admin/news/edit', [
+            'title'   => 'Modifier l’article — Espace SG',
+            'article' => $article,
         ], 'layouts/admin');
     }
 
@@ -64,20 +80,24 @@ final class NewsAdminController extends Controller
     {
         $this->verifyCsrf();
 
-        // Bascule rapide de l'état de publication (AJAX).
         if ($this->input('toggle') === '1') {
             $this->model->togglePublished((int) $id);
+
             if ($this->isAjax()) {
                 $this->json(['ok' => true, 'id' => (int) $id]);
+                return;
             }
+
             flash('success', 'Statut de publication mis à jour.');
             $this->redirect('admin/actualites');
+            return;
         }
 
         $existing = $this->model->find((int) $id);
         if ($existing === null) {
             flash('error', 'Article introuvable.');
             $this->redirect('admin/actualites');
+            return;
         }
 
         $data = $this->payload();
@@ -90,7 +110,6 @@ final class NewsAdminController extends Controller
             $data['cover_image'] = $uploaded;
         }
 
-        // Publication sans date choisie et sans date existante : on prend maintenant.
         if (empty($data['published_at']) && $data['is_published'] && empty($existing['published_at'])) {
             $data['published_at'] = date('Y-m-d H:i:s');
         }
@@ -113,18 +132,19 @@ final class NewsAdminController extends Controller
      */
     private function payload(): array
     {
-        $title = (string) $this->input('title');
+        $title = trim((string) $this->input('title'));
+        $excerpt = trim((string) ($this->input('excerpt') ?? ''));
+        $content = (string) ($this->input('content') ?? '');
 
         $data = [
             'title'        => $title,
             'slug'         => slugify($title),
-            'excerpt'      => $this->input('excerpt') ?: null,
-            'content'      => $this->input('content') ?: null,
+            'excerpt'      => $excerpt !== '' ? $excerpt : null,
+            'content'      => $content !== '' ? $this->sanitizeArticleHtml($content) : null,
             'category'     => $this->input('category') ?: 'general',
             'is_published' => $this->input('is_published') ? 1 : 0,
         ];
 
-        // Date de publication choisie par l'admin (normalisée en datetime).
         $date = trim((string) $this->input('published_at'));
         if ($date !== '') {
             $ts = strtotime($date);
@@ -136,6 +156,27 @@ final class NewsAdminController extends Controller
         return $data;
     }
 
+    private function sanitizeArticleHtml(string $html): string
+    {
+        $html = trim($html);
+
+        if ($html === '') {
+            return '';
+        }
+
+        $allowedTags = '<p><br><strong><b><em><i><u><s><h1><h2><h3><h4><blockquote><ul><ol><li><a><table><thead><tbody><tr><td><th><img><hr>';
+
+        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $html) ?? '';
+        $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $html) ?? '';
+        $html = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', '', $html) ?? '';
+        $html = preg_replace('/on\w+="[^"]*"/i', '', $html) ?? '';
+        $html = preg_replace("/on\w+='[^']*'/i", '', $html) ?? '';
+        $html = preg_replace('/javascript:/i', '', $html) ?? '';
+        $html = strip_tags($html, $allowedTags);
+
+        return trim($html);
+    }
+
     private function handleUpload(): ?string
     {
         if (empty($_FILES['cover_image']['name'])) {
@@ -145,6 +186,7 @@ final class NewsAdminController extends Controller
         try {
             $uploader = new FileUpload(ROOT . '/public/uploads');
             $result = $uploader->store($_FILES['cover_image']);
+
             return 'uploads/' . $result['filename'];
         } catch (RuntimeException $e) {
             flash('error', 'Image : ' . $e->getMessage());
@@ -165,13 +207,14 @@ final class NewsAdminController extends Controller
         $validator = new Validator($data);
         $validator->validate([
             'title'    => 'required|max:250',
-            'category' => 'in:resultat,recrutement,evenement,partenariat,general,rapport',
+            'category' => 'in:resultat,recrutement,evenement,partenariat,general,rapport,coupe du monde',
         ]);
 
         if ($validator->fails()) {
             set_old($data);
             flash('error', implode(' ', $validator->flatErrors()));
             $this->redirect($redirectPath);
+            return false;
         }
 
         clear_old();

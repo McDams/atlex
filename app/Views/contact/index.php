@@ -32,8 +32,8 @@ $invalid = static function (string $field) use ($formErrors): string {
             <h2 class="font-bebas text-2xl tracking-wider mb-4">Nos coordonnées</h2>
             <ul class="space-y-3 text-sm text-white/70">
                 <li><span class="text-atlex-red font-semibold">Adresse</span><br>Cotonou, Bénin</li>
-                <li><span class="text-atlex-red font-semibold">Email</span><br>contact@atlexsport.com</li>
-                <li><span class="text-atlex-red font-semibold">Téléphone</span><br>+229 21 30 36 00<br>+229 21 30 36 14</li>
+                <li><span class="text-atlex-red font-semibold">Email</span><br>contact@atlex-sport.com</li>
+                <li><span class="text-atlex-red font-semibold">Téléphone</span><br>+229 01 92 57 33 33</li>
             </ul>
         </aside>
 
@@ -70,7 +70,8 @@ $invalid = static function (string $field) use ($formErrors): string {
                         <?= $err('email') ?>
                     </div>
                     <div>
-                        <label for="i-phone" class="<?= $labelClass ?>">Téléphone *</label>
+                        <!--Proposer le choix de l'indicatif de tous les pays en plus du numéro de téléphone-->
+                        <label for="i-phone" class="<?= $labelClass ?>">Téléphone *</label> 
                         <input id="i-phone" name="phone" required value="<?= e(old('phone')) ?>" class="form-input w-full"<?= $invalid('phone') ?>>
                         <?= $err('phone') ?>
                     </div>
@@ -155,14 +156,66 @@ $invalid = static function (string $field) use ($formErrors): string {
             </form>
 
             <!-- Bénévolat -->
-            <div id="tab-benevol" role="tabpanel" aria-labelledby="tabbtn-benevol" class="contact-panel hidden bg-atlex-dark rounded-xl p-6 border border-white/5 space-y-4">
+            <form id="tab-benevol" method="POST" action="<?= url('/contact/benevole') ?>" role="tabpanel" aria-labelledby="tabbtn-benevol" class="contact-panel hidden bg-atlex-dark rounded-xl p-6 border border-white/5 space-y-4">
+                <?= csrf_field() ?>
+                <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px" tabindex="-1">
+                    <label>Ne pas remplir<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                </div>
                 <h2 class="font-bebas text-2xl tracking-wider">Devenir bénévole</h2>
                 <p class="text-white/70">L'Espace Bénévolat d'Atlex-Sport permet aux associations, clubs, projets communautaires et initiatives sportives de faire connaître leurs besoins en ressources humaines, tout en offrant aux citoyens l'opportunité de s'engager selon leurs compétences, leurs centres d'intérêt et leurs disponibilités.
                     En quelques clics, chacun peut rejoindre une mission bénévole, participer à l'organisation d'événements sportifs, soutenir des actions sociales ou contribuer à des projets en faveur de la jeunesse et du développement local.
                     Parce que le sport est un puissant levier de transformation sociale, l'engagement bénévole permet à chaque citoyen de devenir un acteur du changement, de renforcer la cohésion communautaire et de contribuer à la construction d'un avenir plus inclusif, solidaire et dynamique pour tous.
                 </p>
-            </div>  
-            
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="b-first" class="<?= $labelClass ?>">Prénom *</label>
+                        <input id="b-first" name="first_name" required value="<?= e(old('first_name')) ?>" class="form-input w-full"<?= $invalid('first_name') ?>>
+                        <?= $err('first_name') ?>
+                    </div>
+                    <div>
+                        <label for="b-last" class="<?= $labelClass ?>">Nom *</label>
+                        <input id="b-last" name="last_name" required value="<?= e(old('last_name')) ?>" class="form-input w-full"<?= $invalid('last_name') ?>>
+                        <?= $err('last_name') ?>
+                    </div>
+                    <div>
+                        <label for="b-phone" class="<?= $labelClass ?>">Téléphone *</label>
+                        <input id="b-phone" name="phone" required value="<?= e(old('phone')) ?>" class="form-input w-full"<?= $invalid('phone') ?>>
+                        <?= $err('phone') ?>
+                    </div>
+                    <div>
+                        <label for="b-email" class="<?= $labelClass ?>">Email *</label>
+                        <input id="b-email" type="email" name="email" required value="<?= e(old('email')) ?>" class="form-input w-full"<?= $invalid('email') ?>>
+                        <?= $err('email') ?>
+                    </div>
+                    <div>
+                        <label for="b-age" class="<?= $labelClass ?>">Âge *</label>
+                        <input id="b-age" type="number" name="age" min="16" max="99" required value="<?= e(old('age')) ?>" class="form-input w-full"<?= $invalid('age') ?>>
+                        <?= $err('age') ?>
+                    </div>
+                </div>
+                <?php
+                $volunteerMissions = \App\Controllers\ContactController::VOLUNTEER_MISSIONS;
+                $selectedMissions = (array) old('missions', []);
+                ?>
+                <fieldset>
+                    <legend class="<?= $labelClass ?>">Missions souhaitées * (plusieurs choix possibles)</legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                        <?php foreach ($volunteerMissions as $value => $label): ?>
+                            <label class="flex items-center gap-2 text-sm text-white/80 bg-atlex-bg border border-white/10 rounded-md px-3 py-2 cursor-pointer">
+                                <input type="checkbox" name="missions[]" value="<?= e($value) ?>" class="accent-atlex-red"<?= in_array($value, $selectedMissions, true) ? ' checked' : '' ?>>
+                                <span><?= e($label) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                    <?= $err('missions') ?>
+                </fieldset>
+                <div>
+                    <label for="b-message" class="<?= $labelClass ?>">Message (optionnel)</label>
+                    <textarea id="b-message" name="message" rows="4" placeholder="Parlez-nous de vous, de vos disponibilités, de vos compétences..." class="form-input w-full"><?= e(old('message')) ?></textarea>
+                </div>
+                <button type="submit" class="btn-atlex">Envoyer ma candidature</button>
+            </form>
+
             <!-- Don -->
             <div id="tab-don" role="tabpanel" aria-labelledby="tabbtn-don" class="contact-panel hidden bg-atlex-dark rounded-xl p-6 border border-white/5 space-y-4">
                 <h2 class="font-bebas text-2xl tracking-wider">Faire un don</h2>
@@ -189,4 +242,5 @@ $invalid = static function (string $field) use ($formErrors): string {
         });
     });
     if (location.hash === '#contact') { document.querySelector('[data-tab="contact"]').click(); }
+    if (location.hash === '#benevol') { document.querySelector('[data-tab="benevol"]').click(); }
 </script>

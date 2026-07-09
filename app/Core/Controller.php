@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Services\VisitTracker;
+
 /**
  * Contrôleur de base : rendu de vues, redirections, helpers JSON.
  */
@@ -18,6 +20,14 @@ abstract class Controller
      */
     protected function render(string $view, array $data = [], string $layout = 'layouts/main'): void
     {
+        if ($this->shouldTrackVisit($layout)) {
+            (new VisitTracker())->track([
+                'view' => $view,
+                'layout' => $layout,
+                'title' => $data['title'] ?? null,
+            ]);
+        }
+
         $content = $this->view($view, $data);
 
         $title     = $data['title'] ?? APP_NAME;
@@ -84,5 +94,51 @@ abstract class Controller
     protected function verifyCsrf(): void
     {
         CSRF::check();
+    }
+
+    /**
+     * Détermine si la requête courante doit être trackée.
+     */
+    private function shouldTrackVisit(string $layout): bool
+    {
+        $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+
+        if ($method !== 'GET') {
+            return false;
+        }
+
+        if (str_starts_with($uri, '/admin')) {
+            return false;
+        }
+
+        if (str_contains($layout, 'admin')) {
+            return false;
+        }
+
+        if ($this->isAjaxRequest()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Détecte une requête AJAX/fetch.
+     */
+    private function isAjaxRequest(): bool
+    {
+        $requestedWith = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+
+        if (strtolower($requestedWith) === 'xmlhttprequest') {
+            return true;
+        }
+
+        if (str_contains(strtolower($accept), 'application/json')) {
+            return true;
+        }
+
+        return false;
     }
 }

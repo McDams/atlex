@@ -19,9 +19,33 @@ final class GalleryController extends Controller
 
         $photos = (new GalleryPhoto())->published();
 
+        $title = 'Galerie photos | ' . APP_NAME;
+        $description = 'Découvrez la galerie photo de ATLEX - Sport : événements, entraînements, compétitions, jeunesse et temps forts de l’association.';
+        $canonical = url('/galerie');
+
+        if ($category !== null) {
+            $label = ucfirst(str_replace(['-', '_'], ' ', $category));
+            $title = 'Galerie ' . $label . ' | ' . APP_NAME;
+            $description = 'Découvrez les photos de la catégorie ' . $label . ' dans la galerie de ATLEX - Sport.';
+            $canonical = url('/galerie?categorie=' . urlencode($category));
+        }
+
+        $ogImage = 'images/hero-bg.png';
+
+        if (!empty($photos) && !empty($photos[0]['image'])) {
+            $ogImage = (string) $photos[0]['image'];
+        } elseif (!empty($photos) && !empty($photos[0]['file_path'])) {
+            $ogImage = (string) $photos[0]['file_path'];
+        }
+
         $this->render('gallery/index', [
-            'title'    => 'Galerie — ' . APP_NAME,
-            'photos'   => $photos,
+            'title' => $title,
+            'description' => $description,
+            'canonical' => $canonical,
+            'ogImage' => $ogImage,
+            'ogType' => 'website',
+            'metaRobots' => 'index, follow',
+            'photos' => $photos,
             'category' => $category,
         ]);
     }

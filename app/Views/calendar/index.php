@@ -100,7 +100,7 @@ function category_icon_svg(string $icon): string
             </div>
         </div>
 
-        <!-- Sidebar événements -->
+        <!-- Sidebar événements / Cliquer sur un evenement pour voir les détails -->
         <aside>
             <h3 class="font-bebas text-2xl tracking-wider mb-4">Événements du mois</h3>
             <div id="cal-events" class="space-y-3">
@@ -111,7 +111,9 @@ function category_icon_svg(string $icon): string
             <h3 class="font-bebas text-xl tracking-wider mt-8 mb-3">Prochains rendez-vous</h3>
             <div class="space-y-2">
                 <?php foreach (array_slice($events, 0, 5) as $ev): ?>
-                <div style="display:flex; align-items:flex-start; gap:.75rem; background:rgba(255,255,255,.04); border-radius:.75rem; padding:.75rem; border:1px solid rgba(255,255,255,.05);">
+                <a href="<?= url('/evenements/' . (int) $ev['id']) ?>" style="display:flex; align-items:flex-start; gap:.75rem; background:rgba(255,255,255,.04); border-radius:.75rem; padding:.75rem; border:1px solid rgba(255,255,255,.05); text-decoration:none; transition:background .2s, border-color .2s;"
+                   onmouseover="this.style.background='rgba(255,255,255,.08)'; this.style.borderColor='<?= e($ev['category_color'] ?? '#4B5563') ?>'"
+                   onmouseout="this.style.background='rgba(255,255,255,.04)'; this.style.borderColor='rgba(255,255,255,.05)'">
                     <div style="width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:<?= e($ev['category_color'] ?? '#4B5563') ?>;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16">
                             <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
@@ -126,7 +128,7 @@ function category_icon_svg(string $icon): string
                         </span>
                         <?php endif; ?>
                     </div>
-                </div>
+                </a>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
