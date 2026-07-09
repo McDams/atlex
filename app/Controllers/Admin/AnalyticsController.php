@@ -5,27 +5,16 @@ declare(strict_types=1);
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Models\Visit;
 use App\Models\VisitSession;
 use App\Models\VisitStat;
-use PDO;
 
 final class AnalyticsController extends Controller
 {
     public function index(): void
     {
-        $pdo = new PDO(
-            'mysql:host=' . ($_ENV['DB_HOST'] ?? '127.0.0.1') .
-            ';port=' . ($_ENV['DB_PORT'] ?? '3306') .
-            ';dbname=' . ($_ENV['DB_NAME'] ?? '') .
-            ';charset=utf8mb4',
-            $_ENV['DB_USER'] ?? '',
-            $_ENV['DB_PASS'] ?? '',
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ]
-        );
+        $pdo = Database::getInstance();
 
         $visit = new Visit($pdo);
         $session = new VisitSession($pdo);
