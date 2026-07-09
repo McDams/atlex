@@ -135,7 +135,7 @@ $fundingStatusColors = [
     </div>
 </template>
 
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
 document.addEventListener('click', function (e) {
     const add = e.target.closest('.repeat-add');
     if (add) {

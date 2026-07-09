@@ -71,10 +71,15 @@ final class Router
     public function dispatch(string $uri, string $method): void
     {
         $method = $this->resolveMethod($method);
+
+        // HEAD n'a pas de routes dédiées : on résout comme un GET et on
+        // supprime le corps de la réponse (RFC 9110 — HEAD doit refléter GET).
+        $isHead = $method === 'HEAD';
+        $matchMethod = $isHead ? 'GET' : $method;
         $path = $this->normalizePath($uri);
 
         foreach ($this->routes as $route) {
-            if ($route['method'] !== $method) {
+            if ($route['method'] !== $matchMethod) {
                 continue;
             }
 
@@ -86,6 +91,12 @@ final class Router
             $params = array_combine($route['params'], $matches) ?: [];
 
             $this->guardAdmin($path);
+
+            if ($isHead) {
+                // Le callback vide le tampon même si le contrôleur termine
+                // via exit() (redirect(), json()...).
+                ob_start(static fn (): string => '');
+            }
 
             try {
                 $this->invoke($route['handler'], $params);

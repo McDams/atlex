@@ -146,7 +146,7 @@ $isPublished  = $isEdit ? (int) ($a['is_published'] ?? 1) === 1 : true;
     </div>
 </template>
 
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
 document.addEventListener('click', function (e) {
     const add = e.target.closest('.repeat-add');
     if (add) {

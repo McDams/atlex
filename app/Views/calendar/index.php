@@ -136,7 +136,7 @@ function category_icon_svg(string $icon): string
     </div>
 </section>
 
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
     window.ATLEX_CALENDAR = {
         year: <?= (int) $year ?>,
         month: <?= (int) $month ?>,
@@ -144,4 +144,4 @@ function category_icon_svg(string $icon): string
         activeCategory: <?= json_encode($activeCategory) ?>
     };
 </script>
-<script src="<?= asset('js/calendar.js') ?>" defer></script>
+<script src="<?= asset('js/calendar.min.js') ?>" defer></script>

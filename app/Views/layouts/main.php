@@ -63,6 +63,24 @@ if (function_exists('mb_substr')) {
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="<?= asset('css/app.min.css') ?>">
+
+    <?php
+        $structuredData = [
+            '@context'    => 'https://schema.org',
+            '@type'       => 'SportsOrganization',
+            'name'        => 'ATLEX - Sport',
+            'url'         => rtrim(APP_URL, '/') . '/',
+            'logo'        => asset('images/LOGO.jpeg'),
+            'description' => 'Association sportive à Cotonou (Bénin) dédiée à la jeunesse : football, basketball, handball, arts martiaux, compétitions et formation.',
+            'sport'       => ['Football', 'Basketball', 'Handball', 'Arts martiaux'],
+            'address'     => [
+                '@type'           => 'PostalAddress',
+                'addressLocality' => 'Cotonou',
+                'addressCountry' => 'BJ',
+            ],
+        ];
+    ?>
+    <script type="application/ld+json" nonce="<?= \App\Core\Security::nonce() ?>"><?= json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 </head>
 <body class="bg-atlex-bg text-white font-poppins antialiased <?= e($bodyClass ?? '') ?>">
 
@@ -86,7 +104,7 @@ if (function_exists('mb_substr')) {
 
     <?php require VIEWS_PATH . '/partials/footer.php'; ?>
 
-    <script src="<?= asset('js/app.js') ?>" defer></script>
+    <script src="<?= asset('js/app.min.js') ?>" defer></script>
     <?php foreach (($scripts ?? []) as $script): ?>
         <script src="<?= asset('js/' . $script) ?>" defer></script>
     <?php endforeach; ?>

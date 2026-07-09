@@ -325,7 +325,7 @@ $hasAlerts = !empty($alerts['subscriptions']) || !empty($alerts['domains']);
 <!-- =========================================================
      JAVASCRIPT — Test connexion AJAX
      ========================================================= -->
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
 /**
  * Teste la connexion API Hostinger via AJAX.
  */

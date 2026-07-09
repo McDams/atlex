@@ -227,7 +227,7 @@ $invalid = static function (string $field) use ($formErrors): string {
     </div>
 </section>
 
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
     document.querySelectorAll('.contact-tab').forEach(function (tab) {
         tab.addEventListener('click', function () {
             var target = this.getAttribute('data-tab');

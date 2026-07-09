@@ -19,8 +19,10 @@ if (is_file(ROOT . '/.env')) {
 require ROOT . '/config/app.php';
 
 use App\Core\Router;
+use App\Core\Security;
 use App\Core\Session;
 
+Security::applyHeaders();
 Session::start();
 
 $router = new Router();

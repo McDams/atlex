@@ -7,6 +7,13 @@
  * Ce fichier expose des constantes secondaires réutilisables partout.
  */
 
+if (!defined('ROOT')) {
+    // Filet de sécurité : permet à l'autoload Composer (fichiers "files")
+    // de s'exécuter avant que le point d'entrée n'ait défini ROOT — c'est
+    // le cas lorsque PHPUnit charge vendor/autoload.php avant son bootstrap.
+    define('ROOT', dirname(__DIR__, 2));
+}
+
 if (!defined('VIEWS_PATH')) {
     define('VIEWS_PATH', ROOT . '/app/Views');
 }

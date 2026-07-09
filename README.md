@@ -79,9 +79,9 @@ cd atlex-sport
 # 2. Dépendances PHP
 composer install
 
-# 3. Dépendances front + compilation du CSS
+# 3. Dépendances front + compilation du CSS et du JS
 npm install
-npm run build:css
+npm run build
 
 # 4. Environnement
 cp .env.example .env
@@ -100,9 +100,13 @@ php -S localhost:8000 -t public
 
 Le site est accessible sur **http://localhost:8000**.
 
-> 🎨 **Tailwind est précompilé** (`public/assets/css/app.min.css`). Après toute
-> modification d'une vue introduisant de **nouvelles classes**, relancer
-> `npm run build:css` (ou `npm run watch:css` en développement).
+> 🎨 **CSS et JS sont précompilés** (`app.min.css`, `app.min.js`, `admin.min.js`,
+> `calendar.min.js`, `gallery.min.js`). Après toute modification d'une vue
+> (nouvelles classes Tailwind) ou d'un fichier JS source, relancer
+> `npm run build` (ou `npm run watch:css` pour le CSS en développement).
+>
+> ✅ **Tests** : `composer test` exécute la suite PHPUnit (`app/Core` —
+> authentification, CSRF, limiteur de débit, validation, nettoyage HTML).
 
 > 🗃️ **Migrations** : le schéma complet est dans `database/schema.sql`. Les
 > évolutions sont versionnées dans `database/migrations/` (`001` → `009`) et

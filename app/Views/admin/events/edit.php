@@ -152,7 +152,7 @@ $toInput = static fn (?string $dt): string => $dt ? str_replace(' ', 'T', substr
     </form>
 </div>
 
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
 function updateCatPreview(select) {
     const opt = select.options[select.selectedIndex];
     const color = opt.dataset.color || '#4B5563';

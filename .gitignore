@@ -1,6 +1,7 @@
 /.env
 /vendor/
 /node_modules/
+/.phpunit.cache/
 /storage/logs/*
 /storage/cache/*
 /public/uploads/*

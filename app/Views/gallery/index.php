@@ -56,4 +56,4 @@ $active = $category ?? 'all';
     <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[90vh] rounded-lg">
 </div>
 
-<script src="<?= asset('js/gallery.js') ?>" defer></script>
+<script src="<?= asset('js/gallery.min.js') ?>" defer></script>

@@ -118,7 +118,7 @@ $btnOut = "this.style.background='#E53935'";
     </section>
 </div>
 
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
 function atlexPwdStrength(value) {
     var bar = document.getElementById('pwd-bar');
     var label = document.getElementById('pwd-label');

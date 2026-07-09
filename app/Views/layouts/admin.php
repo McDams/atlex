@@ -136,11 +136,11 @@ $navItems = [
     </div>
 <?php endif; ?>
 
-<script src="<?= asset('js/admin.js') ?>" defer></script>
+<script src="<?= asset('js/admin.min.js') ?>" defer></script>
 
 <?php if (!$isLoginPage): ?>
 <script src="https://cdn.tiny.cloud/1/myu0eibmmz87g5ljgwz9zbqu1lv39pd2ddszl17qm1udeqdm/tinymce/8/tinymce.min.js" referrerpolicy="origin"></script>
-<script>
+<script nonce="<?= \App\Core\Security::nonce() ?>">
 document.addEventListener('DOMContentLoaded', function () {
     const editor = document.querySelector('#article-content');
     if (!editor || typeof tinymce === 'undefined') {

@@ -158,23 +158,7 @@ final class NewsAdminController extends Controller
 
     private function sanitizeArticleHtml(string $html): string
     {
-        $html = trim($html);
-
-        if ($html === '') {
-            return '';
-        }
-
-        $allowedTags = '<p><br><strong><b><em><i><u><s><h1><h2><h3><h4><blockquote><ul><ol><li><a><table><thead><tbody><tr><td><th><img><hr>';
-
-        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $html) ?? '';
-        $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $html) ?? '';
-        $html = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', '', $html) ?? '';
-        $html = preg_replace('/on\w+="[^"]*"/i', '', $html) ?? '';
-        $html = preg_replace("/on\w+='[^']*'/i", '', $html) ?? '';
-        $html = preg_replace('/javascript:/i', '', $html) ?? '';
-        $html = strip_tags($html, $allowedTags);
-
-        return trim($html);
+        return \App\Core\HtmlSanitizer::clean($html);
     }
 
     private function handleUpload(): ?string
