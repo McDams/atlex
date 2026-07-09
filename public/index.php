@@ -18,12 +18,18 @@ if (is_file(ROOT . '/.env')) {
 
 require ROOT . '/config/app.php';
 
+use App\Core\AssetBuilder;
 use App\Core\Router;
 use App\Core\Security;
 use App\Core\Session;
 
 Security::applyHeaders();
 Session::start();
+
+$assetBuilder = new AssetBuilder();
+if ($assetBuilder->shouldRebuild(ROOT)) {
+    $assetBuilder->rebuild(ROOT);
+}
 
 $router = new Router();
 require ROOT . '/config/routes.php';
