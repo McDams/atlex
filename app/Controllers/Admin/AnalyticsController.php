@@ -30,6 +30,7 @@ final class AnalyticsController extends Controller
             'dailySeries'  => $stat->dailySeries(30),
             'topPages'     => $visit->topPages(10),
             'topCountries' => $visit->topCountries(10),
+            'topCities'    => $visit->topCities(12),
             'topSources'   => $visit->topSources(10),
             'devices'      => $visit->deviceBreakdown(),
             'browsers'     => $visit->browserBreakdown(),

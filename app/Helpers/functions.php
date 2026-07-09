@@ -14,6 +14,33 @@ if (!function_exists('e')) {
     }
 }
 
+if (!function_exists('country_flag')) {
+    /**
+     * Convertit un code pays ISO-3166 alpha-2 (ex: "BJ") en emoji drapeau.
+     * Repose sur les symboles indicateurs régionaux Unicode (U+1F1E6...U+1F1FF),
+     * décalés de la même façon que les lettres A-Z — aucune image nécessaire.
+     */
+    function country_flag(?string $isoCode): string
+    {
+        $isoCode = strtoupper((string) $isoCode);
+
+        if (!preg_match('/^[A-Z]{2}$/', $isoCode)) {
+            return '🏳️';
+        }
+
+        $codePoints = array_map(
+            static fn (string $char): int => 0x1F1E6 + (ord($char) - ord('A')),
+            str_split($isoCode)
+        );
+
+        return mb_convert_encoding(
+            '&#' . implode(';&#', $codePoints) . ';',
+            'UTF-8',
+            'HTML-ENTITIES'
+        );
+    }
+}
+
 if (!function_exists('url')) {
     /**
      * Construit une URL absolue à partir d'un chemin relatif.

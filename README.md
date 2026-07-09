@@ -135,9 +135,16 @@ Le site est accessible sur **http://localhost:8000**.
 
 # Veille de financements — deux fois par jour (7h et 19h)
 0 7,19 * * * php /chemin/atlex-sport/cron/funding_watch.php >> /chemin/atlex-sport/storage/logs/cron.log 2>&1
+
+# Mise à jour de la base de géolocalisation IP (carte Analytics) — 1x/mois
+0 4 5 * * php /chemin/atlex-sport/cron/geoip_update.php >> /chemin/atlex-sport/storage/logs/cron.log 2>&1
 ```
 
 > La veille fonctionne aussi à la demande via le bouton **« Rafraîchir »** dans `/admin/veille`.
+>
+> 🌍 **Carte géographique (Analytics)** : nécessite `MAXMIND_LICENSE_KEY` dans
+> `.env` (compte gratuit sur [maxmind.com/en/geolite2/signup](https://www.maxmind.com/en/geolite2/signup)).
+> Sans clé, la carte affiche simplement « Aucune donnée » — rien d'autre n'est affecté.
 
 ---
 

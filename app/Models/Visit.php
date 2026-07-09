@@ -99,6 +99,7 @@ final class Visit
         $sql = '
             SELECT
                 COALESCE(country_name, "Inconnu") AS country_name,
+                country_code,
                 COUNT(*) AS pageviews,
                 COUNT(DISTINCT visitor_key) AS unique_visitors
             FROM visits
@@ -117,7 +118,50 @@ final class Visit
         }
 
         $sql .= '
-            GROUP BY country_name
+            GROUP BY country_name, country_code
+            ORDER BY pageviews DESC
+            LIMIT ' . (int) $limit;
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    /**
+     * Villes les plus actives, avec coordonnées moyennes pour la carte.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    public function topCities(int $limit = 12, ?string $from = null, ?string $to = null): array
+    {
+        $sql = '
+            SELECT
+                city_name,
+                COALESCE(country_name, "Inconnu") AS country_name,
+                country_code,
+                AVG(latitude) AS latitude,
+                AVG(longitude) AS longitude,
+                COUNT(*) AS pageviews,
+                COUNT(DISTINCT visitor_key) AS unique_visitors
+            FROM visits
+            WHERE is_public = 1 AND is_bot = 0
+              AND city_name IS NOT NULL
+        ';
+        $params = [];
+
+        if ($from !== null) {
+            $sql .= ' AND visit_date >= :from';
+            $params['from'] = $from;
+        }
+
+        if ($to !== null) {
+            $sql .= ' AND visit_date <= :to';
+            $params['to'] = $to;
+        }
+
+        $sql .= '
+            GROUP BY city_name, country_name, country_code
             ORDER BY pageviews DESC
             LIMIT ' . (int) $limit;
 

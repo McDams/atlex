@@ -156,6 +156,35 @@ Fréquence : Tous les jours à 08h00 (0 8 * * *)
 
 ---
 
+## ÉTAPE 9bis — Carte géographique des visites (MaxMind GeoLite2)
+
+La carte "Top pays / Top villes" du tableau de bord Analytics repose sur une
+base de géolocalisation IP locale (aucun appel externe à chaque visite).
+
+1. Créer un compte gratuit sur [maxmind.com/en/geolite2/signup](https://www.maxmind.com/en/geolite2/signup)
+2. Dans le compte MaxMind → **Manage License Keys** → générer une clé
+3. Ajouter la clé dans `.env` :
+   ```env
+   MAXMIND_LICENSE_KEY=ta_cle_maxmind
+   ```
+4. Télécharger la base une première fois (en SSH, ou via une tâche cron
+   ponctuelle) :
+   ```bash
+   php /home/ton_user/public_html/cron/geoip_update.php
+   ```
+   Le fichier atterrit dans `storage/geoip/GeoLite2-City.mmdb` (~70 Mo).
+5. Programmer la mise à jour mensuelle dans Hostinger → **Cron Jobs** :
+   ```
+   Commande : php /home/ton_user/public_html/cron/geoip_update.php >> /home/ton_user/public_html/storage/logs/cron.log 2>&1
+   Fréquence : Le 5 de chaque mois à 4h (0 4 5 * *)
+   ```
+
+> Tant que la base n'est pas téléchargée, la carte affiche simplement
+> "Aucune donnée de localisation" — le suivi de visites continue de
+> fonctionner normalement (pays/ville restent vides).
+
+---
+
 ## ÉTAPE 10 — Vérifications finales
 
 - [ ] `https://atlexsport.com` charge la page d'accueil ✅

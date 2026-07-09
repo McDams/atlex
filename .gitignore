@@ -4,6 +4,7 @@
 /.phpunit.cache/
 /storage/logs/*
 /storage/cache/*
+/storage/geoip/*
 /public/uploads/*
 .DS_Store
 *.log
@@ -11,5 +12,6 @@ Thumbs.db
 
 !/storage/logs/.gitkeep
 !/storage/cache/.gitkeep
+!/storage/geoip/.gitkeep
 !/public/uploads/.gitkeep
 !/public/uploads/.htaccess
