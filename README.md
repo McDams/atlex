@@ -138,6 +138,12 @@ Le site est accessible sur **http://localhost:8000**.
 
 # Mise à jour de la base de géolocalisation IP (carte Analytics) — 1x/mois
 0 4 5 * * php /chemin/atlex-sport/cron/geoip_update.php >> /chemin/atlex-sport/storage/logs/cron.log 2>&1
+
+# Assistant IA réseaux sociaux — brouillons à partir des actus/événements
+0 6 * * * php /chemin/atlex-sport/cron/social_content_generate.php >> /chemin/atlex-sport/storage/logs/cron.log 2>&1
+
+# Résumés de matchs (grandes compétitions) — toutes les 2h
+0 0,2,4,6,8,10,12,14,16,18,20,22 * * * php /chemin/atlex-sport/cron/sports_results_check.php >> /chemin/atlex-sport/storage/logs/cron.log 2>&1
 ```
 
 > La veille fonctionne aussi à la demande via le bouton **« Rafraîchir »** dans `/admin/veille`.
@@ -145,6 +151,12 @@ Le site est accessible sur **http://localhost:8000**.
 > 🌍 **Carte géographique (Analytics)** : nécessite `MAXMIND_LICENSE_KEY` dans
 > `.env` (compte gratuit sur [maxmind.com/en/geolite2/signup](https://www.maxmind.com/en/geolite2/signup)).
 > Sans clé, la carte affiche simplement « Aucune donnée » — rien d'autre n'est affecté.
+>
+> 🤖 **Assistant IA réseaux sociaux (`/admin/social`)** : nécessite `ANTHROPIC_API_KEY`
+> (compte sur [console.anthropic.com](https://console.anthropic.com)) et, pour les
+> résumés de matchs, `API_FOOTBALL_KEY`. **Supervisé** : l'IA ne fait que proposer
+> des brouillons — chaque publication passe par une approbation manuelle explicite
+> dans l'admin, jamais automatique.
 
 ---
 

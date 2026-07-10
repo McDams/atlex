@@ -139,6 +139,18 @@ $router->post('/admin/veille/template', 'Admin/FundingWatchController@saveTempla
 $router->post('/admin/veille/{id}/promouvoir', 'Admin/FundingWatchController@promote');
 $router->post('/admin/veille/{id}/ignorer', 'Admin/FundingWatchController@ignore');
 
+// Réseaux sociaux (assistant IA — brouillons validés manuellement)
+$router->get('/admin/social', 'Admin/SocialMediaController@index');
+$router->post('/admin/social/generer', 'Admin/SocialMediaController@generate');
+$router->post('/admin/social/generer-matchs', 'Admin/SocialMediaController@generateMatches');
+$router->put('/admin/social/{id}', 'Admin/SocialMediaController@update');
+$router->post('/admin/social/{id}/approuver', 'Admin/SocialMediaController@approve');
+$router->post('/admin/social/{id}/publier', 'Admin/SocialMediaController@publish');
+$router->post('/admin/social/{id}/ignorer', 'Admin/SocialMediaController@ignore');
+$router->get('/admin/social/comptes', 'Admin/SocialAccountsController@index');
+$router->post('/admin/social/comptes/enregistrer', 'Admin/SocialAccountsController@save');
+$router->post('/admin/social/comptes/competitions/{id}/toggle', 'Admin/SocialAccountsController@toggleCompetition');
+
 // Partenaires
 $router->get('/admin/partenaires', 'Admin/PartnersController@index');
 $router->get('/admin/partenaires/nouveau', 'Admin/PartnersController@create');

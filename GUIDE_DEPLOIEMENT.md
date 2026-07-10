@@ -185,6 +185,46 @@ base de géolocalisation IP locale (aucun appel externe à chaque visite).
 
 ---
 
+## ÉTAPE 9ter — Assistant IA réseaux sociaux (/admin/social)
+
+Génère des brouillons de posts (actualités du site + résumés de grandes
+compétitions) qu'un membre du bureau relit et publie manuellement — **rien
+n'est jamais publié automatiquement**.
+
+1. Créer une clé API sur [console.anthropic.com](https://console.anthropic.com),
+   l'ajouter dans `.env` :
+   ```env
+   ANTHROPIC_API_KEY=ta_cle_anthropic
+   ```
+2. *(Optionnel — résumés de matchs)* Créer un compte gratuit sur
+   [rapidapi.com/api-sports/api/api-football](https://rapidapi.com/api-sports/api/api-football),
+   ajouter la clé dans `.env` :
+   ```env
+   API_FOOTBALL_KEY=ta_cle_api_football
+   ```
+   Puis, dans `/admin/social/comptes`, vérifier les identifiants de
+   compétition (proposés par défaut mais à confirmer) avant d'activer une
+   compétition.
+3. Connecter les comptes réseaux sociaux dans `/admin/social/comptes` : pour
+   chacun, coller l'identifiant du compte (Page ID Facebook, Instagram
+   Business Account ID, ou URN d'organisation LinkedIn) et un jeton d'accès
+   généré depuis l'app développeur correspondante (Meta for Developers /
+   LinkedIn Developer Portal). **Une app Meta en mode développement suffit**
+   pour publier depuis le compte de l'admin, sans attendre la revue Meta.
+4. Programmer les tâches planifiées dans Hostinger → **Cron Jobs** :
+   ```
+   Commande : php /home/ton_user/public_html/cron/social_content_generate.php >> /home/ton_user/public_html/storage/logs/cron.log 2>&1
+   Fréquence : Tous les jours à 6h (0 6 * * *)
+
+   Commande : php /home/ton_user/public_html/cron/sports_results_check.php >> /home/ton_user/public_html/storage/logs/cron.log 2>&1
+   Fréquence : Toutes les 2h (0 0,2,4,6,8,10,12,14,16,18,20,22 * * *)
+   ```
+
+> Sans `ANTHROPIC_API_KEY`, ces crons ne font rien (log explicite, aucune
+> erreur) — le reste du site n'est jamais affecté.
+
+---
+
 ## ÉTAPE 10 — Vérifications finales
 
 - [ ] `https://atlexsport.com` charge la page d'accueil ✅

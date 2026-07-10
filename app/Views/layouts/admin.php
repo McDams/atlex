@@ -37,6 +37,7 @@ $navItems = [
     '/admin/veille'      => ['Veille financements',  'M21 21l-4.35-4.35M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'],
     '/admin/partenaires' => ['Partenaires',          'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z'],
     '/admin/media'       => ['Centre média',         'M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z'],
+    '/admin/social'      => ['Réseaux sociaux',      'M18 16.08a2.99 2.99 0 0 0-2 .77l-7.05-4.11a3 3 0 0 0 0-1.48L16 7.15a3 3 0 1 0-1-1.74L7.91 9.53a3 3 0 1 0 0 4.94L15 18.6a3 3 0 1 0 3-2.52z'],
     '/admin/documents'   => ['Documents',            'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'],
     '/admin/taches'      => ['Tâches',               'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
     '/admin/hostinger'   => ['Hébergement',          'M3 15a4 4 0 0 0 4 4h9a5 5 0 1 0-.1-9.999 5.002 5.002 0 0 0-9.78 2.096A4.001 4.001 0 0 0 3 15z'],
