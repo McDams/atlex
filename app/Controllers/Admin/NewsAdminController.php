@@ -9,7 +9,9 @@ use App\Core\Controller;
 use App\Core\FileUpload;
 use App\Core\Validator;
 use App\Models\NewsArticle;
+use App\Services\NewsDraftGeneratorService;
 use RuntimeException;
+use Throwable;
 
 /**
  * CRUD des articles d'actualités (avec upload d'image et contenu HTML enrichi).
@@ -37,6 +39,40 @@ final class NewsAdminController extends Controller
         $this->render('admin/news/create', [
             'title' => 'Nouvel article — Espace SG',
         ], 'layouts/admin');
+    }
+
+    /**
+     * Génère un brouillon d'article avec l'IA à partir d'un résumé de faits,
+     * dans le même style éditorial que le reste du site. Crée l'article en
+     * brouillon (non publié) puis redirige vers l'édition normale — la
+     * relecture et la publication restent des actions manuelles.
+     */
+    public function generateDraft(): void
+    {
+        $this->verifyCsrf();
+
+        $brief = trim((string) $this->input('brief'));
+        if ($brief === '') {
+            flash('error', 'Décrivez le sujet ou les faits à mettre en article.');
+            $this->redirect('admin/actualites');
+        }
+
+        $category = (string) ($this->input('category') ?: 'general');
+
+        $service = new NewsDraftGeneratorService();
+        if (!$service->isConfigured()) {
+            flash('error', 'Clé API Anthropic non configurée (ANTHROPIC_API_KEY dans .env).');
+            $this->redirect('admin/actualites');
+        }
+
+        try {
+            $id = $service->generateFromBrief($brief, $category);
+            flash('success', "Brouillon généré par l'IA — relisez-le avant de publier.");
+            $this->redirect('admin/actualites/' . $id . '/edit');
+        } catch (Throwable $e) {
+            flash('error', 'Échec de la génération : ' . $e->getMessage());
+            $this->redirect('admin/actualites');
+        }
     }
 
     public function edit(string $id): void

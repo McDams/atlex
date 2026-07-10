@@ -92,6 +92,7 @@ $router->get('/admin/actualites', 'Admin/NewsAdminController@index');
 $router->get('/admin/actualites/nouveau', 'Admin/NewsAdminController@create');
 $router->get('/admin/actualites/{id}/edit', 'Admin/NewsAdminController@edit');
 $router->post('/admin/actualites', 'Admin/NewsAdminController@store');
+$router->post('/admin/actualites/generer-ia', 'Admin/NewsAdminController@generateDraft');
 $router->put('/admin/actualites/{id}', 'Admin/NewsAdminController@update');
 $router->delete('/admin/actualites/{id}', 'Admin/NewsAdminController@destroy');
 
