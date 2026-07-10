@@ -56,8 +56,8 @@ foreach ($accounts as $a) {
         <h2 class="font-bebas text-xl tracking-wider text-white">Compétitions suivies</h2>
         <p class="text-white/40 text-xs font-montserrat mt-1">
             Résumés de matchs (Coupe du Monde, CAN, Ligue des Champions...). Nécessite
-            <code class="text-white/60">API_FOOTBALL_KEY</code> dans <code class="text-white/60">.env</code>.
-            Vérifiez l'identifiant de chaque compétition auprès d'API-Football avant de l'activer.
+            <code class="text-white/60">SOFASCORE_API_KEY</code> dans <code class="text-white/60">.env</code>.
+            Vérifiez l'identifiant de chaque compétition auprès de Sofascore (uniqueTournament.id) avant de l'activer.
         </p>
     </div>
     <table class="w-full text-sm">
@@ -66,7 +66,7 @@ foreach ($accounts as $a) {
                 <tr class="border-b border-white/5">
                     <td class="px-6 py-3 font-montserrat text-white"><?= e($c['name']) ?></td>
                     <td class="px-6 py-3 text-white/40 text-xs">
-                        ID API-Football : <?= e($c['external_competition_id']) ?>
+                        ID Sofascore : <?= e($c['external_competition_id']) ?>
                     </td>
                     <td class="px-6 py-3 text-right">
                         <form method="POST" action="<?= url('/admin/social/comptes/competitions/' . $c['id'] . '/toggle') ?>">

@@ -191,20 +191,22 @@ Génère des brouillons de posts (actualités du site + résumés de grandes
 compétitions) qu'un membre du bureau relit et publie manuellement — **rien
 n'est jamais publié automatiquement**.
 
-1. Créer une clé API sur [console.anthropic.com](https://console.anthropic.com),
+1. Créer une clé API gratuite (aucune carte bancaire requise) sur
+   [aistudio.google.com/apikey](https://aistudio.google.com/apikey),
    l'ajouter dans `.env` :
    ```env
-   ANTHROPIC_API_KEY=ta_cle_anthropic
+   GEMINI_API_KEY=ta_cle_gemini
    ```
 2. *(Optionnel — résumés de matchs)* Créer un compte gratuit sur
-   [rapidapi.com/api-sports/api/api-football](https://rapidapi.com/api-sports/api/api-football),
-   ajouter la clé dans `.env` :
+   [rapidapi.com](https://rapidapi.com), s'abonner au plan gratuit de
+   l'API **Sofascore** (éditeur Api Dojo — chercher « Sofascore » dans
+   RapidAPI, pas « API-Football »), ajouter la clé dans `.env` :
    ```env
-   API_FOOTBALL_KEY=ta_cle_api_football
+   SOFASCORE_API_KEY=ta_cle_rapidapi
    ```
-   Puis, dans `/admin/social/comptes`, vérifier les identifiants de
-   compétition (proposés par défaut mais à confirmer) avant d'activer une
-   compétition.
+   Puis, dans `/admin/social/comptes`, remplacer les identifiants de
+   compétition (marqués `A_COMPLETER_*` par défaut, voir migration 015)
+   par les vrais ID de tournoi Sofascore avant d'activer une compétition.
 3. Connecter les comptes réseaux sociaux dans `/admin/social/comptes` : pour
    chacun, coller l'identifiant du compte (Page ID Facebook, Instagram
    Business Account ID, ou URN d'organisation LinkedIn) et un jeton d'accès
@@ -220,7 +222,7 @@ n'est jamais publié automatiquement**.
    Fréquence : Toutes les 2h (0 0,2,4,6,8,10,12,14,16,18,20,22 * * *)
    ```
 
-> Sans `ANTHROPIC_API_KEY`, ces crons ne font rien (log explicite, aucune
+> Sans `GEMINI_API_KEY`, ces crons ne font rien (log explicite, aucune
 > erreur) — le reste du site n'est jamais affecté.
 
 ---

@@ -4,7 +4,7 @@
 /**
  * Script cron — Vérification des résultats des grandes compétitions
  *
- * Interroge l'API-Football pour les matchs terminés des compétitions
+ * Interroge Sofascore (via RapidAPI) pour les matchs terminés des compétitions
  * actives (/admin/social/comptes) et propose des brouillons de résumés.
  * Ne publie jamais rien : chaque brouillon attend une validation manuelle.
  *
@@ -60,7 +60,7 @@ echo sprintf("[%s] [sports_results_check] Démarrage...\n", date('Y-m-d H:i:s'))
 
 $service = new SportsResultsService();
 if (!$service->isConfigured()) {
-    fwrite(STDERR, "[sports_results_check] API_FOOTBALL_KEY absent de .env — vérification ignorée.\n");
+    fwrite(STDERR, "[sports_results_check] SOFASCORE_API_KEY absent de .env — vérification ignorée.\n");
     exit(0); // pas une erreur : dégradation attendue tant que la clé n'est pas configurée
 }
 

@@ -10,19 +10,27 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Récupère les matchs terminés des compétitions suivies (API-Football, via
+ * Récupère les matchs terminés des compétitions suivies (Sofascore, via
  * RapidAPI) et propose des brouillons de résumés — mêmes garde-fous que
  * SocialContentGeneratorService : jamais de publication automatique, l'IA
  * met en mots un score réel, elle ne l'invente jamais.
  *
- * Authentification : API_FOOTBALL_KEY (.env), compte gratuit sur
- * https://rapidapi.com/api-sports/api/api-football (plan gratuit limité,
- * voir GUIDE_DEPLOIEMENT.md).
+ * Authentification : SOFASCORE_API_KEY (.env), abonnement gratuit sur
+ * RapidAPI à l'API « Sofascore » (éditeur Api Dojo).
+ *
+ * ⚠️ Les noms de champs de la réponse (events[], tournament.uniqueTournament.id,
+ * homeTeam/awayTeam, homeScore/awayScore, status.type…) correspondent à la
+ * structure généralement documentée pour cette API au moment de l'écriture
+ * de ce fichier, mais n'ont pas pu être vérifiés contre un appel réel.
+ * À confirmer/ajuster avec un exemple de réponse (onglet « Results » de
+ * RapidAPI) une fois SOFASCORE_API_KEY configurée — voir matchesForDate()
+ * et isFinished()/matchContext() ci-dessous si les résumés ne se génèrent
+ * pas comme attendu.
  */
 final class SportsResultsService
 {
-    private const API_HOST = 'api-football-v1.p.rapidapi.com';
-    private const API_URL = 'https://api-football-v1.p.rapidapi.com/v3/fixtures';
+    private const API_HOST = 'sofascore.p.rapidapi.com';
+    private const API_URL = 'https://sofascore.p.rapidapi.com/matches/get-scheduled-events';
 
     private const PLATFORMS = ['facebook', 'instagram', 'linkedin'];
 
@@ -33,7 +41,7 @@ final class SportsResultsService
 
     public function __construct(?AiContentService $ai = null)
     {
-        $this->apiKey = (string) ($_ENV['API_FOOTBALL_KEY'] ?? getenv('API_FOOTBALL_KEY') ?: '');
+        $this->apiKey = (string) ($_ENV['SOFASCORE_API_KEY'] ?? getenv('SOFASCORE_API_KEY') ?: '');
         $this->competitions = new SportsCompetition();
         $this->posts = new SocialPost();
         $this->ai = $ai ?? new AiContentService();
@@ -58,48 +66,67 @@ final class SportsResultsService
         $competitions = $this->competitions->active();
         $stats['competitions'] = count($competitions);
 
-        foreach ($competitions as $competition) {
-            $from = $this->sinceDate($competition['last_checked_at'] ?? null);
+        if ($competitions === []) {
+            return $stats;
+        }
 
+        // Sofascore expose les événements par date (pas par plage de dates) :
+        // on interroge chaque jour de la fenêtre de rattrapage, puis on filtre
+        // par compétition suivie. Fenêtre courte par défaut (voir sinceDate).
+        $days = $this->datesSince($this->earliestLastChecked($competitions));
+
+        $eventsByDay = [];
+        foreach ($days as $day) {
             try {
-                $matches = $this->fetchFinishedMatches((string) $competition['external_competition_id'], $from);
+                $eventsByDay[$day] = $this->matchesForDate($day);
             } catch (Throwable $e) {
                 error_log('[SportsResultsService] ' . $e->getMessage());
                 $stats['errors']++;
-                continue;
+                $eventsByDay[$day] = [];
             }
+        }
 
-            foreach ($matches as $match) {
-                $stats['matches']++;
-                $fixtureId = (int) ($match['fixture']['id'] ?? 0);
-                if ($fixtureId === 0) {
-                    continue;
-                }
+        foreach ($competitions as $competition) {
+            $competitionId = (string) $competition['external_competition_id'];
 
-                foreach (self::PLATFORMS as $platform) {
-                    if ($this->posts->alreadyProposed('match_resume', $fixtureId, $platform)) {
+            foreach ($eventsByDay as $events) {
+                foreach ($events as $event) {
+                    $tournamentId = (string) ($event['tournament']['uniqueTournament']['id'] ?? '');
+                    if ($tournamentId !== $competitionId || !$this->isFinished($event)) {
                         continue;
                     }
 
-                    try {
-                        $text = $this->ai->draft(
-                            $this->systemPromptFor($platform),
-                            $this->matchContext($match, (string) $competition['name'])
-                        );
+                    $stats['matches']++;
+                    $eventId = (int) ($event['id'] ?? 0);
+                    if ($eventId === 0) {
+                        continue;
+                    }
 
-                        $this->posts->create([
-                            'platform'     => $platform,
-                            'status'       => 'brouillon',
-                            'content_text' => $text,
-                            'source_type'  => 'match_resume',
-                            'source_id'    => $fixtureId,
-                            'created_by'   => 'ia',
-                        ]);
+                    foreach (self::PLATFORMS as $platform) {
+                        if ($this->posts->alreadyProposed('match_resume', $eventId, $platform)) {
+                            continue;
+                        }
 
-                        $stats['created']++;
-                    } catch (Throwable $e) {
-                        error_log('[SportsResultsService] ' . $e->getMessage());
-                        $stats['errors']++;
+                        try {
+                            $text = $this->ai->draft(
+                                $this->systemPromptFor($platform),
+                                $this->matchContext($event, (string) $competition['name'])
+                            );
+
+                            $this->posts->create([
+                                'platform'     => $platform,
+                                'status'       => 'brouillon',
+                                'content_text' => $text,
+                                'source_type'  => 'match_resume',
+                                'source_id'    => $eventId,
+                                'created_by'   => 'ia',
+                            ]);
+
+                            $stats['created']++;
+                        } catch (Throwable $e) {
+                            error_log('[SportsResultsService] ' . $e->getMessage());
+                            $stats['errors']++;
+                        }
                     }
                 }
             }
@@ -113,22 +140,9 @@ final class SportsResultsService
     /**
      * @return array<int,array<string,mixed>>
      */
-    private function fetchFinishedMatches(string $leagueId, string $from): array
+    private function matchesForDate(string $date): array
     {
-        // NB : le paramètre "season" d'API-Football attend l'année de début
-        // de saison (ex: 2025 pour une saison 2025-26 européenne). Pour une
-        // compétition à cheval sur deux années civiles, ajuster ici si les
-        // résultats semblent incomplets en fin d'année.
-        $season = (int) date('Y');
-        $to = date('Y-m-d');
-
-        $url = self::API_URL . '?' . http_build_query([
-            'league' => $leagueId,
-            'season' => $season,
-            'from'   => $from,
-            'to'     => $to,
-            'status' => 'FT',
-        ]);
+        $url = self::API_URL . '?' . http_build_query(['date' => $date]);
 
         $ch = curl_init($url);
         curl_setopt_array($ch, [
@@ -138,8 +152,8 @@ final class SportsResultsService
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_HTTPHEADER     => [
-                'X-RapidAPI-Key: ' . $this->apiKey,
-                'X-RapidAPI-Host: ' . self::API_HOST,
+                'x-rapidapi-key: ' . $this->apiKey,
+                'x-rapidapi-host: ' . self::API_HOST,
             ],
         ]);
 
@@ -149,37 +163,65 @@ final class SportsResultsService
         curl_close($ch);
 
         if ($response === false) {
-            throw new RuntimeException('Erreur réseau cURL (API-Football) : ' . $curlError);
+            throw new RuntimeException('Erreur réseau cURL (Sofascore) : ' . $curlError);
         }
 
         $decoded = json_decode((string) $response, true);
         if (!is_array($decoded)) {
-            throw new RuntimeException(sprintf('Réponse API-Football invalide (HTTP %d).', $httpCode));
+            throw new RuntimeException(sprintf('Réponse Sofascore invalide (HTTP %d).', $httpCode));
         }
 
         if ($httpCode < 200 || $httpCode >= 300) {
-            $errorMsg = is_array($decoded['message'] ?? null)
-                ? implode(', ', $decoded['message'])
-                : (string) ($decoded['message'] ?? "Erreur HTTP $httpCode");
-            throw new RuntimeException('API-Football — ' . $errorMsg);
+            $errorMsg = (string) ($decoded['message'] ?? "Erreur HTTP $httpCode");
+            throw new RuntimeException('Sofascore — ' . $errorMsg);
         }
 
-        return is_array($decoded['response'] ?? null) ? $decoded['response'] : [];
+        return is_array($decoded['events'] ?? null) ? $decoded['events'] : [];
     }
 
-    private function sinceDate(?string $lastCheckedAt): string
+    private function isFinished(array $event): bool
     {
+        $status = strtolower((string) ($event['status']['type'] ?? ''));
+
+        return $status === 'finished';
+    }
+
+    /**
+     * @param array<int,array<string,mixed>> $competitions
+     */
+    private function earliestLastChecked(array $competitions): ?string
+    {
+        $dates = array_filter(array_column($competitions, 'last_checked_at'));
+
+        return $dates === [] ? null : min($dates);
+    }
+
+    /**
+     * @return array<int,string> dates (Y-m-d) de la veille de $lastCheckedAt à aujourd'hui, plafonné à 3 jours.
+     */
+    private function datesSince(?string $lastCheckedAt): array
+    {
+        $daysBack = 1;
+
         if ($lastCheckedAt !== null && $lastCheckedAt !== '') {
             try {
-                return (new \DateTimeImmutable($lastCheckedAt))->format('Y-m-d');
+                $since = new \DateTimeImmutable($lastCheckedAt);
+                $daysBack = min(3, max(1, (new \DateTimeImmutable('today'))->diff($since)->days + 1));
             } catch (Throwable) {
-                // valeur invalide -> repli sur la fenêtre par défaut ci-dessous
+                $daysBack = 3;
             }
+        } else {
+            // Jamais vérifiée : ne remonte que les 3 derniers jours pour
+            // éviter de rattraper toute une saison au premier passage.
+            $daysBack = 3;
         }
 
-        // Jamais vérifiée : ne remonte que les 3 derniers jours pour éviter
-        // de rattraper toute une saison au premier passage.
-        return (new \DateTimeImmutable('-3 days'))->format('Y-m-d');
+        $dates = [];
+        for ($i = $daysBack - 1; $i >= 0; $i--) {
+            $dates[] = (new \DateTimeImmutable("-{$i} days"))->format('Y-m-d');
+        }
+
+        return $dates;
     }
 
     private function systemPromptFor(string $platform): string
@@ -198,19 +240,18 @@ final class SportsResultsService
     }
 
     /**
-     * @param array<string,mixed> $match
+     * @param array<string,mixed> $event
      */
-    private function matchContext(array $match, string $competitionName): string
+    private function matchContext(array $event, string $competitionName): string
     {
-        $home = (string) ($match['teams']['home']['name'] ?? '?');
-        $away = (string) ($match['teams']['away']['name'] ?? '?');
-        $goalsHome = $match['goals']['home'] ?? '?';
-        $goalsAway = $match['goals']['away'] ?? '?';
-        $round = trim((string) ($match['league']['round'] ?? ''));
+        $home = (string) ($event['homeTeam']['name'] ?? '?');
+        $away = (string) ($event['awayTeam']['name'] ?? '?');
+        $goalsHome = $event['homeScore']['current'] ?? '?';
+        $goalsAway = $event['awayScore']['current'] ?? '?';
 
         $lines = [
             'Résultat de match à résumer :',
-            'Compétition : ' . $competitionName . ($round !== '' ? ' — ' . $round : ''),
+            'Compétition : ' . $competitionName,
             "Score final : {$home} {$goalsHome} - {$goalsAway} {$away}",
         ];
 

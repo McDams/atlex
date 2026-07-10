@@ -61,7 +61,7 @@ final class NewsAdminController extends Controller
 
         $service = new NewsDraftGeneratorService();
         if (!$service->isConfigured()) {
-            flash('error', 'Clé API Anthropic non configurée (ANTHROPIC_API_KEY dans .env).');
+            flash('error', 'Clé API Gemini non configurée (GEMINI_API_KEY dans .env).');
             $this->redirect('admin/actualites');
         }
 

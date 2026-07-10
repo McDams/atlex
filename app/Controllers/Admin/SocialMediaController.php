@@ -82,7 +82,7 @@ final class SocialMediaController extends Controller
 
         $service = new SportsResultsService();
         if (!$service->isConfigured()) {
-            flash('error', 'Clé API-Football non configurée (API_FOOTBALL_KEY dans .env).');
+            flash('error', 'Clé Sofascore non configurée (SOFASCORE_API_KEY dans .env).');
             $this->redirect('admin/social');
         }
 

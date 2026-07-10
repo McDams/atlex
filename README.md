@@ -152,11 +152,12 @@ Le site est accessible sur **http://localhost:8000**.
 > `.env` (compte gratuit sur [maxmind.com/en/geolite2/signup](https://www.maxmind.com/en/geolite2/signup)).
 > Sans clé, la carte affiche simplement « Aucune donnée » — rien d'autre n'est affecté.
 >
-> 🤖 **Assistant IA réseaux sociaux (`/admin/social`)** : nécessite `ANTHROPIC_API_KEY`
-> (compte sur [console.anthropic.com](https://console.anthropic.com)) et, pour les
-> résumés de matchs, `API_FOOTBALL_KEY`. **Supervisé** : l'IA ne fait que proposer
-> des brouillons — chaque publication passe par une approbation manuelle explicite
-> dans l'admin, jamais automatique.
+> 🤖 **Assistant IA réseaux sociaux (`/admin/social`) et articles Actualités** :
+> nécessite `GEMINI_API_KEY` (clé gratuite sur
+> [aistudio.google.com/apikey](https://aistudio.google.com/apikey)) et, pour les
+> résumés de matchs, `SOFASCORE_API_KEY` (RapidAPI). **Supervisé** : l'IA ne fait
+> que proposer des brouillons — chaque publication passe par une approbation
+> manuelle explicite dans l'admin, jamais automatique.
 
 ---
 
