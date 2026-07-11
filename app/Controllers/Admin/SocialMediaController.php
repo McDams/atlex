@@ -89,10 +89,11 @@ final class SocialMediaController extends Controller
         try {
             $report = $service->checkFinishedMatches();
             flash('success', sprintf(
-                '%d compétition(s) vérifiée(s), %d match(s) trouvé(s), %d brouillon(s) créé(s).',
+                '%d compétition(s) vérifiée(s), %d match(s) trouvé(s), %d brouillon(s) créé(s), %d article(s) rédigé(s).',
                 $report['competitions'],
                 $report['matches'],
-                $report['created']
+                $report['created'],
+                $report['articles']
             ));
         } catch (Throwable $e) {
             flash('error', 'Échec de la vérification des résultats : ' . $e->getMessage());

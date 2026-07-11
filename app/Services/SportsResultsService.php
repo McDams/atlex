@@ -25,12 +25,16 @@ use Throwable;
  * À confirmer/ajuster avec un exemple de réponse (onglet « Results » de
  * RapidAPI) une fois SOFASCORE_API_KEY configurée — voir matchesForDate()
  * et isFinished()/matchContext() ci-dessous si les résumés ne se génèrent
- * pas comme attendu.
+ * pas comme attendu. L'endpoint des buteurs (fetchIncidents) est une
+ * hypothèse encore moins certaine que matchesForDate() : en cas d'échec ou
+ * de format inattendu, elle dégrade proprement (aucun buteur détaillé) sans
+ * empêcher la génération de l'article — voir MatchReportGeneratorService.
  */
 final class SportsResultsService
 {
     private const API_HOST = 'sofascore.p.rapidapi.com';
     private const API_URL = 'https://sofascore.p.rapidapi.com/matches/get-scheduled-events';
+    private const INCIDENTS_URL = 'https://sofascore.p.rapidapi.com/matches/get-incidents';
 
     private const PLATFORMS = ['facebook', 'instagram', 'linkedin'];
 
@@ -38,6 +42,7 @@ final class SportsResultsService
     private SportsCompetition $competitions;
     private SocialPost $posts;
     private AiContentService $ai;
+    private MatchReportGeneratorService $articleGenerator;
 
     public function __construct(?AiContentService $ai = null)
     {
@@ -45,6 +50,7 @@ final class SportsResultsService
         $this->competitions = new SportsCompetition();
         $this->posts = new SocialPost();
         $this->ai = $ai ?? new AiContentService();
+        $this->articleGenerator = new MatchReportGeneratorService($this->ai);
     }
 
     public function isConfigured(): bool
@@ -53,11 +59,11 @@ final class SportsResultsService
     }
 
     /**
-     * @return array{competitions:int,matches:int,created:int,errors:int}
+     * @return array{competitions:int,matches:int,created:int,articles:int,errors:int}
      */
     public function checkFinishedMatches(): array
     {
-        $stats = ['competitions' => 0, 'matches' => 0, 'created' => 0, 'errors' => 0];
+        $stats = ['competitions' => 0, 'matches' => 0, 'created' => 0, 'articles' => 0, 'errors' => 0];
 
         if (!$this->isConfigured()) {
             return $stats;
@@ -102,6 +108,10 @@ final class SportsResultsService
                         continue;
                     }
 
+                    // Capturé avant la boucle ci-dessous : une fois le premier post créé,
+                    // alreadyProposed() renverrait déjà "vrai" pour ce match.
+                    $isNewMatch = !$this->posts->alreadyProposed('match_resume', $eventId, 'facebook');
+
                     foreach (self::PLATFORMS as $platform) {
                         if ($this->posts->alreadyProposed('match_resume', $eventId, $platform)) {
                             continue;
@@ -123,6 +133,16 @@ final class SportsResultsService
                             ]);
 
                             $stats['created']++;
+                        } catch (Throwable $e) {
+                            error_log('[SportsResultsService] ' . $e->getMessage());
+                            $stats['errors']++;
+                        }
+                    }
+
+                    if ($isNewMatch) {
+                        try {
+                            $this->generateMatchArticle($event, $competition);
+                            $stats['articles']++;
                         } catch (Throwable $e) {
                             error_log('[SportsResultsService] ' . $e->getMessage());
                             $stats['errors']++;
@@ -177,6 +197,103 @@ final class SportsResultsService
         }
 
         return is_array($decoded['events'] ?? null) ? $decoded['events'] : [];
+    }
+
+    /**
+     * @param array<string,mixed> $event
+     * @param array<string,mixed> $competition
+     */
+    private function generateMatchArticle(array $event, array $competition): void
+    {
+        $eventId = (int) ($event['id'] ?? 0);
+        $home = (string) ($event['homeTeam']['name'] ?? '?');
+        $away = (string) ($event['awayTeam']['name'] ?? '?');
+        $homeScore = (int) ($event['homeScore']['current'] ?? 0);
+        $awayScore = (int) ($event['awayScore']['current'] ?? 0);
+        $round = trim((string) ($event['roundInfo']['name'] ?? $event['tournament']['round'] ?? ''));
+
+        $matchDate = '';
+        $timestamp = $event['startTimestamp'] ?? null;
+        if (is_int($timestamp)) {
+            $matchDate = (new \DateTimeImmutable('@' . $timestamp))->format('d/m/Y');
+        }
+
+        $goalEvents = $this->fetchIncidents($eventId);
+
+        $this->articleGenerator->generateArticle(
+            $home,
+            $away,
+            $homeScore,
+            $awayScore,
+            (string) $competition['name'],
+            $round,
+            $matchDate,
+            $goalEvents
+        );
+    }
+
+    /**
+     * Récupère les buts (buteur + minute) d'un match, si disponibles.
+     * Dégrade toujours en tableau vide en cas d'échec — l'article se génère
+     * quand même, juste sans détail de buteurs.
+     *
+     * @return array<int,array{team:string,scorer:string,minute:int}>
+     */
+    private function fetchIncidents(int $eventId): array
+    {
+        try {
+            $url = self::INCIDENTS_URL . '?' . http_build_query(['matchId' => $eventId]);
+
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT        => 15,
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_HTTPHEADER     => [
+                    'x-rapidapi-key: ' . $this->apiKey,
+                    'x-rapidapi-host: ' . self::API_HOST,
+                ],
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($response === false || $httpCode < 200 || $httpCode >= 300) {
+                return [];
+            }
+
+            $decoded = json_decode((string) $response, true);
+            $incidents = is_array($decoded['incidents'] ?? null) ? $decoded['incidents'] : [];
+
+            $goals = [];
+            foreach ($incidents as $incident) {
+                $type = strtolower((string) ($incident['incidentType'] ?? ''));
+                if ($type !== 'goal') {
+                    continue;
+                }
+
+                $scorer = trim((string) ($incident['player']['name'] ?? ''));
+                $minute = (int) ($incident['time'] ?? 0);
+                if ($scorer === '' || $minute === 0) {
+                    continue;
+                }
+
+                $goals[] = [
+                    'team'   => !empty($incident['isHome']) ? 'home' : 'away',
+                    'scorer' => $scorer,
+                    'minute' => $minute,
+                ];
+            }
+
+            return $goals;
+        } catch (Throwable $e) {
+            error_log('[SportsResultsService] fetchIncidents: ' . $e->getMessage());
+
+            return [];
+        }
     }
 
     private function isFinished(array $event): bool

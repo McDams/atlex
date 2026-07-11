@@ -68,11 +68,12 @@ try {
     $report = $service->checkFinishedMatches();
 
     echo sprintf(
-        "[%s] [sports_results_check] Terminé : %d compétition(s), %d match(s), %d brouillon(s) créé(s), %d erreur(s).\n",
+        "[%s] [sports_results_check] Terminé : %d compétition(s), %d match(s), %d brouillon(s) créé(s), %d article(s), %d erreur(s).\n",
         date('Y-m-d H:i:s'),
         $report['competitions'],
         $report['matches'],
         $report['created'],
+        $report['articles'],
         $report['errors']
     );
     exit(0);
