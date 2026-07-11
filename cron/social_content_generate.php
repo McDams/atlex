@@ -61,7 +61,7 @@ echo sprintf("[%s] [social_content_generate] Démarrage...\n", date('Y-m-d H:i:s
 
 $ai = new AiContentService();
 if (!$ai->isConfigured()) {
-    fwrite(STDERR, "[social_content_generate] GEMINI_API_KEY absent de .env — aucun brouillon généré.\n");
+    fwrite(STDERR, "[social_content_generate] GROQ_API_KEY absent de .env — aucun brouillon généré.\n");
     exit(0); // pas une erreur : dégradation attendue tant que la clé n'est pas configurée
 }
 

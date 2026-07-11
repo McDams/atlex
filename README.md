@@ -153,8 +153,8 @@ Le site est accessible sur **http://localhost:8000**.
 > Sans clé, la carte affiche simplement « Aucune donnée » — rien d'autre n'est affecté.
 >
 > 🤖 **Assistant IA réseaux sociaux (`/admin/social`) et articles Actualités** :
-> nécessite `GEMINI_API_KEY` (clé gratuite sur
-> [aistudio.google.com/apikey](https://aistudio.google.com/apikey)) et, pour les
+> nécessite `GROQ_API_KEY` (clé gratuite sur
+> [console.groq.com/keys](https://console.groq.com/keys)) et, pour les
 > résumés de matchs, `SOFASCORE_API_KEY` (RapidAPI). **Supervisé** : l'IA ne fait
 > que proposer des brouillons — chaque publication passe par une approbation
 > manuelle explicite dans l'admin, jamais automatique.

@@ -7,19 +7,20 @@ namespace App\Services;
 use RuntimeException;
 
 /**
- * Wrapper générique pour l'API Google Gemini : rédige un texte à partir
- * d'une consigne (voix de marque, contraintes de format) et d'un contexte
- * factuel fourni par l'appelant. L'IA met en forme des faits réels — elle
- * ne les invente jamais ; c'est à l'appelant de ne fournir que du contenu
- * vérifié (article, événement, score de match...) dans $context.
+ * Wrapper générique pour l'API Groq (modèles ouverts type Llama, format
+ * compatible OpenAI Chat Completions) : rédige un texte à partir d'une
+ * consigne (voix de marque, contraintes de format) et d'un contexte factuel
+ * fourni par l'appelant. L'IA met en forme des faits réels — elle ne les
+ * invente jamais ; c'est à l'appelant de ne fournir que du contenu vérifié
+ * (article, événement, score de match...) dans $context.
  *
- * Authentification : GEMINI_API_KEY (.env), clé gratuite (sans carte
- * bancaire) sur https://aistudio.google.com/apikey
+ * Authentification : GROQ_API_KEY (.env), clé gratuite (sans carte
+ * bancaire) sur https://console.groq.com/keys
  */
 final class AiContentService
 {
-    private const MODEL = 'gemini-2.0-flash';
-    private const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' . self::MODEL . ':generateContent';
+    private const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+    private const MODEL = 'llama-3.3-70b-versatile';
 
     private string $apiKey;
 
@@ -27,7 +28,7 @@ final class AiContentService
     {
         $this->apiKey = $apiKey !== ''
             ? $apiKey
-            : (string) ($_ENV['GEMINI_API_KEY'] ?? getenv('GEMINI_API_KEY') ?: '');
+            : (string) ($_ENV['GROQ_API_KEY'] ?? getenv('GROQ_API_KEY') ?: '');
     }
 
     public function isConfigured(): bool
@@ -44,23 +45,20 @@ final class AiContentService
     public function draft(string $systemPrompt, string $context, int $maxTokens = 600): string
     {
         if (!$this->isConfigured()) {
-            throw new RuntimeException('Clé API Gemini manquante. Configurez GEMINI_API_KEY.');
+            throw new RuntimeException('Clé API Groq manquante. Configurez GROQ_API_KEY.');
         }
 
         $payload = json_encode([
-            'system_instruction' => [
-                'parts' => [['text' => $systemPrompt]],
-            ],
-            'contents' => [
-                ['role' => 'user', 'parts' => [['text' => $context]]],
-            ],
-            'generationConfig' => [
-                'maxOutputTokens' => $maxTokens,
+            'model'      => self::MODEL,
+            'max_tokens' => $maxTokens,
+            'messages'   => [
+                ['role' => 'system', 'content' => $systemPrompt],
+                ['role' => 'user', 'content' => $context],
             ],
         ], JSON_UNESCAPED_UNICODE);
 
         if ($payload === false) {
-            throw new RuntimeException('Impossible de sérialiser la requête vers l\'API Gemini.');
+            throw new RuntimeException('Impossible de sérialiser la requête vers l\'API Groq.');
         }
 
         $ch = curl_init(self::API_URL);
@@ -73,8 +71,8 @@ final class AiContentService
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_HTTPHEADER     => [
-                'x-goog-api-key: ' . $this->apiKey,
-                'content-type: application/json',
+                'Authorization: Bearer ' . $this->apiKey,
+                'Content-Type: application/json',
             ],
         ]);
 
@@ -84,28 +82,24 @@ final class AiContentService
         curl_close($ch);
 
         if ($response === false) {
-            throw new RuntimeException('Erreur réseau cURL (API Gemini) : ' . $curlError);
+            throw new RuntimeException('Erreur réseau cURL (API Groq) : ' . $curlError);
         }
 
         $decoded = json_decode((string) $response, true);
         if (!is_array($decoded)) {
             throw new RuntimeException(
-                sprintf('Réponse API Gemini invalide (HTTP %d).', $httpCode)
+                sprintf('Réponse API Groq invalide (HTTP %d).', $httpCode)
             );
         }
 
         if ($httpCode < 200 || $httpCode >= 300) {
             $errorMsg = $decoded['error']['message'] ?? "Erreur HTTP $httpCode";
-            throw new RuntimeException('API Gemini — ' . $errorMsg);
+            throw new RuntimeException('API Groq — ' . $errorMsg);
         }
 
-        $text = $decoded['candidates'][0]['content']['parts'][0]['text'] ?? null;
+        $text = $decoded['choices'][0]['message']['content'] ?? null;
         if (!is_string($text) || trim($text) === '') {
-            $finishReason = $decoded['candidates'][0]['finishReason'] ?? null;
-            throw new RuntimeException(
-                'Réponse API Gemini vide ou inattendue.'
-                . ($finishReason !== null ? " (finishReason: $finishReason)" : '')
-            );
+            throw new RuntimeException('Réponse API Groq vide ou inattendue.');
         }
 
         return trim($text);

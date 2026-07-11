@@ -192,10 +192,10 @@ compétitions) qu'un membre du bureau relit et publie manuellement — **rien
 n'est jamais publié automatiquement**.
 
 1. Créer une clé API gratuite (aucune carte bancaire requise) sur
-   [aistudio.google.com/apikey](https://aistudio.google.com/apikey),
+   [console.groq.com/keys](https://console.groq.com/keys),
    l'ajouter dans `.env` :
    ```env
-   GEMINI_API_KEY=ta_cle_gemini
+   GROQ_API_KEY=ta_cle_groq
    ```
 2. *(Optionnel — résumés de matchs)* Créer un compte gratuit sur
    [rapidapi.com](https://rapidapi.com), s'abonner au plan gratuit de
@@ -222,7 +222,7 @@ n'est jamais publié automatiquement**.
    Fréquence : Toutes les 2h (0 0,2,4,6,8,10,12,14,16,18,20,22 * * *)
    ```
 
-> Sans `GEMINI_API_KEY`, ces crons ne font rien (log explicite, aucune
+> Sans `GROQ_API_KEY`, ces crons ne font rien (log explicite, aucune
 > erreur) — le reste du site n'est jamais affecté.
 
 ---

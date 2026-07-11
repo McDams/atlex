@@ -19,7 +19,7 @@ final class AiContentServiceTest extends TestCase
 
     public function testIsConfiguredIsTrueWithApiKey(): void
     {
-        $service = new AiContentService('gemini-test-key');
+        $service = new AiContentService('groq-test-key');
 
         $this->assertTrue($service->isConfigured());
     }
@@ -34,11 +34,11 @@ final class AiContentServiceTest extends TestCase
 
     public function testFallsBackToEnvironmentVariableWhenNoKeyProvided(): void
     {
-        putenv('GEMINI_API_KEY=from-env-test');
+        putenv('GROQ_API_KEY=from-env-test');
         $service = new AiContentService();
 
         $this->assertTrue($service->isConfigured());
 
-        putenv('GEMINI_API_KEY'); // nettoyage
+        putenv('GROQ_API_KEY'); // nettoyage
     }
 }
