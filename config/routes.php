@@ -38,6 +38,13 @@ $router->post('/contact', 'ContactController@send');
 $router->post('/contact/benevole', 'ContactController@submitVolunteer');
 $router->post('/inscription', 'ContactController@register');
 
+$router->post('/don/momo/initier', 'DonationController@initiateMomo');
+$router->get('/don/momo/statut/{reference}', 'DonationController@momoStatus');
+$router->post('/don/momo/callback', 'DonationController@momoCallback');
+$router->post('/don/paypal/creer-commande', 'DonationController@createPaypalOrder');
+$router->post('/don/paypal/capturer', 'DonationController@capturePaypalOrder');
+$router->post('/don/paypal/webhook', 'DonationController@paypalWebhook');
+
 $router->get('/confidentialite', 'PrivacyController@index');
 $router->get('/sitemap.xml', 'SitemapController@index');
 
@@ -151,6 +158,9 @@ $router->post('/admin/social/{id}/ignorer', 'Admin/SocialMediaController@ignore'
 $router->get('/admin/social/comptes', 'Admin/SocialAccountsController@index');
 $router->post('/admin/social/comptes/enregistrer', 'Admin/SocialAccountsController@save');
 $router->post('/admin/social/comptes/competitions/{id}/toggle', 'Admin/SocialAccountsController@toggleCompetition');
+
+$router->get('/admin/dons', 'Admin/DonationsController@index');
+$router->post('/admin/dons/{id}/confirmer', 'Admin/DonationsController@markConfirmed');
 
 // Partenaires
 $router->get('/admin/partenaires', 'Admin/PartnersController@index');

@@ -45,6 +45,9 @@ final class ContactController extends Controller
             'ogImage' => 'images/hero-bg.png',
             'ogType' => 'website',
             'metaRobots' => 'index, follow',
+            // Identifiant PUBLIC PayPal (client-id) — pas un secret, nécessaire
+            // pour charger le SDK Boutons côté navigateur.
+            'paypalClientId' => (string) ($_ENV['PAYPAL_CLIENT_ID'] ?? getenv('PAYPAL_CLIENT_ID') ?: ''),
         ]);
     }
 

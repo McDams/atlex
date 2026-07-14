@@ -224,35 +224,71 @@ $invalid = static function (string $field) use ($formErrors): string {
                 </p>
 
                 <div class="bg-atlex-bg rounded-lg border border-white/10 p-5 mt-2">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full font-bebas text-sm text-black" style="background:#FFCC00">MTN</span>
-                        <h3 class="font-montserrat font-semibold text-white">Don via Mobile Money (MTN MoMo)</h3>
+                    <div class="flex gap-2 mb-5">
+                        <button type="button" class="don-method-tab btn-atlex text-sm" data-method="momo">Mobile Money (MTN)</button>
+                        <button type="button" class="don-method-tab btn-atlex-outline text-sm" data-method="paypal">PayPal</button>
                     </div>
-                    <p class="text-white/60 text-sm mb-3">
-                        Depuis l'application MTN MoMo ou le code <span class="text-white">*880#</span>,
-                        choisissez « Envoyer de l'argent » puis saisissez le numéro ci-dessous.
-                    </p>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span
-                            id="momo-number"
-                            class="font-bebas text-2xl tracking-wider text-white bg-white/5 rounded-lg px-4 py-2"
-                        >+229 01 92 57 33 33</span>
-                        <button
-                            type="button"
-                            id="momo-copy-btn"
-                            class="btn-atlex-outline text-sm"
-                            data-copy-target="momo-number"
-                        >Copier le numéro</button>
+
+                    <div id="don-alert" class="hidden text-sm rounded-lg px-4 py-3 mb-4"></div>
+
+                    <!-- Champs communs -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="<?= $labelClass ?>">Nom complet</label>
+                            <input type="text" id="don-name" class="form-input w-full" required>
+                        </div>
+                        <div>
+                            <label class="<?= $labelClass ?>">Email</label>
+                            <input type="email" id="don-email" class="form-input w-full" required>
+                        </div>
                     </div>
-                    <p class="text-white/40 text-xs mt-3">
-                        Merci de préciser votre nom en référence du transfert afin que nous puissions
-                        vous adresser un reçu si vous le souhaitez.
-                    </p>
+                    <label class="hidden">Ne pas remplir<input type="text" id="don-website" tabindex="-1" autocomplete="off"></label>
+                    <input type="hidden" id="don-csrf" value="<?= e(\App\Core\CSRF::generateToken()) ?>">
+
+                    <!-- MoMo -->
+                    <div id="don-panel-momo" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="<?= $labelClass ?>">Numéro MTN MoMo (le vôtre)</label>
+                                <input type="tel" id="don-momo-phone" placeholder="+229 XX XX XX XX" class="form-input w-full" required>
+                            </div>
+                            <div>
+                                <label class="<?= $labelClass ?>">Montant (FCFA)</label>
+                                <input type="number" id="don-momo-amount" min="100" step="1" placeholder="5000" class="form-input w-full" required>
+                            </div>
+                        </div>
+                        <button type="button" id="don-momo-submit" class="btn-atlex text-sm">Faire le don via MoMo</button>
+                        <p class="text-white/40 text-xs">
+                            Vous recevrez une notification sur votre téléphone pour confirmer le paiement
+                            avec votre code MoMo.
+                        </p>
+                        <div id="don-momo-status" class="hidden text-sm text-white/70"></div>
+                    </div>
+
+                    <!-- PayPal -->
+                    <div id="don-panel-paypal" class="space-y-4 hidden">
+                        <div class="max-w-xs">
+                            <label class="<?= $labelClass ?>">Montant (EUR)</label>
+                            <input type="number" id="don-paypal-amount" min="1" step="0.01" placeholder="10.00" class="form-input w-full" required>
+                        </div>
+                        <?php if (empty($paypalClientId)): ?>
+                            <p class="text-atlex-red text-sm">Le paiement PayPal n'est pas encore configuré.</p>
+                        <?php else: ?>
+                            <div id="don-paypal-buttons" class="max-w-xs"></div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<?php if (!empty($paypalClientId)): ?>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=<?= urlencode($paypalClientId) ?>&currency=EUR"
+        nonce="<?= \App\Core\Security::nonce() ?>"
+    ></script>
+<?php endif; ?>
 
 <script nonce="<?= \App\Core\Security::nonce() ?>">
     document.querySelectorAll('.contact-tab').forEach(function (tab) {
@@ -271,15 +307,161 @@ $invalid = static function (string $field) use ($formErrors): string {
     if (location.hash === '#contact') { document.querySelector('[data-tab="contact"]').click(); }
     if (location.hash === '#benevol') { document.querySelector('[data-tab="benevol"]').click(); }
 
-    var momoCopyBtn = document.getElementById('momo-copy-btn');
-    if (momoCopyBtn) {
-        momoCopyBtn.addEventListener('click', function () {
-            var text = document.getElementById(this.getAttribute('data-copy-target')).textContent.trim();
-            var originalLabel = this.textContent;
-            navigator.clipboard.writeText(text).then(function () {
-                momoCopyBtn.textContent = 'Copié !';
-                setTimeout(function () { momoCopyBtn.textContent = originalLabel; }, 2000);
+    // ------------------------------------------------------------
+    // Dons — bascule de méthode
+    // ------------------------------------------------------------
+    document.querySelectorAll('.don-method-tab').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var method = this.getAttribute('data-method');
+            document.getElementById('don-panel-momo').classList.toggle('hidden', method !== 'momo');
+            document.getElementById('don-panel-paypal').classList.toggle('hidden', method !== 'paypal');
+            document.querySelectorAll('.don-method-tab').forEach(function (b) {
+                b.classList.remove('btn-atlex'); b.classList.add('btn-atlex-outline');
             });
+            this.classList.remove('btn-atlex-outline'); this.classList.add('btn-atlex');
+        });
+    });
+
+    function donAlert(message, type) {
+        var el = document.getElementById('don-alert');
+        el.textContent = message;
+        el.className = 'text-sm rounded-lg px-4 py-3 mb-4 ' +
+            (type === 'error' ? 'bg-atlex-red/20 text-atlex-red' : 'bg-green-600/20 text-green-300');
+    }
+    function donCsrf() { return document.getElementById('don-csrf').value; }
+    function donHoneypot() { return document.getElementById('don-website').value; }
+
+    // ------------------------------------------------------------
+    // Dons — MTN MoMo
+    // ------------------------------------------------------------
+    var momoSubmit = document.getElementById('don-momo-submit');
+    if (momoSubmit) {
+        momoSubmit.addEventListener('click', function () {
+            var name = document.getElementById('don-name').value.trim();
+            var email = document.getElementById('don-email').value.trim();
+            var phone = document.getElementById('don-momo-phone').value.trim();
+            var amount = document.getElementById('don-momo-amount').value;
+
+            if (!name || !email || !phone || !amount) {
+                donAlert('Merci de remplir tous les champs.', 'error');
+                return;
+            }
+
+            momoSubmit.disabled = true;
+            momoSubmit.textContent = 'Envoi en cours...';
+
+            var body = new URLSearchParams();
+            body.set('_token', donCsrf());
+            body.set('website', donHoneypot());
+            body.set('donor_name', name);
+            body.set('donor_email', email);
+            body.set('donor_phone', phone);
+            body.set('amount', amount);
+
+            fetch('<?= url('/don/momo/initier') ?>', { method: 'POST', body: body })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.error) {
+                        donAlert(data.error, 'error');
+                        momoSubmit.disabled = false;
+                        momoSubmit.textContent = 'Faire le don via MoMo';
+                        return;
+                    }
+                    var status = document.getElementById('don-momo-status');
+                    status.classList.remove('hidden');
+                    status.textContent = 'Consultez votre téléphone pour confirmer le paiement...';
+                    pollMomoStatus(data.reference, 0);
+                })
+                .catch(function () {
+                    donAlert('Erreur réseau. Réessayez.', 'error');
+                    momoSubmit.disabled = false;
+                    momoSubmit.textContent = 'Faire le don via MoMo';
+                });
         });
     }
+
+    function pollMomoStatus(reference, attempt) {
+        var status = document.getElementById('don-momo-status');
+
+        if (attempt > 40) {
+            status.textContent = 'Délai dépassé. Si vous avez confirmé sur votre téléphone, votre don sera bien enregistré sous peu.';
+            return;
+        }
+
+        fetch('<?= url('/don/momo/statut') ?>/' + encodeURIComponent(reference))
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.status === 'completed') {
+                    donAlert('Merci pour votre don ! Il a bien été confirmé.', 'success');
+                    status.classList.add('hidden');
+                    momoSubmit.disabled = false;
+                    momoSubmit.textContent = 'Faire le don via MoMo';
+                } else if (data.status === 'failed') {
+                    donAlert('Le paiement a échoué ou a été annulé.', 'error');
+                    status.classList.add('hidden');
+                    momoSubmit.disabled = false;
+                    momoSubmit.textContent = 'Faire le don via MoMo';
+                } else {
+                    setTimeout(function () { pollMomoStatus(reference, attempt + 1); }, 3000);
+                }
+            })
+            .catch(function () {
+                setTimeout(function () { pollMomoStatus(reference, attempt + 1); }, 3000);
+            });
+    }
+
+    // ------------------------------------------------------------
+    // Dons — PayPal
+    // ------------------------------------------------------------
+    <?php if (!empty($paypalClientId)): ?>
+    if (window.paypal && document.getElementById('don-paypal-buttons')) {
+        paypal.Buttons({
+            createOrder: function () {
+                var name = document.getElementById('don-name').value.trim();
+                var email = document.getElementById('don-email').value.trim();
+                var amount = document.getElementById('don-paypal-amount').value;
+
+                if (!name || !email || !amount) {
+                    donAlert('Merci de renseigner votre nom, email et le montant avant de continuer.', 'error');
+                    return Promise.reject(new Error('missing-fields'));
+                }
+
+                var body = new URLSearchParams();
+                body.set('_token', donCsrf());
+                body.set('website', donHoneypot());
+                body.set('donor_name', name);
+                body.set('donor_email', email);
+                body.set('amount', amount);
+
+                return fetch('<?= url('/don/paypal/creer-commande') ?>', { method: 'POST', body: body })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.error) {
+                            donAlert(data.error, 'error');
+                            throw new Error(data.error);
+                        }
+                        return data.orderID;
+                    });
+            },
+            onApprove: function (data) {
+                var body = new URLSearchParams();
+                body.set('_token', donCsrf());
+                body.set('orderID', data.orderID);
+
+                return fetch('<?= url('/don/paypal/capturer') ?>', { method: 'POST', body: body })
+                    .then(function (r) { return r.json(); })
+                    .then(function (result) {
+                        if (result.status === 'completed') {
+                            donAlert('Merci pour votre don ! Il a bien été confirmé.', 'success');
+                        } else {
+                            donAlert("Le paiement n'a pas pu être confirmé.", 'error');
+                        }
+                    });
+            },
+            onError: function () {
+                donAlert('Une erreur est survenue avec PayPal. Réessayez.', 'error');
+            }
+        }).render('#don-paypal-buttons');
+    }
+    <?php endif; ?>
 </script>
