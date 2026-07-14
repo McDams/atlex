@@ -222,6 +222,33 @@ $invalid = static function (string $field) use ($formErrors): string {
                 <p class="text-white/70">Votre soutien financier est essentiel pour permettre à Atlex-Sport de poursuivre sa mission d'inclusion sociale par le sport. En faisant un don, vous contribuez directement à la mise en place de programmes sportifs accessibles à tous, au développement d'infrastructures adaptées et à l'organisation d'événements qui rassemblent les communautés autour des valeurs du sport.
                     Chaque contribution, quelle que soit sa taille, fait une différence significative dans la vie des bénéficiaires de nos actions. En soutenant Atlex-Sport, vous devenez un acteur clé du changement social, en aidant à créer des opportunités pour les personnes défavorisées, en renforçant la cohésion sociale et en promouvant un avenir plus inclusif et solidaire grâce au pouvoir du sport.
                 </p>
+
+                <div class="bg-atlex-bg rounded-lg border border-white/10 p-5 mt-2">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full font-bebas text-sm text-black" style="background:#FFCC00">MTN</span>
+                        <h3 class="font-montserrat font-semibold text-white">Don via Mobile Money (MTN MoMo)</h3>
+                    </div>
+                    <p class="text-white/60 text-sm mb-3">
+                        Depuis l'application MTN MoMo ou le code <span class="text-white">*880#</span>,
+                        choisissez « Envoyer de l'argent » puis saisissez le numéro ci-dessous.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span
+                            id="momo-number"
+                            class="font-bebas text-2xl tracking-wider text-white bg-white/5 rounded-lg px-4 py-2"
+                        >+229 01 92 57 33 33</span>
+                        <button
+                            type="button"
+                            id="momo-copy-btn"
+                            class="btn-atlex-outline text-sm"
+                            data-copy-target="momo-number"
+                        >Copier le numéro</button>
+                    </div>
+                    <p class="text-white/40 text-xs mt-3">
+                        Merci de préciser votre nom en référence du transfert afin que nous puissions
+                        vous adresser un reçu si vous le souhaitez.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -243,4 +270,16 @@ $invalid = static function (string $field) use ($formErrors): string {
     });
     if (location.hash === '#contact') { document.querySelector('[data-tab="contact"]').click(); }
     if (location.hash === '#benevol') { document.querySelector('[data-tab="benevol"]').click(); }
+
+    var momoCopyBtn = document.getElementById('momo-copy-btn');
+    if (momoCopyBtn) {
+        momoCopyBtn.addEventListener('click', function () {
+            var text = document.getElementById(this.getAttribute('data-copy-target')).textContent.trim();
+            var originalLabel = this.textContent;
+            navigator.clipboard.writeText(text).then(function () {
+                momoCopyBtn.textContent = 'Copié !';
+                setTimeout(function () { momoCopyBtn.textContent = originalLabel; }, 2000);
+            });
+        });
+    }
 </script>
